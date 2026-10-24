@@ -13,14 +13,18 @@ public final class Main {
     private Main() {}
 
     public static void main(String[] args) {
+        System.setOut(new java.io.PrintStream(System.out, true, StandardCharsets.UTF_8));
+        System.setErr(new java.io.PrintStream(System.err, true, StandardCharsets.UTF_8));
         int code;
         try { code = run(args); }
+        catch (ai.lmctl.lmdb.core.DatabaseException e) { System.err.println("lmdb: " + e.getMessage()); code = 3; }
         catch (IllegalArgumentException e) { System.err.println("lmdb: " + e.getMessage()); code = 2; }
         catch (Exception e) {
             System.err.println("lmdb: database or file operation failed (" + e.getClass().getSimpleName() + ")");
             code = 3;
         }
         catch (OutOfMemoryError e) { System.err.println("lmdb: LMDB_MAX_MEMORY_MB memory budget exceeded"); code = 3; }
+        catch (LinkageError e) { System.err.println("lmdb: bundled native driver could not load (" + e.getClass().getSimpleName() + ")"); code = 3; }
         if (code != 0) System.exit(code);
     }
 
@@ -43,6 +47,7 @@ public final class Main {
             case "--version": System.out.println("lmdb " + VERSION); return 0;
             case "--dsl-schema": System.out.print(HostApi.schema()); return 0;
             case "--dsl-signatures": System.out.print(HostApi.signatures()); return 0;
+            case "--drivers": Drivers.names().forEach(System.out::println); return 0;
             case "--notices":
                 try (var stream = Main.class.getResourceAsStream("/THIRD_PARTY_NOTICES")) {
                     if (stream == null) throw new IllegalStateException("missing embedded notices");
@@ -63,6 +68,8 @@ public final class Main {
         }
         String url = options.getOrDefault("--url", System.getenv("LMDB_URL"));
         Credentials.validateUrl(url);
+        long actions = java.util.List.of("--sql", "--file", "--metadata", "--explain", "--diff-url").stream().filter(options::containsKey).count();
+        if (actions != 1) throw new IllegalArgumentException("choose one of --sql, --file, --metadata, --explain or --diff-url");
         Drivers.register();
         if (options.containsKey("--driver-jar"))
             loadExternalDriver(options.get("--driver-jar"), options.get("--driver-class"));
@@ -73,7 +80,9 @@ public final class Main {
         try { maxRows = Integer.parseInt(options.getOrDefault("--max-rows", "10000")); }
         catch (NumberFormatException e) { throw new IllegalArgumentException("max-rows must be positive"); }
         if (maxRows <= 0 || maxRows > 1_000_000) throw new IllegalArgumentException("max-rows must be between 1 and 1000000");
-        try (var database = Database.connect(url, Credentials.read(options.get("--credentials-file")))) {
+        var properties = Credentials.read(options.getOrDefault("--credentials-file", System.getenv("LMDB_CREDENTIALS_FILE")));
+        properties.setProperty("lmdb.maxRows", Integer.toString(maxRows));
+        try (var database = Database.connect(url, properties)) {
             String sql = options.get("--sql");
             if (options.containsKey("--file")) {
                 if (sql != null) throw new IllegalArgumentException("choose --sql or --file");
@@ -98,6 +107,7 @@ public final class Main {
                 case "views" -> database.views();
                 case "columns" -> database.columns(null, table == null ? "%" : table);
                 case "keys" -> database.keys(null, requiredTable(table));
+                case "foreign_keys" -> database.foreignKeys(null, requiredTable(table));
                 case "indexes" -> database.indexes(null, requiredTable(table));
                 default -> throw new IllegalArgumentException("unknown metadata kind");
             };
@@ -148,11 +158,11 @@ public final class Main {
             lmdb: portable scriptable JDBC client
             lmdb --url JDBC_URL --sql SQL [--format table|csv|json] [--output FILE]
             lmdb --url JDBC_URL --file SQL_FILE [--max-rows N]
-            lmdb --url JDBC_URL --metadata schemas|tables|views|columns|keys|indexes [--table NAME]
+            lmdb --url JDBC_URL --metadata schemas|tables|views|columns|keys|foreign_keys|indexes [--table NAME]
             lmdb --url JDBC_URL --explain SQL
             lmdb --url JDBC_URL --diff-url OTHER_JDBC_URL
             lmdb --dsl BYTECODE [--dry-run] | --dsl-schema | --dsl-signatures
-            lmdb --driver-test | --version | --notices
+            lmdb --drivers | --driver-test | --version | --notices
             Credentials: LMDB_USER, LMDB_PASSWORD, or --credentials-file UTF8_PROPERTIES.
             URL fallback: LMDB_URL. Optional drivers: --driver-jar JAR --driver-class CLASS (JVM only).
             LMDB_MAX_MEMORY_MB: positive whole MiB; default 4096. Results default to 10000 rows.

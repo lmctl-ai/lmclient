@@ -34,6 +34,9 @@ run("--unknown", code=2)
 run("--url", code=2)
 run("--url", "jdbc:h2:mem:bad", "--format", "xml", code=2)
 run("--url", "jdbc:h2:mem:bad", "--max-rows", "-1", code=2)
+run("--url", "jdbc:h2:mem:bad", "--sql", "SELECT 1", "--metadata", "tables", code=2)
+run("--url", "jdbc:h2:mem:limit", "--sql", "SELECT X FROM SYSTEM_RANGE(1,3)", "--max-rows", "2", code=3)
+assert len(json.loads(run("--url", "jdbc:h2:mem:limit", "--sql", "SELECT X FROM SYSTEM_RANGE(1,10001)", "--max-rows", "10001", "--format", "json").stdout)) == 10001
 for invalid in ("0", "-1", "1.5", "lots", "99999999999999999999999"):
     run("--version", code=2, env={**os.environ, "LMDB_MAX_MEMORY_MB": invalid})
 for driver, url in (("h2", "jdbc:h2:mem:test"), ("sqlite", "jdbc:sqlite::memory:"), ("duckdb", "jdbc:duckdb:")):

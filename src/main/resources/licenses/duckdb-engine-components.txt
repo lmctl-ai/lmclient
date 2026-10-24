@@ -1,0 +1,40 @@
+DuckDB engine source and bundled third-party components
+=======================================================
+
+The native DuckDB JNI library is built from duckdb/duckdb-java at commit
+679d526542cf9dfb24322d9d9c75641624f24bc1 (the source pin is recorded in
+deps.lock). The engine is MIT licensed; see duckdb-mit.txt.
+
+The pinned engine source includes these third-party components. Their complete
+license texts are included once in this directory under the named file:
+
+  brotli             MIT                 mit-license.txt
+  concurrentqueue    BSD-2-Clause       bsd-2-clause.txt
+  fast_float         MIT                 mit-license.txt
+  fastpforlib        Apache-2.0         apache-2.0.txt
+  fmt                MIT                 mit-license.txt
+  fsst               MIT                 mit-license.txt
+  httplib             MIT                 mit-license.txt
+  hyperloglog        MIT                 mit-license.txt
+  jaro_winkler       MIT                 mit-license.txt
+  lz4                BSD-2-Clause       bsd-2-clause.txt
+  mbedtls            Apache-2.0         apache-2.0.txt
+  miniz              MIT                 mit-license.txt
+  parquet            Apache-2.0         apache-2.0.txt
+  pcg                Apache-2.0         apache-2.0.txt
+  pdqsort             custom permissive  pdqsort-custom-license.txt
+  re2                BSD-3-Clause       bsd-3-clause.txt
+  ska_sort            MIT                 mit-license.txt
+  skiplist             MIT                 mit-license.txt
+  snappy              BSD-3-Clause       bsd-3-clause.txt
+  tdigest              Apache-2.0         apache-2.0.txt
+  thrift               Apache-2.0         apache-2.0.txt
+  utf8proc             MIT                 mit-license.txt
+  vergesort            MIT                 mit-license.txt
+  yyjson               MIT                 mit-license.txt
+  zstd                 BSD-3-Clause       bsd-3-clause.txt
+
+The aliases above reuse identical standard license text where the license
+terms are the same. Copyright notices and source paths remain identified by
+the pinned upstream tree; this file is a component notice index, not a claim
+that unrelated source notices have been collapsed into one license.

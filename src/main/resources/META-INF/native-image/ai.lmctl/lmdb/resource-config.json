@@ -1,7 +1,8 @@
 {
   "resources": {
     "includes": [
-      {"pattern":"THIRD_PARTY_NOTICES"},
+      {"pattern":"^THIRD_PARTY_NOTICES$"},
+      {"pattern":"licenses/.*"},
       {"pattern":"META-INF/services/java.sql.Driver"},
       {"pattern":"org/h2/res/.*"},
       {"pattern":"org/h2/util/.*"},

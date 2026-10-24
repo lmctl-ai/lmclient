@@ -18,13 +18,12 @@ fi
 git -C "$SRC" fetch --depth 1 origin "$COMMIT"
 git -C "$SRC" checkout --detach "$COMMIT"
 
-rm -rf "$BUILD"
 mkdir -p "$BUILD" "$OUT"
 cmake -S "$SRC" -B "$BUILD" -G Ninja -DCMAKE_BUILD_TYPE=Release \
   -DCMAKE_CXX_FLAGS='-static-libstdc++ -static-libgcc' \
-  -DCMAKE_SHARED_LINKER_FLAGS='-static-libstdc++ -static-libgcc' \
-  -DCMAKE_MODULE_LINKER_FLAGS='-static-libstdc++ -static-libgcc'
-cmake --build "$BUILD" --target duckdb_java
+  -DCMAKE_SHARED_LINKER_FLAGS='-static-libstdc++ -static-libgcc -Wl,-Bstatic -lstdc++ -lgcc -lgcc_eh -Wl,-Bdynamic' \
+  -DCMAKE_MODULE_LINKER_FLAGS='-static-libstdc++ -static-libgcc -Wl,-Bstatic -lstdc++ -lgcc -lgcc_eh -Wl,-Bdynamic'
+cmake --build "$BUILD" --target duckdb_java --parallel "${LMDB_DUCKDB_JOBS:-2}"
 
 arch=$(uname -m)
 case "$arch" in
@@ -35,7 +34,7 @@ esac
 lib=$(find "$BUILD" -type f -name 'libduckdb_java.so_*' -print -quit)
 [ -n "$lib" ] || { printf '%s\n' 'DuckDB JNI library was not produced' >&2; exit 1; }
 needed=$(readelf -d "$lib" | sed -n 's/.*\[\([^]]*\)\].*/\1/p' | sort -u)
-if printf '%s\n' "$needed" | rg -q '^(libstdc\\+\\+|libgcc_s)\.so'; then
+if printf '%s\n' "$needed" | grep -Eq '^(libstdc\+\+|libgcc_s)\.so'; then
   printf '%s\n' 'DuckDB JNI still has a dynamic C++ runtime dependency' >&2
   exit 1
 fi

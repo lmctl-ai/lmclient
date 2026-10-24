@@ -82,6 +82,8 @@ public final class Database implements AutoCloseable {
             return new Database(DriverManager.getConnection(url, p), rows, bytes);
         } catch (SQLException e) {
             throw DatabaseException.from(e);
+        } catch (RuntimeException e) {
+            throw DatabaseException.from(e);
         }
     }
 
@@ -108,6 +110,8 @@ public final class Database implements AutoCloseable {
             if (result) return read(statement.getResultSet(), effectiveLimit);
             return new QueryResult(List.of(), List.of(), statement.getUpdateCount());
         } catch (SQLException e) { throw DatabaseException.from(e); }
+          catch (DatabaseException e) { throw e; }
+          catch (RuntimeException e) { throw DatabaseException.from(e); }
     }
 
     public QueryResult query(String sql, List<?> parameters, int rowLimit) {
@@ -123,6 +127,8 @@ public final class Database implements AutoCloseable {
             return result ? read(statement.getResultSet(), effectiveLimit)
                     : new QueryResult(List.of(), List.of(), statement.getUpdateCount());
         } catch (SQLException e) { throw DatabaseException.from(e); }
+          catch (DatabaseException e) { throw e; }
+          catch (RuntimeException e) { throw DatabaseException.from(e); }
     }
 
     private void bind(PreparedStatement statement, List<?> values) throws SQLException {
@@ -154,6 +160,12 @@ public final class Database implements AutoCloseable {
             throw new DatabaseException("result cell exceeds configured limit");
         if (value instanceof String s && s.getBytes(StandardCharsets.UTF_8).length > maxCellBytes)
             throw new DatabaseException("result cell exceeds configured limit");
+        if (value != null && !(value instanceof Number) && !(value instanceof Boolean)
+                && !(value instanceof String) && !(value instanceof byte[])
+                && !(value instanceof java.sql.Date) && !(value instanceof java.sql.Time)
+                && !(value instanceof java.sql.Timestamp) && !(value instanceof java.time.temporal.TemporalAccessor)
+                && !(value instanceof java.time.ZoneId) && !(value instanceof java.time.ZoneOffset))
+            throw new DatabaseException("unsupported JDBC result type: " + value.getClass().getName());
         return value;
     }
 

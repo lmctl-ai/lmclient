@@ -1,29 +1,34 @@
 lmdb 0.1.0 — third-party notices
 
-lmdb and the lmcode-java SDK: MIT License, lmctl-ai contributors.
+lmdb and the lmcode-java SDK are MIT licensed.
 
-Bundled JDBC drivers (versions pinned in pom.xml and deps.lock):
-PostgreSQL JDBC: BSD-2-Clause, https://jdbc.postgresql.org/about/license/
-SQLite JDBC: Apache-2.0, https://github.com/xerial/sqlite-jdbc/blob/master/LICENSE
-SQLite engine: public domain, https://sqlite.org/copyright.html
-H2: dual MPL-2.0 / EPL-1.0, https://h2database.com/html/license.html
-DuckDB JDBC and engine: MIT, https://github.com/duckdb/duckdb-java/blob/main/LICENSE
-Microsoft JDBC Driver for SQL Server: MIT,
-https://github.com/microsoft/mssql-jdbc/blob/main/LICENSE
-SLF4J API (SQLite transitive dependency): MIT, https://www.slf4j.org/license.html
-Checker Framework annotations (PostgreSQL transitive dependency): MIT,
-https://github.com/typetools/checker-framework/blob/master/LICENSE.txt
+Bundled JDBC drivers (versions are pinned in pom.xml and deps.lock):
 
-The JVM source distribution requires Java 21 or newer. Native release executables
-include GraalVM Community/OpenJDK runtime components under GPLv2 with the
-Classpath Exception, https://openjdk.org/legal/gplv2+ce.html . The Classpath
-Exception permits linking this runtime with this MIT-licensed application.
+* PostgreSQL JDBC 42.7.8 — PostgreSQL License (BSD-2-Clause).
+* SQLite-JDBC 3.50.3.0 — Apache License 2.0; the SQLite engine is public
+  domain.
+* H2 2.3.232 — dual Mozilla Public License 2.0 / Eclipse Public License 1.0.
+* DuckDB JDBC 1.5.6.0 and the JNI engine built from
+  duckdb/duckdb-java commit 679d526542cf9dfb24322d9d9c75641624f24bc1 —
+  MIT, with the component licenses listed in
+  licenses/duckdb-engine-components.txt.
+* Microsoft JDBC Driver for SQL Server 13.2.0.jre11 — MIT.
 
-Linux native executables are dynamically linked to the system glibc (LGPL-2.1),
-requiring glibc 2.35 or newer. No glibc implementation is bundled. GCC runtime
-components, when linked, use GPLv3 with the GCC Runtime Library Exception.
+Bundled transitive components:
 
-MySQL Connector/J (GPL) and MariaDB Connector/J (LGPL) are NOT bundled.
-Users supplying optional JDBC jars are responsible for those drivers' licenses.
-Dependency license texts and upstream copyright notices are retained as Maven
-dependency resources; see the upstream source links above for full terms.
+* Checker Framework annotations 3.49.5 — MIT.
+* Byte Buddy 1.15.11 — Apache License 2.0, with its embedded ASM BSD notice.
+* PostgreSQL's SCRAM and stringprep libraries retain their separate BSD
+  license texts.
+
+The complete license texts and notices for the bundled JVM and native
+components are embedded as distinct resources under licenses/ in the
+distribution JAR. Standard license text is deduplicated by identical terms;
+the component index retains the upstream component names and source pin.
+The native image also includes the GraalVM runtime under GPLv2 with the
+Classpath Exception. Linux executables dynamically link the host glibc
+(LGPL-2.1, minimum glibc 2.35); no glibc implementation is bundled. GCC
+runtime components, when linked, use the GPLv3 GCC Runtime Library Exception.
+
+MySQL Connector/J (GPL) and MariaDB Connector/J (LGPL) are not bundled.
+Users supplying optional JDBC jars are responsible for those jars' licenses.

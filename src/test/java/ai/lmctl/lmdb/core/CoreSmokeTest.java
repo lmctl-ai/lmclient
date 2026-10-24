@@ -2,6 +2,7 @@ package ai.lmctl.lmdb.core;
 
 import java.util.List;
 import java.util.Arrays;
+import java.sql.SQLException;
 
 /** Dependency-free smoke test; run with {@code java ...CoreSmokeTest}. */
 public final class CoreSmokeTest {
@@ -16,6 +17,16 @@ public final class CoreSmokeTest {
         check(ResultFormats.csv(result).equals("a,b\nx,y,2\n,true\n".replace("x,y,2", "\"x,y\",2")), "CSV escaping");
         check(ResultFormats.json(result).contains("\"a\": \"x,y\""), "JSON rendering");
         check(ResultFormats.table(result).contains("| a"), "table rendering");
+        var controls = new Database.QueryResult(List.of("text", "bytes"), List.of(Arrays.asList("a\b\f\u0000", new byte[]{0, 15})), -1);
+        String controlJson = ResultFormats.json(controls);
+        check(controlJson.contains("\\b") && controlJson.contains("\\f") && controlJson.contains("\\u0000"), "JSON controls");
+        check(ResultFormats.csv(controls).contains("000f"), "CSV bytes");
+        check(ResultFormats.json(new Database.QueryResult(List.of(), List.of(), 3)).contains("update_count"), "DML JSON");
+        boolean duplicate = false;
+        try { ResultFormats.json(new Database.QueryResult(List.of("x", "x"), List.of(Arrays.asList(1, 2)), -1)); } catch (IllegalArgumentException expected) { duplicate = true; }
+        check(duplicate, "duplicate JSON labels");
+        String safeError = DatabaseException.from(new SQLException("jdbc:postgresql://user:secret@example/db password=secret", "08001")).getMessage();
+        check(!safeError.contains("postgresql") && !safeError.contains("secret"), "SQL error redaction");
         System.out.println("lmdb core smoke tests: PASS");
     }
     private static void check(boolean condition, String message) { if (!condition) throw new AssertionError(message); }

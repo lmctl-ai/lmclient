@@ -13,6 +13,8 @@ public final class Credentials {
     public static Properties read(String file) throws IOException {
         Properties properties = new Properties();
         if (file != null) {
+            if (Files.size(Path.of(file)) > Math.min(1024 * 1024, Main.memoryBudget() / 8))
+                throw new IllegalArgumentException("credentials file exceeds LMDB_MAX_MEMORY_MB budget");
             try (var reader = Files.newBufferedReader(Path.of(file), StandardCharsets.UTF_8)) {
                 properties.load(reader);
             }

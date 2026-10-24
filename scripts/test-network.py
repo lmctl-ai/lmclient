@@ -9,8 +9,8 @@ import os
 from pathlib import Path
 import subprocess
 import sys
-import tempfile
 import uuid
+import time
 
 if len(sys.argv) != 2:
     raise SystemExit("usage: test-network.py PATH_TO_LMDB")
@@ -38,6 +38,16 @@ def exercise(driver, url, user, password):
     table = "lmdb_network_" + uuid.uuid4().hex[:16]
     quoted = '"' + table + '"' if driver == "postgres" else "[" + table + "]"
     try:
+        ready = False
+        for _ in range(20):
+            try:
+                run(driver, url, user, password, "--sql", "SELECT 1")
+                ready = True
+                break
+            except RuntimeError:
+                time.sleep(3)
+        if not ready:
+            raise RuntimeError(f"{driver} server did not become ready")
         run(driver, url, user, password, "--sql", f"CREATE TABLE {quoted} (id INTEGER PRIMARY KEY, label VARCHAR(40)); INSERT INTO {quoted} VALUES (1, 'network-ok');")
         csv = run(driver, url, user, password, "--sql", f"SELECT id,label FROM {quoted}", "--format", "csv")
         if "network-ok" not in csv or "1" not in csv:
