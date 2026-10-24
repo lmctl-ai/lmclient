@@ -61,12 +61,14 @@ public final class Database implements AutoCloseable {
     private final Connection connection;
     private final int maxRows;
     private final int maxCellBytes;
+    private final long engineMemoryLimitBytes;
     private boolean closed;
 
-    private Database(Connection connection, int maxRows, int maxCellBytes) {
+    private Database(Connection connection, int maxRows, int maxCellBytes, long engineMemoryLimitBytes) {
         this.connection = connection;
         this.maxRows = maxRows;
         this.maxCellBytes = maxCellBytes;
+        this.engineMemoryLimitBytes = engineMemoryLimitBytes;
     }
 
     /** Connect without retaining or printing credentials. Properties are copied. */
@@ -77,13 +79,44 @@ public final class Database implements AutoCloseable {
         int rows = positiveInt(p, "lmdb.maxRows", DEFAULT_MAX_ROWS);
         int bytes = positiveInt(p, "lmdb.maxCellBytes", DEFAULT_MAX_CELL_BYTES);
         p.remove("lmdb.maxRows"); p.remove("lmdb.maxCellBytes");
+        Connection connection = null;
         try {
             DriverManager.setLoginTimeout(DEFAULT_QUERY_TIMEOUT_SECONDS);
-            return new Database(DriverManager.getConnection(url, p), rows, bytes);
+            connection = DriverManager.getConnection(url, p);
+            long budget = memoryBudgetBytes();
+            long engineLimit = Math.max(1024L * 1024, budget / 4);
+            configureEngineMemoryLimit(connection, engineLimit);
+            return new Database(connection, rows, bytes, engineLimit);
         } catch (SQLException e) {
+            closeQuietly(connection);
             throw DatabaseException.from(e);
         } catch (RuntimeException e) {
+            closeQuietly(connection);
             throw DatabaseException.from(e);
+        }
+    }
+
+    private static void closeQuietly(Connection connection) {
+        if (connection != null) try { connection.close(); } catch (SQLException ignored) { }
+    }
+
+    /**
+     * Applies driver-managed caps where the embedded engine supports them. The
+     * cap covers engine allocations; JVM/native runtime, stacks, and JDBC
+     * objects remain governed by the outer lmdb process budget.
+     */
+    private static void configureEngineMemoryLimit(Connection connection, long bytes) throws SQLException {
+        String product = connection.getMetaData().getDatabaseProductName().toLowerCase(Locale.ROOT);
+        try (Statement statement = connection.createStatement()) {
+            if (product.contains("duckdb")) {
+                statement.execute("SET memory_limit = '" + bytes + " B'");
+            } else if (product.contains("sqlite")) {
+                long current = 0;
+                try (ResultSet result = statement.executeQuery("PRAGMA hard_heap_limit")) {
+                    if (result.next()) current = result.getLong(1);
+                }
+                if (current <= 0 || current > bytes) statement.execute("PRAGMA hard_heap_limit = " + bytes);
+            }
         }
     }
 
@@ -246,8 +279,26 @@ public final class Database implements AutoCloseable {
         return metadata("getIndexInfo", new String[]{"TABLE_SCHEM", "TABLE_NAME", "INDEX_NAME", "COLUMN_NAME", "NON_UNIQUE", "ORDINAL_POSITION"}, schema, table);
     }
     public QueryResult foreignKeys(String schema, String table) {
+        ensureOpen();
+        if (isSqlite()) return sqliteForeignKeys(table);
         return metadata("getImportedKeys", new String[]{"PKTABLE_SCHEM", "PKTABLE_NAME", "PKCOLUMN_NAME", "FKTABLE_SCHEM", "FKTABLE_NAME", "FKCOLUMN_NAME", "FK_NAME", "KEY_SEQ"}, schema, table);
     }
+
+    private boolean isSqlite() {
+        try { return connection.getMetaData().getDatabaseProductName().toLowerCase(Locale.ROOT).contains("sqlite"); }
+        catch (SQLException e) { throw DatabaseException.from(e); }
+    }
+    private QueryResult sqliteForeignKeys(String table) {
+        if (table == null || table.isBlank()) throw new IllegalArgumentException("table is required");
+        QueryResult raw = query("PRAGMA foreign_key_list('" + table.replace("'", "''") + "')");
+        int tableColumn = columnIndex(raw.columns(), "table"), fromColumn = columnIndex(raw.columns(), "from"), toColumn = columnIndex(raw.columns(), "to"), seqColumn = columnIndex(raw.columns(), "seq");
+        if (tableColumn < 0 || fromColumn < 0 || toColumn < 0) return new QueryResult(List.of("PKTABLE_SCHEM", "PKTABLE_NAME", "PKCOLUMN_NAME", "FKTABLE_SCHEM", "FKTABLE_NAME", "FKCOLUMN_NAME", "FK_NAME", "KEY_SEQ"), List.of(), -1);
+        List<List<Object>> rows = new ArrayList<>();
+        for (List<Object> row : raw.rows()) rows.add(java.util.Arrays.asList(null, row.get(tableColumn), row.get(toColumn), schemaName(), table, row.get(fromColumn), null, seqColumn < 0 ? 0 : row.get(seqColumn)));
+        return new QueryResult(List.of("PKTABLE_SCHEM", "PKTABLE_NAME", "PKCOLUMN_NAME", "FKTABLE_SCHEM", "FKTABLE_NAME", "FKCOLUMN_NAME", "FK_NAME", "KEY_SEQ"), rows, -1);
+    }
+    private String schemaName() { try { return connection.getSchema(); } catch (SQLException e) { return null; } }
+    private static int columnIndex(List<String> columns, String wanted) { for (int i = 0; i < columns.size(); i++) if (columns.get(i).equalsIgnoreCase(wanted)) return i; return -1; }
 
     private QueryResult metadata(String operation, String[] wanted, String... args) {
         ensureOpen();

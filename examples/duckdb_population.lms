@@ -1,20 +1,21 @@
 # DuckDB joins population and area to show regional density.
 mkdir("images"); mkdir("data"); mkdir("build");
-let db = _dsl_ cli="lmdb" install="github:lmctl-ai/lmdb@latest";
-let c = db.connect("jdbc:duckdb:");
+dbhost = _dsl_ cli="lmdb" install="github:lmctl-ai/lmdb@latest";
+let c = connect("jdbc:duckdb:");
 c.exec("CREATE TABLE region(name VARCHAR, population BIGINT, area_km2 DOUBLE); INSERT INTO region VALUES ('Alpine',1800000,42000),('Coastal',9200000,38000),('Prairie',2400000,160000),('Forest',3100000,210000);");
 let q = c.query("SELECT name, population/area_km2 AS density FROM region ORDER BY density DESC");
 q.csv("data/duckdb_population.csv");
-assert(q.rows() == 4);
-assert(q.number(0, 1) == 242.1052631579);
 end _dsl_
+savedsl(dbhost, "build/duckdb_population.dslb");
+r = system ${dsl_cli(dbhost)} --dsl build/duckdb_population.dslb;
+assert(r.code == 0);
+let rows = csv_parse(read_file("data/duckdb_population.csv"), false);
+assert(rows.len() == 5);
+assert(abs(num(rows[1][1]) - 242.1052631579) < 0.0001);
 plot = _dsl_ cli="lmplot" install="github:lmctl-ai/lmplot@latest";
 let p = plot;
 p.png("images/duckdb_population.png", 900, 560); p.cmd("set title 'Regional population density'; set ylabel 'People / km²'; set style data histograms; set style fill solid 0.8; set datafile separator ','; plot 'data/duckdb_population.csv' every ::1 using 2:xtic(1) title 'density'"); p.close();
 end _dsl_
-savedsl(db, "build/duckdb_population.dslb");
-r = system ${dsl_cli(db)} --dsl build/duckdb_population.dslb;
-assert(r.code == 0);
 savedsl(plot, "build/duckdb_population_plot.dslb");
 r = system ${dsl_cli(plot)} --dsl build/duckdb_population_plot.dslb;
 assert(r.code == 0);

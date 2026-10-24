@@ -484,10 +484,21 @@
   },
   {
     "name": "org.duckdb.ProfilerPrintFormat",
-    "methods": [
+    "fields": [
       {
-        "name": "getName",
-        "parameterTypes": []
+        "name": "QUERY_TREE"
+      },
+      {
+        "name": "JSON"
+      },
+      {
+        "name": "NO_OUTPUT"
+      },
+      {
+        "name": "HTML"
+      },
+      {
+        "name": "GRAPHVIZ"
       }
     ]
   },

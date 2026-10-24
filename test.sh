@@ -25,6 +25,8 @@ root = Path.cwd()
 readme = (root / "README.md").read_text(encoding="utf-8")
 paths = re.findall(r'(?:src|href)=["\']([^"\']+\.png)["\']|\]\(([^)]+\.png)\)', readme, flags=re.I)
 paths = [a or b for a, b in paths]
+paths.extend(str(path.relative_to(root)) for path in (root / "docs/images").glob("*.png"))
+paths = sorted(set(paths))
 for raw in paths:
     path = root / raw.lstrip("./")
     if not path.is_file():
@@ -36,6 +38,8 @@ for raw in paths:
     data = path.read_bytes()
     if data[:8] != b"\x89PNG\r\n\x1a\n":
         raise SystemExit(f"gallery image is not a PNG: {raw}")
+    if len(data) > 300_000:
+        raise SystemExit(f"gallery image exceeds 300 KB: {raw}")
     print(f"gallery image OK: {raw}")
 for raw in sorted(set(re.findall(r'(?:raw[^ ]*/)?examples/([A-Za-z0-9_.-]+\.lms)', readme))):
     example = root / "examples" / raw

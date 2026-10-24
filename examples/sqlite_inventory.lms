@@ -1,20 +1,21 @@
 # Inventory value by warehouse: a query feeds a ranked bar chart.
 mkdir("images"); mkdir("data"); mkdir("build");
-let db = _dsl_ cli="lmdb" install="github:lmctl-ai/lmdb@latest";
-let c = db.connect("jdbc:sqlite::memory:");
+dbhost = _dsl_ cli="lmdb" install="github:lmctl-ai/lmdb@latest";
+let c = connect("jdbc:sqlite::memory:");
 c.exec("CREATE TABLE stock(warehouse TEXT, units INTEGER, unit_price REAL); INSERT INTO stock VALUES ('North',420,18.5),('South',310,22.0),('East',525,15.75),('West',275,31.0);");
 let q = c.query("SELECT warehouse, units * unit_price AS value FROM stock ORDER BY value DESC");
 q.csv("data/sqlite_inventory.csv");
-assert(q.rows() == 4);
-assert(q.number(0, 1) == 8525.0);
 end _dsl_
+savedsl(dbhost, "build/sqlite_inventory.dslb");
+r = system ${dsl_cli(dbhost)} --dsl build/sqlite_inventory.dslb;
+assert(r.code == 0);
+let rows = csv_parse(read_file("data/sqlite_inventory.csv"), false);
+assert(rows.len() == 5);
+assert(abs(num(rows[1][1]) - 8525.0) < 0.001);
 plot = _dsl_ cli="lmplot" install="github:lmctl-ai/lmplot@latest";
 let p = plot;
-p.png("images/sqlite_inventory.png", 900, 560); p.cmd("set title 'Inventory value by warehouse'; set ylabel 'Value'; set style data histograms; set style fill solid 0.8; set boxwidth 0.7; set datafile separator ','; plot 'data/sqlite_inventory.csv' every ::1 using 2:xtic(1) title 'inventory value'"); p.close();
+p.png("images/sqlite_inventory.png", 900, 560); p.cmd("set title 'Inventory value by warehouse'; set ylabel 'Value'; set yrange [0:*]; set style data histograms; set style fill solid 0.8; set boxwidth 0.7; set datafile separator ','; plot 'data/sqlite_inventory.csv' every ::1 using 2:xtic(1) title 'inventory value'"); p.close();
 end _dsl_
-savedsl(db, "build/sqlite_inventory.dslb");
-r = system ${dsl_cli(db)} --dsl build/sqlite_inventory.dslb;
-assert(r.code == 0);
 savedsl(plot, "build/sqlite_inventory_plot.dslb");
 r = system ${dsl_cli(plot)} --dsl build/sqlite_inventory_plot.dslb;
 assert(r.code == 0);

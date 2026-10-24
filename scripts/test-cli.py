@@ -47,8 +47,17 @@ for driver, url in (("h2", "jdbc:h2:mem:test"), ("sqlite", "jdbc:sqlite::memory:
     assert abs(float(list(rows[1].values())[1]) - 7.25) < 1e-10
     result = run("--url", url, "--sql", sql, "--format", "csv")
     assert list(csv.reader(io.StringIO(result.stdout)))[1][0] == "tea,green"
-    result = run("--url", url, "--sql", "SELECT 'héllo,世界' AS greeting", "--format", "json")
-    assert "héllo,世界" in result.stdout
+    unicode_sql = "SELECT 'héllo,世界' AS greeting"
+    if os.name == "nt" and len(sys.argv) == 1:
+        # The upstream JVM's Windows launcher converts argv through the ANSI
+        # code page; the native distribution embeds its own UTF-8 manifest.
+        with tempfile.TemporaryDirectory(prefix="lmdb-utf8-") as directory:
+            sql_file = Path(directory) / "unicode.sql"
+            sql_file.write_text(unicode_sql, encoding="utf-8")
+            result = run("--url", url, "--file", str(sql_file), "--format", "json")
+    else:
+        result = run("--url", url, "--sql", unicode_sql, "--format", "json")
+    assert "héllo,世界" in result.stdout, (driver, repr(result.stdout))
     run("--url", url, "--sql", "SELECT * FROM missing_table", code=3)
     run("--url", url, "--metadata", "tables", "--format", "json")
     run("--url", url, "--explain", "SELECT 1")

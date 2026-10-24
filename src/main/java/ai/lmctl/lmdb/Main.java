@@ -16,14 +16,19 @@ public final class Main {
         System.setOut(new java.io.PrintStream(System.out, true, StandardCharsets.UTF_8));
         System.setErr(new java.io.PrintStream(System.err, true, StandardCharsets.UTF_8));
         int code;
-        try { code = run(args); }
+        try { RuntimeBudget.configure(memoryBudget(),args); code = run(args); }
         catch (ai.lmctl.lmdb.core.DatabaseException e) { System.err.println("lmdb: " + e.getMessage()); code = 3; }
         catch (IllegalArgumentException e) { System.err.println("lmdb: " + e.getMessage()); code = 2; }
         catch (Exception e) {
             System.err.println("lmdb: database or file operation failed (" + e.getClass().getSimpleName() + ")");
             code = 3;
         }
-        catch (OutOfMemoryError e) { System.err.println("lmdb: LMDB_MAX_MEMORY_MB memory budget exceeded"); code = 3; }
+        catch (OutOfMemoryError e) {
+            System.err.println("lmdb: LMDB_MAX_MEMORY_MB memory budget exceeded");
+            if (java.util.Arrays.asList(args).contains("--dsl"))
+                System.out.println("{\"ok\":false,\"phase\":\"run\",\"code\":\"RUN_ERROR\",\"message\":\"LMDB_MAX_MEMORY_MB memory budget exceeded\"}");
+            code = 3;
+        }
         catch (LinkageError e) { System.err.println("lmdb: bundled native driver could not load (" + e.getClass().getSimpleName() + ")"); code = 3; }
         if (code != 0) System.exit(code);
     }
@@ -57,6 +62,17 @@ public final class Main {
                 var results = Drivers.selfTest();
                 results.forEach((name, result) -> System.out.println(name + ": " + result));
                 return results.values().stream().allMatch("ok"::equals) ? 0 : 3;
+            case "--dsl":
+                boolean dryRun = false;
+                String bytecode = null;
+                for (int i = 1; i < args.length; i++) {
+                    if (args[i].equals("--dry-run")) dryRun = true;
+                    else if (args[i].startsWith("--") || bytecode != null) throw new IllegalArgumentException("usage: --dsl BYTECODE [--dry-run]");
+                    else bytecode = args[i];
+                }
+                if (bytecode == null) throw new IllegalArgumentException("--dsl requires a bytecode file");
+                Drivers.register();
+                try (var host = new DslHost()) { return host.run(Path.of(bytecode),dryRun); }
             default: break;
         }
         Map<String, String> options = new LinkedHashMap<>();

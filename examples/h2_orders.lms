@@ -1,20 +1,21 @@
 # Order funnel: H2 joins events into conversion rates.
 mkdir("images"); mkdir("data"); mkdir("build");
-let db = _dsl_ cli="lmdb" install="github:lmctl-ai/lmdb@latest";
-let c = db.connect("jdbc:h2:mem:orders");
+dbhost = _dsl_ cli="lmdb" install="github:lmctl-ai/lmdb@latest";
+let c = connect("jdbc:h2:mem:orders");
 c.exec("CREATE TABLE funnel(stage VARCHAR(20), visitors INT, converted INT); INSERT INTO funnel VALUES ('Landing',1000,1000),('Browse',1000,640),('Cart',1000,260),('Checkout',1000,190),('Paid',1000,154);");
 let q = c.query("SELECT stage, 100.0*converted/visitors AS rate FROM funnel ORDER BY rate DESC");
 q.csv("data/h2_orders.csv");
-assert(q.rows() == 5);
-assert(q.number(4, 1) == 15.4);
 end _dsl_
+savedsl(dbhost, "build/h2_orders.dslb");
+r = system ${dsl_cli(dbhost)} --dsl build/h2_orders.dslb;
+assert(r.code == 0);
+let rows = csv_parse(read_file("data/h2_orders.csv"), false);
+assert(rows.len() == 6);
+assert(abs(num(rows[5][1]) - 15.4) < 0.001);
 plot = _dsl_ cli="lmplot" install="github:lmctl-ai/lmplot@latest";
 let p = plot;
 p.png("images/h2_orders.png", 900, 560); p.cmd("set title 'Order funnel conversion'; set ylabel 'Percent'; set yrange [0:105]; set datafile separator ','; plot 'data/h2_orders.csv' every ::1 using 0:2:xtic(1) with boxes title 'conversion rate'"); p.close();
 end _dsl_
-savedsl(db, "build/h2_orders.dslb");
-r = system ${dsl_cli(db)} --dsl build/h2_orders.dslb;
-assert(r.code == 0);
 savedsl(plot, "build/h2_orders_plot.dslb");
 r = system ${dsl_cli(plot)} --dsl build/h2_orders_plot.dslb;
 assert(r.code == 0);

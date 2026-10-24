@@ -1,8 +1,10 @@
 # Maven coordinates and versions are pinned for reproducible native images.
 org.postgresql:postgresql:42.7.8
 org.xerial:sqlite-jdbc:3.50.3.0
+sqlite-jdbc/source:4781e381921a348fa2e533d0c43767525374b26d
+sqlite/amalgamation:3500300:9ad6d16cbc1df7cd55c8b55127c82a9bca5e9f287818de6dc87e04e73599d754
 com.h2database:h2:2.3.232
 org.duckdb:duckdb_jdbc:1.5.6.0
-duckdb/duckdb-java:679d526542cf9dfb24322d9d9c75641624f24bc1
+duckdb/duckdb-java:a561d2ddadde231402411ce76112779bc34b57f0
 com.microsoft.sqlserver:mssql-jdbc:13.2.0.jre11
 org.graalvm.buildtools:native-maven-plugin:0.10.6

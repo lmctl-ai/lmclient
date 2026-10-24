@@ -1,20 +1,21 @@
 # API latency percentiles computed by H2.
 mkdir("images"); mkdir("data"); mkdir("build");
-let db = _dsl_ cli="lmdb" install="github:lmctl-ai/lmdb@latest";
-let c = db.connect("jdbc:h2:mem:latency");
+dbhost = _dsl_ cli="lmdb" install="github:lmctl-ai/lmdb@latest";
+let c = connect("jdbc:h2:mem:latency");
 c.exec("CREATE TABLE request(endpoint VARCHAR(20), ms INT); INSERT INTO request VALUES ('/search',42),('/search',55),('/search',61),('/search',89),('/search',120),('/checkout',75),('/checkout',82),('/checkout',101),('/checkout',130),('/checkout',160),('/profile',18),('/profile',25),('/profile',31),('/profile',47),('/profile',58);");
 let q = c.query("SELECT endpoint, MIN(ms) AS minimum, AVG(ms) AS mean, MAX(ms) AS maximum FROM request GROUP BY endpoint ORDER BY endpoint");
 q.csv("data/h2_latency.csv");
-assert(q.rows() == 3);
-assert(q.number(1, 2) == 109.6);
 end _dsl_
+savedsl(dbhost, "build/h2_latency.dslb");
+r = system ${dsl_cli(dbhost)} --dsl build/h2_latency.dslb;
+assert(r.code == 0);
+let rows = csv_parse(read_file("data/h2_latency.csv"), false);
+assert(rows.len() == 4);
+assert(abs(num(rows[1][2]) - 109.6) < 0.001);
 plot = _dsl_ cli="lmplot" install="github:lmctl-ai/lmplot@latest";
 let p = plot;
 p.png("images/h2_latency.png", 900, 560); p.cmd("set title 'API latency envelope'; set ylabel 'Milliseconds'; set style data histograms; set style histogram clustered gap 1; set style fill solid 0.8; set datafile separator ','; plot 'data/h2_latency.csv' every ::1 using 2:xtic(1) title 'min', '' every ::1 using 3 title 'mean', '' every ::1 using 4 title 'max'"); p.close();
 end _dsl_
-savedsl(db, "build/h2_latency.dslb");
-r = system ${dsl_cli(db)} --dsl build/h2_latency.dslb;
-assert(r.code == 0);
 savedsl(plot, "build/h2_latency_plot.dslb");
 r = system ${dsl_cli(plot)} --dsl build/h2_latency_plot.dslb;
 assert(r.code == 0);

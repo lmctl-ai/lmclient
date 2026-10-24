@@ -49,12 +49,33 @@ The native distribution bundles PostgreSQL, SQLite-JDBC, H2, DuckDB and Microsof
 Optional drivers are a JVM feature because native-image executables cannot load arbitrary classes after compilation:
 
 ```sh
-lmdb --driver-jar /path/to/driver.jar --driver-class com.example.Driver +  --url jdbc:example:... --sql 'SELECT 1'
+lmdb --driver-jar /path/to/driver.jar --driver-class com.example.Driver \
+  --url jdbc:example:... --sql 'SELECT 1'
 ```
 
-Every invocation is bounded by `LMDB_MAX_MEMORY_MB` (default 4096 MiB); invalid or non-positive values fail with usage status 2, and a runtime budget breach fails with status 3. Query results are capped at 10,000 rows by default; use `--max-rows` to choose a positive limit up to 1,000,000.
+Every invocation is bounded by `LMDB_MAX_MEMORY_MB` (default 4096 MiB; minimum 16 MiB). At startup lmdb reserves 75% for the Java heap and 25% for embedded JDBC engine memory and fixed native overhead. If the current process was not started with the requested heap, it restarts itself once with the corresponding `-Xmx` value before opening a driver or reading a query. Invalid or non-positive values fail with usage status 2, and a runtime budget breach fails with status 3. Query results are capped at 10,000 rows by default; use `--max-rows` to choose a positive limit up to 1,000,000.
+
+## CLI workflows
+
+```sh
+# Explain a query and inspect a schema
+lmdb --url jdbc:sqlite:app.db --explain 'SELECT * FROM orders WHERE total > 100'
+lmdb --url jdbc:sqlite:app.db --metadata tables --format json
+lmdb --url jdbc:sqlite:app.db --metadata columns --table orders --format table
+
+# Export a query, run a SQL file, and compare two schemas
+lmdb --url jdbc:sqlite:app.db --sql 'SELECT * FROM orders' --format csv --output orders.csv
+lmdb --url jdbc:sqlite:app.db --file migration.sql --format json --output result.json
+lmdb --url jdbc:sqlite:app.db --diff-url jdbc:sqlite:reference.db --format json
+
+# Keep credentials in a UTF-8 properties file; lmdb never prints them
+lmdb --url jdbc:postgresql://db.example/app \
+  --credentials-file credentials.properties --sql 'SELECT 1'
+```
 
 ## Build
+
+The JVM build requires JDK 21 or newer, Maven, and Python 3. `mvn -q verify` resolves the pinned lmcode-java SDK from `sdk.lock` and runs the JDBC and DSL tests. Native images require GraalVM for JDK 25 with `native-image`, plus the platform C toolchain; the native profile also builds the pinned DuckDB JNI support.
 
 ```sh
 mvn -q verify
