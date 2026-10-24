@@ -77,7 +77,7 @@ lmdb --url jdbc:postgresql://db.example/app \
 
 ## Build
 
-The JVM build requires JDK 21 or newer, Maven, and Python 3. `mvn -q verify` resolves the pinned lmcode-java SDK from `sdk.lock` and runs the JDBC and DSL tests. Native images require GraalVM for JDK 25 with `native-image`, plus the platform C toolchain; the native profile also builds the pinned DuckDB JNI support.
+The JVM build requires JDK 21 or newer, Maven, and Python 3. `mvn -q verify` resolves the pinned lmcode-java SDK from `sdk.lock` and runs the JDBC core suites; `test.sh` adds CLI and gallery checks. CI also runs the DSL fixtures and every example with compiler `0.2.369`. Native images require GraalVM for JDK 25 with `native-image`, plus the platform C toolchain; the native profile builds the pinned JDBC JNI archives.
 
 ```sh
 mvn -q verify

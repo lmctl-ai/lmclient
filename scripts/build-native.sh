@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 set -eu
 
-if ! command -v native-image >/dev/null 2>&1; then
+if ! command -v native-image >/dev/null 2>&1 && ! command -v native-image.cmd >/dev/null 2>&1; then
   printf '%s\n' 'native-image is required (install GraalVM for Java 22 or newer)' >&2
   exit 2
 fi

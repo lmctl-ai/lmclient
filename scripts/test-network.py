@@ -59,6 +59,15 @@ def exercise(driver, url, user, password):
         if "label" not in columns.lower():
             raise RuntimeError(f"{driver} metadata mismatch")
         run(driver, url, user, password, "--explain", f"SELECT id FROM {quoted}")
+        if driver == "postgres":
+            typed = json.loads(run(driver,url,user,password,"--sql",
+                "SELECT '{\"ok\":true}'::jsonb AS payload, '00000000-0000-0000-0000-000000000001'::uuid AS id", "--format","json"))
+            if json.loads(typed[0]["payload"]) != {"ok":True} or typed[0]["id"] != "00000000-0000-0000-0000-000000000001":
+                raise RuntimeError("postgres typed value mismatch")
+        else:
+            typed = json.loads(run(driver,url,user,password,"--sql","SELECT CAST(N'<root>ok</root>' AS XML) AS payload","--format","json"))
+            if "<root>ok</root>" not in typed[0]["payload"]:
+                raise RuntimeError("sqlserver XML value mismatch")
     finally:
         try:
             run(driver, url, user, password, "--sql", f"DROP TABLE {quoted}")

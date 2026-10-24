@@ -221,13 +221,10 @@ public final class Database implements AutoCloseable {
                 Reader reader = xml.getCharacterStream();
                 value = reader == null ? xml.getString() : readText(reader);
             } finally { try { xml.free(); } catch (SQLException ignored) { } }
-        } else if (value != null && value.getClass().getName().equals("org.postgresql.util.PGobject")) {
-            try {
-                Object text = value.getClass().getMethod("getValue").invoke(value);
-                value = text == null ? null : String.valueOf(text);
-            } catch (ReflectiveOperationException e) {
-                throw new DatabaseException("could not read PostgreSQL value", e);
-            }
+        } else if (value instanceof org.postgresql.util.PGobject postgresValue) {
+            value = postgresValue.getValue();
+        } else if (value instanceof java.util.UUID uuid) {
+            value = uuid.toString();
         }
         Object safe = safeValue(value);
         budget.add(estimateBytes(safe));
