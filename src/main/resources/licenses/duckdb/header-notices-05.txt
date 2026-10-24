@@ -1,0 +1,1499 @@
+DuckDB JNI source pin: a561d2ddadde231402411ce76112779bc34b57f0 (v1.5.6.0)
+This file preserves top-of-file copyright/license notices from the pinned source.
+Warning: truncated output (original token count: 26110)
+Total output lines: 2276
+
+--- SOURCE: extension/icu/third_party/icu/i18n/collationrootelements.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2013-2014, International Business Machines
+* Corporation and others.  All Rights Reserved.
+*******************************************************************************
+* collationrootelements.h
+*
+* created on: 2013mar01
+* created by: Markus W. Scherer
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/collationruleparser.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2013-2015, International Business Machines
+* Corporation and others.  All Rights Reserved.
+*******************************************************************************
+* collationruleparser.cpp
+*
+* (replaced the former ucol_tok.cpp)
+*
+* created on: 2013apr10
+* created by: Markus W. Scherer
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/collationruleparser.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2013-2014, International Business Machines
+* Corporation and others.  All Rights Reserved.
+*******************************************************************************
+* collationruleparser.h
+*
+* created on: 2013apr10
+* created by: Markus W. Scherer
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/collationsets.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2013-2014, International Business Machines
+* Corporation and others.  All Rights Reserved.
+*******************************************************************************
+* collationsets.cpp
+*
+* created on: 2013feb09
+* created by: Markus W. Scherer
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/collationsets.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2013-2014, International Business Machines
+* Corporation and others.  All Rights Reserved.
+*******************************************************************************
+* collationsets.h
+*
+* created on: 2013feb09
+* created by: Markus W. Scherer
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/collationsettings.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2013-2015, International Business Machines
+* Corporation and others.  All Rights Reserved.
+*******************************************************************************
+* collationsettings.cpp
+*
+* created on: 2013feb07
+* created by: Markus W. Scherer
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/collationsettings.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2013-2015, International Business Machines
+* Corporation and others.  All Rights Reserved.
+*******************************************************************************
+* collationsettings.h
+*
+* created on: 2013feb07
+* created by: Markus W. Scherer
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/collationtailoring.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2013-2015, International Business Machines
+* Corporation and others.  All Rights Reserved.
+*******************************************************************************
+* collationtailoring.cpp
+*
+* created on: 2013mar12
+* created by: Markus W. Scherer
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/collationtailoring.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2013-2014, International Business Machines
+* Corporation and others.  All Rights Reserved.
+*******************************************************************************
+* collationtailoring.h
+*
+* created on: 2013mar12
+* created by: Markus W. Scherer
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/collationweights.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*  
+*******************************************************************************
+*
+*   Copyright (C) 1999-2015, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*
+*******************************************************************************
+*   file name:  collationweights.cpp
+*   encoding:   UTF-8
+*   tab size:   8 (not used)
+*   indentation:4
+*
+*   created on: 2001mar08 as ucol_wgt.cpp
+*   created by: Markus W. Scherer
+*
+*   This file contains code for allocating n collation element weights
+*   between two exclusive limits.
+*   It is used only internally by the collation tailoring builder.
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/collationweights.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*  
+*******************************************************************************
+*
+*   Copyright (C) 1999-2014, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*
+*******************************************************************************
+*   file name:  collationweights.h
+*   encoding:   UTF-8
+*   tab size:   8 (not used)
+*   indentation:4
+*
+*   created on: 2001mar08 as ucol_wgt.h
+*   created by: Markus W. Scherer
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/collunsafe.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+// collunsafe.h
+//  Copyright (C) 2015-2016, International Business Machines Corporation and others.
+//  All Rights Reserved.
+
+// To be included by collationdatareader.cpp, and generated by gencolusb.
+// Machine generated, do not edit.
+
+--- SOURCE: extension/icu/third_party/icu/i18n/coptccal.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2003 - 2013, International Business Machines Corporation and
+* others. All Rights Reserved.
+*******************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/coptccal.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2003 - 2013, International Business Machines Corporation and  *
+* others. All Rights Reserved.                                                *
+*******************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/cpdtrans.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+**********************************************************************
+*   Copyright (C) 1999-2011, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+**********************************************************************
+*   Date        Name        Description
+*   11/17/99    aliu        Creation.
+**********************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/curramt.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+**********************************************************************
+* Copyright (c) 2004, International Business Machines
+* Corporation and others.  All Rights Reserved.
+**********************************************************************
+* Author: Alan Liu
+* Created: April 26, 2004
+* Since: ICU 3.0
+**********************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/currfmt.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+**********************************************************************
+* Copyright (c) 2004-2014 International Business Machines
+* Corporation and others.  All Rights Reserved.
+**********************************************************************
+* Author: Alan Liu
+* Created: April 20, 2004
+* Since: ICU 3.0
+**********************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/currfmt.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+**********************************************************************
+* Copyright (c) 2004-2014, International Business Machines
+* Corporation and others.  All Rights Reserved.
+**********************************************************************
+* Author: Alan Liu
+* Created: April 20, 2004
+* Since: ICU 3.0
+**********************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/currpinf.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+ *******************************************************************************
+ * Copyright (C) 2009-2014, International Business Machines Corporation and
+ * others. All Rights Reserved.
+ *******************************************************************************
+ */
+
+--- SOURCE: extension/icu/third_party/icu/i18n/currunit.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+**********************************************************************
+* Copyright (c) 2004-2014, International Business Machines
+* Corporation and others.  All Rights Reserved.
+**********************************************************************
+* Author: Alan Liu
+* Created: April 26, 2004
+* Since: ICU 3.0
+**********************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/dangical.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+ ******************************************************************************
+ * Copyright (C) 2013, International Business Machines Corporation
+ * and others. All Rights Reserved.
+ ******************************************************************************
+ *
+ * File DANGICAL.CPP
+ *****************************************************************************
+ */
+
+--- SOURCE: extension/icu/third_party/icu/i18n/dangical.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+ *****************************************************************************
+ * Copyright (C) 2013, International Business Machines Corporation
+ * and others. All Rights Reserved.
+ *****************************************************************************
+ *
+ * File DANGICAL.H
+ *****************************************************************************
+ */
+
+--- SOURCE: extension/icu/third_party/icu/i18n/datefmt.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+ *******************************************************************************
+ * Copyright (C) 1997-2015, International Business Machines Corporation and    *
+ * others. All Rights Reserved.                                                *
+ *******************************************************************************
+ *
+ * File DATEFMT.CPP
+ *
+ * Modification History:
+ *
+ *   Date        Name        Description
+ *   02/19/97    aliu        Converted from java.
+ *   03/31/97    aliu        Modified extensively to work with 50 locales.
+ *   04/01/97    aliu        Added support for centuries.
+ *   08/12/97    aliu        Fixed operator== to use Calendar::equivalentTo.
+ *   07/20/98    stephen     Changed ParsePosition initialization
+ ********************************************************************************
+ */
+
+--- SOURCE: extension/icu/third_party/icu/i18n/dayperiodrules.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2016, International Business Machines
+* Corporation and others.  All Rights Reserved.
+*******************************************************************************
+* dayperiodrules.cpp
+*
+* created on: 2016-01-20
+* created by: kazede
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/dayperiodrules.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2016, International Business Machines
+* Corporation and others.  All Rights Reserved.
+*******************************************************************************
+* dayperiodrules.h
+*
+* created on: 2016-01-20
+* created by: kazede
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/dcfmtsym.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 1997-2016, International Business Machines Corporation and
+* others. All Rights Reserved.
+*******************************************************************************
+*
+* File DCFMTSYM.CPP
+*
+* Modification History:
+*
+*   Date        Name        Description
+*   02/19/97    aliu        Converted from java.
+*   03/18/97    clhuang     Implemented with C++ APIs.
+*   03/27/97    helena      Updated to pass the simple test after code review.
+*   08/26/97    aliu        Added currency/intl currency symbol support.
+*   07/20/98    stephen     Slightly modified initialization of monetarySeparator
+********************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/decContext.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/* ------------------------------------------------------------------ */
+/* Decimal Context module                                             */
+/* ------------------------------------------------------------------ */
+/* Copyright (c) IBM Corporation, 2000-2012.  All rights reserved.    */
+/*                                                                    */
+/* This software is made available under the terms of the             */
+/* ICU License -- ICU 1.8.1 and later.                                */
+/*                                                                    */
+/* The description and User's Guide ("The decNumber C Library") for   */
+/* this software is called decNumber.pdf.  This document is           */
+/* available, together with arithmetic and format specifications,     */
+/* testcases, and Web links, on the General Decimal Arithmetic page.  */
+/*                                                                    */
+/* Please send comments, suggestions, and corrections to the author:  */
+/*   mfc@uk.ibm.com                                                   */
+/*   Mike Cowlishaw, IBM Fellow                                       */
+/*   IBM UK, PO Box 31, Birmingham Road, Warwick CV34 5JL, UK         */
+/* ------------------------------------------------------------------ */
+/* This module comprises the routines for handling arithmetic         */
+/* context structures.                                                */
+/* ------------------------------------------------------------------ */
+
+#include <string.h>           /* for strcmp  */
+#include <stdio.h>            /* for printf if DECCHECK  */
+#include "decContext.h"       /* context and base types  */
+#include "decNumberLocal.h"   /* decNumber local types, etc.  */
+
+#if 0  /* ICU: No need to test endianness at runtime. */
+/* compile-time endian tester [assumes sizeof(Int)>1] */
+static  const  Int mfcone=1;                 /* constant 1  */
+static  const  Flag *mfctop=(Flag *)&mfcone; /* -> top byte  */
+#define LITEND *mfctop             /* named flag; 1=little-endian  */
+
+--- SOURCE: extension/icu/third_party/icu/i18n/decContext.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/* ------------------------------------------------------------------ */
+/* Decimal Context module header                                      */
+/* ------------------------------------------------------------------ */
+/* Copyright (c) IBM Corporation, 2000-2011.   All rights reserved.   */
+/*                                                                    */
+/* This software is made available under the terms of the             */
+/* ICU License -- ICU 1.8.1 and later.                                */
+/*                                                                    */
+/* The description and User's Guide ("The decNumber C Library") for   */
+/* this software is called decNumber.pdf.  This document is           */
+/* available, together with arithmetic and format specifications,     */
+/* testcases, and Web links, on the General Decimal Arithmetic page.  */
+/*                                                                    */
+/* Please send comments, suggestions, and corrections to the author:  */
+/*   mfc@uk.ibm.com                                                   */
+/*   Mike Cowlishaw, IBM Fellow                                       */
+/*   IBM UK, PO Box 31, Birmingham Road, Warwick CV34 5JL, UK         */
+/* ------------------------------------------------------------------ */
+
+--- SOURCE: extension/icu/third_party/icu/i18n/decNumber.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/* ------------------------------------------------------------------ */
+/* Decimal Number arithmetic module                                   */
+/* ------------------------------------------------------------------ */
+/* Copyright (c) IBM Corporation, 2000-2014.  All rights reserved.    */
+/*                                                                    */
+/* This software is made available under the terms of the             */
+/* ICU License -- ICU 1.8.1 and later.                                */
+/*                                                                    */
+/* The description and User's Guide ("The decNumber C Library") for   */
+/* this software is called decNumber.pdf.  This document is           */
+/* available, together with arithmetic and format specifications,     */
+/* testcases, and Web links, on the General Decimal Arithmetic page.  */
+/*                                                                    */
+/* Please send comments, suggestions, and corrections to the author:  */
+/*   mfc@uk.ibm.com                                                   */
+/*   Mike Cowlishaw, IBM Fellow                                       */
+/*   IBM UK, PO Box 31, Birmingham Road, Warwick CV34 5JL, UK         */
+/* ------------------------------------------------------------------ */
+
+/* Modified version, for use from within ICU.
+ *    Renamed public functions, to avoid an unwanted export of the
+ *    standard names from the ICU library.
+ *
+ *    Use ICU's uprv_malloc() and uprv_free()
+ *
+ *    Revert comment syntax to plain C
+ *
+ *    Remove a few compiler warnings.
+ */
+
+/* This module comprises the routines for arbitrary-precision General */
+/* Decimal Arithmetic as defined in the specification which may be    */
+/* found on the General Decimal Arithmetic pages.  It implements both */
+/* the full ('extended') arithmetic and the simpler ('subset')        */
+/* arithmetic.                                                        */
+/*                                                                    */
+/* Usage notes:                                                       */
+/*                                                                    */
+/* 1. This code is ANSI C89 except:                                   */
+/*                                                                    */
+/*    a) C99 line comments (double forward slash) are used.  (Most C  */
+/*       compilers accept these.  If yours does not, a simple script  */
+/*       can be used to convert them to ANSI C comments.)             */
+/*                                                                    */
+/*    b) Types from C99 stdint.h are used.  If you do not have this   */
+/*       header file, see the User's Guide section of the decNumber   */
+/*       documentation; this lists the necessary definitions.         */
+/*                                                                    */
+/*    c) If DECDPUN>4 or DECUSE64=1, the C99 64-bit int64_t and       */
+/*       uint64_t types may be used.  To avoid these, set DECUSE64=0  */
+/*       and DECDPUN<=4 (see documentation).                          */
+/*                                                                    */
+/*    The code also conforms to C99 restrictions; in particular,      */
+/*    strict aliasing rules are observed.                             */
+/*                                                                    */
+/* 2. The decNumber format which this library uses is optimized for   */
+/*    efficient processing of relatively short numbers; in particular */
+/*    it allows the use of fixed sized structures and minimizes copy  */
+/*    and move operations.  It does, however, support arbitrary       */
+/*    precision (up to 999,999,999 digits) and arbitrary exponent     */
+/*    range (Emax in the range 0 through 999,999,999 and Emin in the  */
+/*    range -999,999,999 through 0).  Mathematical functions (for     */
+/*    example decNumberExp) as identified below are restricted more   */
+/*    tightly: digits, emax, and -emin in the context must be <=      */
+/*    DEC_MAX_MATH (999999), and their operand(s) must be within      */
+/*    these bounds.                                                   */
+/*                                                                    */
+/* 3. Logical functions are further restricted; their operands must   */
+/*    be finite, positive, have an exponent of zero, and all digits   */
+/*    must be either 0 or 1.  The result will only contain digits     */
+/*    which are 0 or 1 (and will have exponent=0 and a sign of 0).    */
+/*                                                                    */
+/* 4. Operands to operator functions are never modified unless they   */
+/*    are also specified to be the result number (which is always     */
+/*    permitted).  Other than that case, operands must not overlap.   */
+/*                                                                    */
+/* 5. Error handling: the type of the error is ORed into the status   */
+/*    flags in the current context (decContext structure).  The       */
+/*    SIGFPE signal is then raised if the corresponding trap-enabler  */
+/*    flag in the decContext is set (is 1).                           */
+/*                                                                    */
+/*    It is the responsibility of the caller to clear the status      */
+/*    flags as required.                                              */
+/*                                                                    */
+/*    The result of any routine which returns a number will always    */
+/*    be a valid number (which may be a special value, such as an     */
+/*    Infinity or NaN).                                               */
+/*                                                                    */
+/* 6. The decNumber format is not an exchangeable concrete            */
+/*    representation as it comprises fields which may be machine-     */
+/*    dependent (packed or unpacked, or special length, for example). */
+/*    Canonical conversions to and from strings are provided; other   */
+/*    conversions are available in separate modules.                  */
+/*                                                                    */
+/* 7. Normally, input operands are assumed to be valid.  Set DECCHECK */
+/*    to 1 for extended operand checking (including NULL operands).   */
+/*    Results are undefined if a badly-formed structure (or a NULL    */
+/*    pointer to a structure) is provided, though with DECCHECK       */
+
+--- SOURCE: extension/icu/third_party/icu/i18n/decNumber.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/* ------------------------------------------------------------------ */
+/* Decimal Number arithmetic module header                            */
+/* ------------------------------------------------------------------ */
+/* Copyright (c) IBM Corporation, 2000-2010.   All rights reserved.   */
+/*                                                                    */
+/* This software is made available under the terms of the             */
+/* ICU License -- ICU 1.8.1 and later.                                */
+/*                                                                    */
+/* The description and User's Guide ("The decNumber C Library") for   */
+/* this software is called decNumber.pdf.  This document is           */
+/* available, together with arithmetic and format specifications,     */
+/* testcases, and Web links, on the General Decimal Arithmetic page.  */
+/*                                                                    */
+/* Please send comments, suggestions, and corrections to the author:  */
+/*   mfc@uk.ibm.com                                                   */
+/*   Mike Cowlishaw, IBM Fellow                                       */
+/*   IBM UK, PO Box 31, Birmingham Road, Warwick CV34 5JL, UK         */
+/* ------------------------------------------------------------------ */
+
+/* Modified version, for use from within ICU.
+ *    Renamed public functions, to avoid an unwanted export of the
+ *    standard names from the ICU library.
+ *
+ *    Use ICU's uprv_malloc() and uprv_free()
+ *
+ *    Revert comment syntax to plain C
+ *
+ *    Remove a few compiler warnings.
+ */
+
+--- SOURCE: extension/icu/third_party/icu/i18n/decNumberLocal.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/* ------------------------------------------------------------------ */
+/* decNumber package local type, tuning, and macro definitions        */
+/* ------------------------------------------------------------------ */
+/* Copyright (c) IBM Corporation, 2000-2016.   All rights reserved.   */
+/*                                                                    */
+/* This software is made available under the terms of the             */
+/* ICU License -- ICU 1.8.1 and later.                                */
+/*                                                                    */
+/* The description and User's Guide ("The decNumber C Library") for   */
+/* this software is called decNumber.pdf.  This document is           */
+/* available, together with arithmetic and format specifications,     */
+/* testcases, and Web links, on the General Decimal Arithmetic page.  */
+/*                                                                    */
+/* Please send comments, suggestions, and corrections to the author:  */
+/*   mfc@uk.ibm.com                                                   */
+/*   Mike Cowlishaw, IBM Fellow                                       */
+/*   IBM UK, PO Box 31, Birmingham Road, Warwick CV34 5JL, UK         */
+/* ------------------------------------------------------------------ */
+/* This header file is included by all modules in the decNumber       */
+/* library, and contains local type definitions, tuning parameters,   */
+/* etc.  It should not need to be used by application programs.       */
+/* decNumber.h or one of decDouble (etc.) must be included first.     */
+/* ------------------------------------------------------------------ */
+
+--- SOURCE: extension/icu/third_party/icu/i18n/double-conversion-bignum-dtoa.cpp ---
+// © 2018 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+//
+// From the double-conversion library. Original license:
+//
+// Copyright 2010 the V8 project authors. All rights reserved.
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions are
+// met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above
+//       copyright notice, this list of conditions and the following
+//       disclaimer in the documentation and/or other materials provided
+//       with the distribution.
+//     * Neither the name of Google Inc. nor the names of its
+//       contributors may be used to endorse or promote products derived
+//       from this software without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+// OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+// ICU PATCH: ifdef around UCONFIG_NO_FORMATTING
+
+--- SOURCE: extension/icu/third_party/icu/i18n/double-conversion-bignum-dtoa.h ---
+// © 2018 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+//
+// From the double-conversion library. Original license:
+//
+// Copyright 2010 the V8 project authors. All rights reserved.
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions are
+// met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above
+//       copyright notice, this list of conditions and the following
+//       disclaimer in the documentation and/or oth…10110 tokens truncated…*************************************************************************
+*
+* File FORMAT.CPP
+*
+* Modification History:
+*
+*   Date        Name        Description
+*   02/19/97    aliu        Converted from java.
+*   03/17/97    clhuang     Implemented with new APIs.
+*   03/27/97    helena      Updated to pass the simple test after code review.
+*   07/20/98    stephen        Added explicit init values for Field/ParsePosition
+********************************************************************************
+*/
+// *****************************************************************************
+// This file was generated from the java source file Format.java
+// *****************************************************************************
+
+--- SOURCE: extension/icu/third_party/icu/i18n/fphdlimp.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2009-2015, International Business Machines Corporation and
+* others. All Rights Reserved.
+*******************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/fphdlimp.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2009-2015, International Business Machines Corporation and    *
+* others. All Rights Reserved.                                                *
+*******************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/fpositer.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+******************************************************************************
+* Copyright (C) 2009-2012, International Business Machines Corporation and
+* others. All Rights Reserved.
+******************************************************************************
+*   Date        Name        Description
+*   12/14/09    doug        Creation.
+******************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/gender.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2008-2013, International Business Machines Corporation and
+* others. All Rights Reserved.
+*******************************************************************************
+*
+*
+* File GENDER.CPP
+*
+* Modification History:*
+*   Date        Name        Description
+*
+********************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/gregocal.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 1997-2016, International Business Machines Corporation and
+* others. All Rights Reserved.
+*******************************************************************************
+*
+* File GREGOCAL.CPP
+*
+* Modification History:
+*
+*   Date        Name        Description
+*   02/05/97    clhuang     Creation.
+*   03/28/97    aliu        Made highly questionable fix to computeFields to
+*                           handle DST correctly.
+*   04/22/97    aliu        Cleaned up code drastically.  Added monthLength().
+*                           Finished unimplemented parts of computeTime() for
+*                           week-based date determination.  Removed quetionable
+*                           fix and wrote correct fix for computeFields() and
+*                           daylight time handling.  Rewrote inDaylightTime()
+*                           and computeFields() to handle sensitive Daylight to
+*                           Standard time transitions correctly.
+*   05/08/97    aliu        Added code review changes.  Fixed isLeapYear() to
+*                           not cutover.
+*   08/12/97    aliu        Added equivalentTo.  Misc other fixes.  Updated
+*                           add() from Java source.
+*    07/28/98    stephen        Sync up with JDK 1.2
+*    09/14/98    stephen        Changed type of kOneDay, kOneWeek to double.
+*                            Fixed bug in roll()
+*   10/15/99    aliu        Fixed j31, incorrect WEEK_OF_YEAR computation.
+*   10/15/99    aliu        Fixed j32, cannot set date to Feb 29 2000 AD.
+*                           {JDK bug 4210209 4209272}
+*   11/15/99    weiv        Added YEAR_WOY and DOW_LOCAL computation
+*                           to timeToFields method, updated kMinValues, kMaxValues & kLeastMaxValues
+*   12/09/99    aliu        Fixed j81, calculation errors and roll bugs
+*                           in year of cutover.
+*   01/24/2000  aliu        Revised computeJulianDay for YEAR YEAR_WOY WOY.
+********************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/gregoimp.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+ **********************************************************************
+ * Copyright (c) 2003-2008, International Business Machines
+ * Corporation and others.  All Rights Reserved.
+ **********************************************************************
+ * Author: Alan Liu
+ * Created: September 2 2003
+ * Since: ICU 2.8
+ **********************************************************************
+ */
+
+--- SOURCE: extension/icu/third_party/icu/i18n/gregoimp.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+ **********************************************************************
+ * Copyright (c) 2003-2008, International Business Machines
+ * Corporation and others.  All Rights Reserved.
+ **********************************************************************
+ * Author: Alan Liu
+ * Created: September 2 2003
+ * Since: ICU 2.8
+ **********************************************************************
+ */
+
+--- SOURCE: extension/icu/third_party/icu/i18n/hebrwcal.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+******************************************************************************
+* Copyright (C) 2003-2016, International Business Machines Corporation
+* and others. All Rights Reserved.
+******************************************************************************
+*
+* File HEBRWCAL.CPP
+*
+* Modification History:
+*
+*   Date        Name        Description
+*   12/03/2003  srl         ported from java HebrewCalendar
+*****************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/hebrwcal.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+******************************************************************************
+* Copyright (C) 2003-2013, International Business Machines Corporation
+* and others. All Rights Reserved.
+******************************************************************************
+*
+* File HEBRWCAL.H
+*
+* Modification History:
+*
+*   Date        Name        Description
+*   05/13/2003  srl          copied from gregocal.h
+*   11/26/2003  srl          copied from buddhcal.h
+******************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/indiancal.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+ * Copyright (C) 2003-2014, International Business Machines Corporation
+ * and others. All Rights Reserved.
+ ******************************************************************************
+ *
+ * File INDIANCAL.CPP
+ *****************************************************************************
+ */
+
+--- SOURCE: extension/icu/third_party/icu/i18n/indiancal.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+ *****************************************************************************
+ * Copyright (C) 2003-2008, International Business Machines Corporation
+ * and others. All Rights Reserved.
+ *****************************************************************************
+ *
+ * File INDIANCAL.H
+ *****************************************************************************
+ */
+
+--- SOURCE: extension/icu/third_party/icu/i18n/islamcal.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+******************************************************************************
+* Copyright (C) 2003-2015, International Business Machines Corporation
+* and others. All Rights Reserved.
+******************************************************************************
+*
+* File ISLAMCAL.H
+*
+* Modification History:
+*
+*   Date        Name        Description
+*   10/14/2003  srl         ported from java IslamicCalendar
+*****************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/islamcal.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+ ********************************************************************************
+ * Copyright (C) 2003-2013, International Business Machines Corporation
+ * and others. All Rights Reserved.
+ ******************************************************************************
+ *
+ * File ISLAMCAL.H
+ *
+ * Modification History:
+ *
+ *   Date        Name        Description
+ *   10/14/2003  srl         ported from java IslamicCalendar
+ *****************************************************************************
+ */
+
+--- SOURCE: extension/icu/third_party/icu/i18n/japancal.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2003-2009,2012,2016 International Business Machines Corporation and
+* others. All Rights Reserved.
+*******************************************************************************
+*
+* File JAPANCAL.CPP
+*
+* Modification History:
+*  05/16/2003    srl     copied from buddhcal.cpp
+*
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/japancal.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+ ********************************************************************************
+ * Copyright (C) 2003-2008, International Business Machines Corporation
+ * and others. All Rights Reserved.
+ ********************************************************************************
+ *
+ * File JAPANCAL.H
+ *
+ * Modification History:
+ *
+ *   Date        Name        Description
+ *   05/13/2003  srl         copied from gregocal.h
+ ********************************************************************************
+ */
+
+--- SOURCE: extension/icu/third_party/icu/i18n/listformatter.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+*
+*   Copyright (C) 2013-2016, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*
+*******************************************************************************
+*   file name:  listformatter.cpp
+*   encoding:   UTF-8
+*   tab size:   8 (not used)
+*   indentation:4
+*
+*   created on: 2012aug27
+*   created by: Umesh P. Nair
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/measfmt.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+**********************************************************************
+* Copyright (c) 2004-2016, International Business Machines
+* Corporation and others.  All Rights Reserved.
+**********************************************************************
+* Author: Alan Liu
+* Created: April 20, 2004
+* Since: ICU 3.0
+**********************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/measunit.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+**********************************************************************
+* Copyright (c) 2004-2016, International Business Machines
+* Corporation and others.  All Rights Reserved.
+**********************************************************************
+* Author: Alan Liu
+* Created: April 26, 2004
+* Since: ICU 3.0
+**********************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/measure.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+**********************************************************************
+* Copyright (c) 2004-2014, International Business Machines
+* Corporation and others.  All Rights Reserved.
+**********************************************************************
+* Author: Alan Liu
+* Created: April 26, 2004
+* Since: ICU 3.0
+**********************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/msgfmt.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/********************************************************************
+ * COPYRIGHT:
+ * Copyright (c) 1997-2015, International Business Machines Corporation and
+ * others. All Rights Reserved.
+ ********************************************************************
+ *
+ * File MSGFMT.CPP
+ *
+ * Modification History:
+ *
+ *   Date        Name        Description
+ *   02/19/97    aliu        Converted from java.
+ *   03/20/97    helena      Finished first cut of implementation.
+ *   04/10/97    aliu        Made to work on AIX.  Added stoi to replace wtoi.
+ *   06/11/97    helena      Fixed addPattern to take the pattern correctly.
+ *   06/17/97    helena      Fixed the getPattern to return the correct pattern.
+ *   07/09/97    helena      Made ParsePosition into a class.
+ *   02/22/99    stephen     Removed character literals for EBCDIC safety
+ *   11/01/09    kirtig      Added SelectFormat
+ ********************************************************************/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/msgfmt_impl.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2007-2008, International Business Machines Corporation and
+* others. All Rights Reserved.                                                *
+*******************************************************************************
+*
+* File MSGFMT.H
+*
+*******************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/name2uni.h ---
+// // © 2016 and later: Unicode, Inc. and others.
+// // License & terms of use: http://www.unicode.org/copyright.html
+// /*
+// **********************************************************************
+// *   Copyright (C) 2001-2007, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// **********************************************************************
+// *   Date        Name        Description
+// *   06/07/01    aliu        Creation.
+// **********************************************************************
+// */
+// #ifndef NAME2UNI_H
+// #define NAME2UNI_H
+
+// #include "unicode/utypes.h"
+
+// #if !UCONFIG_NO_TRANSLITERATION
+
+// #include "unicode/translit.h"
+// #include "unicode/uniset.h"
+
+// U_NAMESPACE_BEGIN
+
+// /**
+//  * A transliterator that performs name to character mapping.
+//  * It recognizes the Perl syntax \N{name}.
+//  * @author Alan Liu
+//  */
+// class NameUnicodeTransliterator : public Transliterator {
+// public:
+
+//     /**
+//      * Constructs a transliterator.
+//      * @param adoptedFilter    the filter for this transliterator.
+//      */
+//     NameUnicodeTransliterator(UnicodeFilter* adoptedFilter = 0);
+
+//     /**
+//      * Destructor.
+//      */
+//     virtual ~NameUnicodeTransliterator();
+
+//     /**
+//      * Copy constructor.
+//      */
+//     NameUnicodeTransliterator(const NameUnicodeTransliterator&);
+
+//     /**
+//      * Transliterator API.
+//      * @return    A copy of the object.
+//      */
+//     virtual NameUnicodeTransliterator* clone() const;
+
+//     /**
+//      * ICU "poor man's RTTI", returns a UClassID for the actual class.
+//      */
+//     virtual UClassID getDynamicClassID() const;
+
+//     /**
+//      * ICU "poor man's RTTI", returns a UClassID for this class.
+//      */
+//     U_I18N_API static UClassID U_EXPORT2 getStaticClassID();
+
+//  protected:
+
+//     /**
+//      * Implements {@link Transliterator#handleTransliterate}.
+//      * @param text          the buffer holding transliterated and
+//      *                      untransliterated text
+//      * @param offset        the start and limit of the text, the position
+//      *                      of the cursor, and the start and limit of transliteration.
+//      * @param incremental   if true, assume more text may be coming after
+//      *                      pos.contextLimit. Otherwise, assume the text is complete.
+//      */
+//     virtual void handleTransliterate(Replaceable& text, UTransPosition& offset,
+//                                      UBool isIncremental) const;
+
+//     /**
+//      * Set of characters which occur in Unicode character names.
+//      */
+//     UnicodeSet legal;
+// private:
+//     /**
+//      * Assignment operator.
+//      */
+//     NameUnicodeTransliterator& operator=(const NameUnicodeTransliterator&);
+// };
+
+// U_NAMESPACE_END
+
+// #endif /* #if !UCONFIG_NO_TRANSLITERATION */
+
+// #endif
+
+--- SOURCE: extension/icu/third_party/icu/i18n/nfrlist.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+******************************************************************************
+*   Copyright (C) 1997-2012, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+******************************************************************************
+*   file name:  nfrlist.h
+*   encoding:   UTF-8
+*   tab size:   8 (not used)
+*   indentation:4
+*
+* Modification history
+* Date        Name      Comments
+* 10/11/2001  Doug      Ported from ICU4J
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/nfrs.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+******************************************************************************
+*   Copyright (C) 1997-2015, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+******************************************************************************
+*   file name:  nfrs.cpp
+*   encoding:   UTF-8
+*   tab size:   8 (not used)
+*   indentation:4
+*
+* Modification history
+* Date        Name      Comments
+* 10/11/2001  Doug      Ported from ICU4J
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/nfrs.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+******************************************************************************
+*   Copyright (C) 1997-2015, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+******************************************************************************
+*   file name:  nfrs.h
+*   encoding:   UTF-8
+*   tab size:   8 (not used)
+*   indentation:4
+*
+* Modification history
+* Date        Name      Comments
+* 10/11/2001  Doug      Ported from ICU4J
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/nfrule.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+******************************************************************************
+*   Copyright (C) 1997-2015, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+******************************************************************************
+*   file name:  nfrule.cpp
+*   encoding:   UTF-8
+*   tab size:   8 (not used)
+*   indentation:4
+*
+* Modification history
+* Date        Name      Comments
+* 10/11/2001  Doug      Ported from ICU4J
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/nfrule.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 1997-2015, International Business Machines
+* Corporation and others. All Rights Reserved.
+*******************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/nfsubs.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+******************************************************************************
+*   Copyright (C) 1997-2015, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+******************************************************************************
+*   file name:  nfsubs.cpp
+*   encoding:   UTF-8
+*   tab size:   8 (not used)
+*   indentation:4
+*
+* Modification history
+* Date        Name      Comments
+* 10/11/2001  Doug      Ported from ICU4J
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/nfsubs.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+******************************************************************************
+*   Copyright (C) 1997-2015, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+******************************************************************************
+*   file name:  nfsubs.h
+*   encoding:   UTF-8
+*   tab size:   8 (not used)
+*   indentation:4
+*
+* Modification history
+* Date        Name      Comments
+* 10/11/2001  Doug      Ported from ICU4J
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/nortrans.h ---
+// // © 2016 and later: Unicode, Inc. and others.
+// // License & terms of use: http://www.unicode.org/copyright.html
+// /*
+// **********************************************************************
+// *   Copyright (C) 2001-2010, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// **********************************************************************
+// *   Date        Name        Description
+// *   07/03/01    aliu        Creation.
+// **********************************************************************
+// */
+// #ifndef NORTRANS_H
+// #define NORTRANS_H
+
+// #include "unicode/utypes.h"
+
+// #if !UCONFIG_NO_TRANSLITERATION
+
+// #include "unicode/translit.h"
+// #include "unicode/normalizer2.h"
+
+// U_NAMESPACE_BEGIN
+
+// /**
+//  * A transliterator that performs normalization.
+//  * @author Alan Liu
+//  */
+// class NormalizationTransliterator : public Transliterator {
+//     const Normalizer2 &fNorm2;
+
+//  public:
+
+//     /**
+//      * Destructor.
+//      */
+//     virtual ~NormalizationTransliterator();
+
+//     /**
+//      * Copy constructor.
+//      */
+//     NormalizationTransliterator(const NormalizationTransliterator&);
+
+//     /**
+//      * Transliterator API.
+//      * @return    A copy of the object.
+//      */
+//     virtual NormalizationTransliterator* clone() const;
+
+//     /**
+//      * ICU "poor man's RTTI", returns a UClassID for the actual class.
+//      */
+//     virtual UClassID getDynamicClassID() const;
+
+//     /**
+//      * ICU "poor man's RTTI", returns a UClassID for this class.
+//      */
+//     U_I18N_API static UClassID U_EXPORT2 getStaticClassID();
+
+//  protected:
+
+//     /**
+//      * Implements {@link Transliterator#handleTransliterate}.
+//      * @param text          the buffer holding transliterated and
+//      *                      untransliterated text
+//      * @param offset        the start and limit of the text, the position
+//      *                      of the cursor, and the start and limit of transliteration.
+//      * @param incremental   if true, assume more text may be coming after
+//      *                      pos.contextLimit. Otherwise, assume the text is complete.
+//      */
+//     virtual void handleTransliterate(Replaceable& text, UTransPosition& offset,
+//                              UBool isIncremental) const;
+//  public:
+
+//     /**
+//      * System registration hook.  Public to Transliterator only.
+//      */
+//     static void registerIDs();
+
+//  private:
+
+//     // Transliterator::Factory methods
+//     static Transliterator* _create(const UnicodeString& ID,
+//                                    Token context);
+
+//     /**
+//      * Constructs a transliterator.  This method is private.
+//      * Public users must use the factory method createInstance().
+//      */
+//     NormalizationTransliterator(const UnicodeString& id, const Normalizer2 &norm2);
+
+// private:
+//     /**
+//      * Assignment operator.
+//      */
+//     NormalizationTransliterator& operator=(const NormalizationTransliterator&);
+// };
+
+// U_NAMESPACE_END
+
+// #endif /* #if !UCONFIG_NO_TRANSLITERATION */
+
+--- SOURCE: extension/icu/third_party/icu/i18n/nultrans.h ---
+// // © 2016 and later: Unicode, Inc. and others.
+// // License & terms of use: http://www.unicode.org/copyright.html
+// /*
+// **********************************************************************
+// *   Copyright (c) 2000-2007, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// **********************************************************************
+// *   Date        Name        Description
+// *   01/11/2000  aliu        Creation.
+// **********************************************************************
+// */
+// #ifndef NULTRANS_H
+// #define NULTRANS_H
+
+// #include "unicode/utypes.h"
+
+// #if !UCONFIG_NO_TRANSLITERATION
+
+// #include "unicode/translit.h"
+
+// U_NAMESPACE_BEGIN
+
+// /**
+//  * A transliterator that leaves text unchanged.
+//  * @author Alan Liu
+//  * @internal Use transliterator factory methods instead since this class will be removed in that release.
+//  */
+// class NullTransliterator : public Transliterator {
+
+// public:
+
+//     /**
+//      * Constructs a transliterator.
+//      * @internal Use transliterator factory methods instead since this class will be removed in that release.
+//      */
+//     NullTransliterator();
+
+//     /**
+//      * Destructor.
+//      * @internal Use transliterator factory methods instead since this class will be removed in that release.
+//      */
+//     virtual ~NullTransliterator();
+
+//     /**
+//      * Transliterator API.
+//      * @internal Use transliterator factory methods instead since this class will be removed in that release.
+//      */
+//     virtual NullTransliterator* clone() const;
+
+//     /**
+//      * Implements {@link Transliterator#handleTransliterate}.
+//      * @internal Use transliterator factory methods instead since this class will be removed in that release.
+//      */
+//     virtual void handleTransliterate(Replaceable& text, UTransPosition& offset,
+//                                      UBool isIncremental) const;
+
+//     /**
+//      * ICU "poor man's RTTI", returns a UClassID for the actual class.
+//      */
+//     virtual UClassID getDynamicClassID() const;
+
+//     /**
+//      * ICU "poor man's RTTI", returns a UClassID for this class.
+//      */
+//     U_I18N_API static UClassID U_EXPORT2 getStaticClassID();
+
+// };
+
+// U_NAMESPACE_END
+
+// #endif /* #if !UCONFIG_NO_TRANSLITERATION */
+
+// #endif
+
+--- SOURCE: extension/icu/third_party/icu/i18n/numfmt.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 1997-2015, International Business Machines Corporation and
+* others. All Rights Reserved.
+*******************************************************************************
+*
+* File NUMFMT.CPP
+*
+* Modification History:
+*
+*   Date        Name        Description
+*   02/19/97    aliu        Converted from java.
+*   03/18/97    clhuang     Implemented with C++ APIs.
+*   04/17/97    aliu        Enlarged MAX_INTEGER_DIGITS to fully accomodate the
+*                           largest double, by default.
+*                           Changed DigitCount to int per code review.
+*    07/20/98    stephen        Changed operator== to check for grouping
+*                            Changed setMaxIntegerDigits per Java implementation.
+*                            Changed setMinIntegerDigits per Java implementation.
+*                            Changed setMinFractionDigits per Java implementation.
+*                            Changed setMaxFractionDigits per Java implementation.
+********************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/numsys.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2010-2015, International Business Machines Corporation and
+* others. All Rights Reserved.
+*******************************************************************************
+*
+*
+* File NUMSYS.CPP
+*
+* Modification History:*
+*   Date        Name        Description
+*
+********************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/numsys_impl.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2015, International Business Machines Corporation and
+* others. All Rights Reserved.                                                *
+*******************************************************************************
+*
+* File NUMSYS_IMPL.H
+*
+*******************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/olsontz.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+**********************************************************************
+* Copyright (c) 2003-2013, International Business Machines
+* Corporation and others.  All Rights Reserved.
+**********************************************************************
+* Author: Alan Liu
+* Created: July 21 2003
+* Since: ICU 2.8
+**********************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/olsontz.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+**********************************************************************
+* Copyright (c) 2003-2013, International Business Machines
+* Corporation and others.  All Rights Reserved.
+**********************************************************************
+* Author: Alan Liu
+* Created: July 21 2003
+* Since: ICU 2.8
+**********************************************************************
+*/
+
+

@@ -492,6 +492,9 @@
         "name": "JSON"
       },
       {
+        "name": "QUERY_TREE_OPTIMIZER"
+      },
+      {
         "name": "NO_OUTPUT"
       },
       {

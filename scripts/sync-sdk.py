@@ -4,7 +4,7 @@ import argparse
 import hashlib
 import io
 import json
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 import tarfile
 import urllib.request
 
@@ -19,8 +19,9 @@ manifest_path = destination / ".sdk-files.json"
 if args.verify or args.ensure and manifest_path.is_file():
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     assert manifest["commit"] == lock["commit"], "SDK commit differs from sdk.lock"
-    actual = {str(path.relative_to(destination)) for path in destination.rglob("*") if path.is_file() and path != manifest_path}
+    actual = {path.relative_to(destination).as_posix() for path in destination.rglob("*") if path.is_file() and path != manifest_path}
     assert actual == set(manifest["files"]), "SDK source file set differs from verified archive"
+    assert "src/main/java/io/lmctl/lmcode/Registry.java" in actual, "SDK Java sources are missing"
     for name, digest in manifest["files"].items():
         assert hashlib.sha256((destination / name).read_bytes()).hexdigest() == digest, "SDK source modified: " + name
     print("SDK sources verified: " + lock["tag"])
@@ -34,14 +35,14 @@ else:
     files = {}
     with tarfile.open(fileobj=io.BytesIO(archive_bytes), mode="r:gz") as archive:
         for member in archive:
-            relative = Path(*Path(member.name).parts[1:])
+            relative = PurePosixPath(*PurePosixPath(member.name).parts[1:])
             if member.isfile() and (str(relative).startswith("src/main/java/io/lmctl/lmcode/") and relative.suffix == ".java" or str(relative) == "LICENSE"):
                 assert not relative.is_absolute() and ".." not in relative.parts
                 data = archive.extractfile(member).read()
-                path = destination / relative
+                path = destination.joinpath(*relative.parts)
                 path.parent.mkdir(parents=True, exist_ok=True)
                 path.write_bytes(data)
                 files[str(relative)] = hashlib.sha256(data).hexdigest()
-    assert files and "LICENSE" in files, "SDK source/license missing"
+    assert "src/main/java/io/lmctl/lmcode/Registry.java" in files and "LICENSE" in files, "SDK source/license missing"
     manifest_path.write_text(json.dumps({"commit": lock["commit"], "files": files}, indent=2) + "\n", encoding="utf-8")
     print("SDK sources fetched: " + lock["tag"])

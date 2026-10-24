@@ -62,13 +62,20 @@
           <imageName>lmdb</imageName><mainClass>${main.class}</mainClass>
           <buildArgs>
             <buildArg>--no-fallback</buildArg>
+            <buildArg>--exclude-config</buildArg>
+            <buildArg>.*h2-2[.]3[.]232[.]jar</buildArg>
+            <buildArg>META-INF/native-image/reflect-config[.]json</buildArg>
             <buildArg>--features=ai.lmctl.lmdb.StaticJdbcFeature</buildArg>
             <buildArg>--enable-native-access=ALL-UNNAMED</buildArg>
             <buildArg>-march=compatibility</buildArg>
             <buildArg>-R:MaxHeapSize=3072m</buildArg>
+            <buildArg>-R:ReservedAddressSpaceSize=4g</buildArg>
             <buildArg>-J-Xmx4g</buildArg>
             <buildArg>-J--add-exports=org.graalvm.nativeimage.builder/com.oracle.svm.hosted.c=ALL-UNNAMED</buildArg>
             <buildArg>-J--add-exports=org.graalvm.nativeimage.builder/com.oracle.svm.core.jdk=ALL-UNNAMED</buildArg>
+            <buildArg>-J--add-exports=org.graalvm.nativeimage.builder/com.oracle.svm.core.jni.functions=ALL-UNNAMED</buildArg>
+            <buildArg>-J--add-exports=org.graalvm.nativeimage.builder/com.oracle.svm.core.jni.headers=ALL-UNNAMED</buildArg>
+            <buildArg>-H:AbortOnTypeReachable=java.awt.Toolkit</buildArg>
             <buildArg>-H:NumberOfThreads=2</buildArg>
             <buildArg>--enable-url-protocols=http,https</buildArg>
             <buildArg>--initialize-at-run-time=org.sqlite.SQLiteJDBCLoader,org.duckdb.DuckDBNative</buildArg>
@@ -111,6 +118,9 @@
       <buildArg>-H:+StaticExecutableWithDynamicLibC</buildArg>
       <buildArg>-H:NativeLinkerOption=-static-libstdc++</buildArg>
       <buildArg>-H:NativeLinkerOption=-static-libgcc</buildArg>
+      <buildArg>-H:NativeLinkerOption=${env.LMDB_STATIC_LIBDIR}/libstdc++.a</buildArg>
+      <buildArg>-H:NativeLinkerOption=${env.LMDB_STATIC_LIBDIR}/libgcc_eh.a</buildArg>
+      <buildArg>-H:NativeLinkerOption=-lm</buildArg>
       <buildArg>-H:ExcludeResources=libduckdb_java[.]so_.*|org/sqlite/native/.*</buildArg>
     </buildArgs></configuration>
   </plugin></plugins></build></profile></profiles>

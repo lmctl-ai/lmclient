@@ -1,0 +1,1687 @@
+DuckDB JNI source pin: a561d2ddadde231402411ce76112779bc34b57f0 (v1.5.6.0)
+This file preserves top-of-file copyright/license notices from the pinned source.
+Warning: truncated output (original token count: 24336)
+Total output lines: 2579
+
+--- SOURCE: extension/icu/third_party/icu/common/appendable.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+*   Copyright (C) 2011-2012, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*******************************************************************************
+*   file name:  appendable.cpp
+*   encoding:   UTF-8
+*   tab size:   8 (not used)
+*   indentation:4
+*
+*   created on: 2010dec07
+*   created by: Markus W. Scherer
+*/
+
+--- SOURCE: extension/icu/third_party/icu/common/bmpset.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+******************************************************************************
+*
+*   Copyright (C) 2007-2012, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*
+******************************************************************************
+*   file name:  bmpset.cpp
+*   encoding:   UTF-8
+*   tab size:   8 (not used)
+*   indentation:4
+*
+*   created on: 2007jan29
+*   created by: Markus W. Scherer
+*/
+
+--- SOURCE: extension/icu/third_party/icu/common/bmpset.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+******************************************************************************
+*
+*   Copyright (C) 2007, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*
+******************************************************************************
+*   file name:  bmpset.h
+*   encoding:   UTF-8
+*   tab size:   8 (not used)
+*   indentation:4
+*
+*   created on: 2007jan29
+*   created by: Markus W. Scherer
+*/
+
+--- SOURCE: extension/icu/third_party/icu/common/brkeng.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+ ************************************************************************************
+ * Copyright (C) 2006-2016, International Business Machines Corporation
+ * and others. All Rights Reserved.
+ ************************************************************************************
+ */
+
+--- SOURCE: extension/icu/third_party/icu/common/brkeng.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/**
+ ************************************************************************************
+ * Copyright (C) 2006-2012, International Business Machines Corporation and others. *
+ * All Rights Reserved.                                                             *
+ ************************************************************************************
+ */
+
+--- SOURCE: extension/icu/third_party/icu/common/brkiter.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 1997-2015, International Business Machines Corporation and
+* others. All Rights Reserved.
+*******************************************************************************
+*
+* File brkiter.cpp
+*
+* Modification History:
+*
+*   Date        Name        Description
+*   02/18/97    aliu        Converted from OpenClass.  Added DONE.
+*   01/13/2000  helena      Added UErrorCode parameter to createXXXInstance methods.
+*****************************************************************************************
+*/
+
+// *****************************************************************************
+// This file was generated from the java source file BreakIterator.java
+// *****************************************************************************
+
+--- SOURCE: extension/icu/third_party/icu/common/bytestream.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+// Copyright (C) 2009-2011, International Business Machines
+// Corporation and others. All Rights Reserved.
+//
+// Copyright 2007 Google Inc. All Rights Reserved.
+// Author: sanjay@google.com (Sanjay Ghemawat)
+
+--- SOURCE: extension/icu/third_party/icu/common/bytestrie.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+*   Copyright (C) 2010-2011, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*******************************************************************************
+*   file name:  bytestrie.cpp
+*   encoding:   UTF-8
+*   tab size:   8 (not used)
+*   indentation:4
+*
+*   created on: 2010sep25
+*   created by: Markus W. Scherer
+*/
+
+--- SOURCE: extension/icu/third_party/icu/common/bytestriebuilder.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+*   Copyright (C) 2010-2012, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*******************************************************************************
+*   file name:  bytestriebuilder.cpp
+*   encoding:   UTF-8
+*   tab size:   8 (not used)
+*   indentation:4
+*
+*   created on: 2010sep25
+*   created by: Markus W. Scherer
+*/
+
+--- SOURCE: extension/icu/third_party/icu/common/bytestrieiterator.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+*   Copyright (C) 2010-2012, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*******************************************************************************
+*   file name:  bytestrieiterator.cpp
+*   encoding:   UTF-8
+*   tab size:   8 (not used)
+*   indentation:4
+*
+*   created on: 2010nov03
+*   created by: Markus W. Scherer
+*/
+
+--- SOURCE: extension/icu/third_party/icu/common/caniter.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+ *****************************************************************************
+ * Copyright (C) 1996-2015, International Business Machines Corporation and
+ * others. All Rights Reserved.
+ *****************************************************************************
+ */
+
+--- SOURCE: extension/icu/third_party/icu/common/chariter.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+**********************************************************************
+*   Copyright (C) 1999-2011, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+**********************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/common/charstr.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+*   Copyright (C) 2010-2015, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*******************************************************************************
+*   file name:  charstr.cpp
+*   encoding:   UTF-8
+*   tab size:   8 (not used)
+*   indentation:4
+*
+*   created on: 2010may19
+*   created by: Markus W. Scherer
+*/
+
+--- SOURCE: extension/icu/third_party/icu/common/charstr.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+**********************************************************************
+*   Copyright (c) 2001-2015, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+**********************************************************************
+*   Date        Name        Description
+*   11/19/2001  aliu        Creation.
+*   05/19/2010  markus      Rewritten from scratch
+**********************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/common/cmemory.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+******************************************************************************
+*
+*   Copyright (C) 2002-2015, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*
+******************************************************************************
+*
+* File cmemory.c      ICU Heap allocation.
+*                     All ICU heap allocation, both for C and C++ new of ICU
+*                     class types, comes through these functions.
+*
+*                     If you have a need to replace ICU allocation, this is the
+*                     place to do it.
+*
+*                     Note that uprv_malloc(0) returns a non-NULL pointer, and
+*                     that a subsequent free of that pointer value is a NOP.
+*
+******************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/common/cmemory.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+******************************************************************************
+*
+*   Copyright (C) 1997-2016, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*
+******************************************************************************
+*
+* File CMEMORY.H
+*
+*  Contains stdlib.h/string.h memory functions
+*
+* @author       Bertrand A. Damiba
+*
+* Modification History:
+*
+*   Date        Name        Description
+*   6/20/98     Bertrand    Created.
+*  05/03/99     stephen     Changed from functions to macros.
+*
+******************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/common/cpputils.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+******************************************************************************
+*
+*   Copyright (C) 1997-2011, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*
+******************************************************************************
+*   file name:  cpputils.h
+*   encoding:   UTF-8
+*   tab size:   8 (not used)
+*   indentation:4
+*/
+
+--- SOURCE: extension/icu/third_party/icu/common/cstr.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+*   Copyright (C) 2015-2016, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*******************************************************************************
+*   file name:  charstr.cpp
+*/
+
+--- SOURCE: extension/icu/third_party/icu/common/cstr.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+******************************************************************************
+*
+*   Copyright (C) 2016, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*
+******************************************************************************
+*
+* File: cstr.h
+*/
+
+--- SOURCE: extension/icu/third_party/icu/common/cstring.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+******************************************************************************
+*
+*   Copyright (C) 1997-2011, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*
+******************************************************************************
+*
+* File CSTRING.C
+*
+* @author       Helena Shih
+*
+* Modification History:
+*
+*   Date        Name        Description
+*   6/18/98     hshih       Created
+*   09/08/98    stephen     Added include for ctype, for Mac Port
+*   11/15/99    helena      Integrated S/390 IEEE changes. 
+******************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/common/cstring.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+******************************************************************************
+*
+*   Copyright (C) 1997-2012, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*
+******************************************************************************
+*
+* File CSTRING.H
+*
+* Contains CString interface
+*
+* @author       Helena Shih
+*
+* Modification History:
+*
+*   Date        Name        Description
+*   6/17/98     hshih       Created.
+*  05/03/99     stephen     Changed from functions to macros.
+*  06/14/99     stephen     Added icu_strncat, icu_strncmp, icu_tolower
+*
+******************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/common/cwchar.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*  
+******************************************************************************
+*
+*   Copyright (C) 2001, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*
+******************************************************************************
+*   file name:  cwchar.c
+*   encoding:   UTF-8
+*   tab size:   8 (not used)
+*   indentation:4
+*
+*   created on: 2001may25
+*   created by: Markus W. Scherer
+*/
+
+--- SOURCE: extension/icu/third_party/icu/common/cwchar.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*  
+******************************************************************************
+*
+*   Copyright (C) 2001, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*
+******************************************************************************
+*   file name:  cwchar.h
+*   encoding:   UTF-8
+*   tab size:   8 (not used)
+*   indentation:4
+*
+*   created on: 2001may25
+*   created by: Markus W. Scherer
+*
+*   This file contains ICU-internal definitions of wchar_t operations.
+*   These definitions were moved here from cstring.h so that fewer
+*   ICU implementation files include wchar.h.
+*/
+
+--- SOURCE: extension/icu/third_party/icu/common/dictbe.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/**
+ *******************************************************************************
+ * Copyright (C) 2006-2016, International Business Machines Corporation
+ * and others. All Rights Reserved.
+ *******************************************************************************
+ */
+
+--- SOURCE: extension/icu/third_party/icu/common/dictbe.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/**
+ *******************************************************************************
+ * Copyright (C) 2006-2014, International Business Machines Corporation   *
+ * and others. All Rights Reserved.                                            *
+ *******************************************************************************
+ */
+
+--- SOURCE: extension/icu/third_party/icu/common/dictionarydata.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2014-2016, International Business Machines
+* Corporation and others.  All Rights Reserved.
+*******************************************************************************
+* dictionarydata.h
+*
+* created on: 2012may31
+* created by: Markus W. Scherer & Maxime Serrano
+*/
+
+// #include "dictionarydata.h"
+// #include "unicode/ucharstrie.h"
+// #include "unicode/bytestrie.h"
+// #include "unicode/udata.h"
+// #include "cmemory.h"
+
+// #if !UCONFIG_NO_BREAK_ITERATION
+
+// U_NAMESPACE_BEGIN
+
+// const int32_t  DictionaryData::TRIE_TYPE_BYTES = 0;
+// const int32_t  DictionaryData::TRIE_TYPE_UCHARS = 1;
+// const int32_t  DictionaryData::TRIE_TYPE_MASK = 7;
+// const int32_t  DictionaryData::TRIE_HAS_VALUES = 8;
+
+// const int32_t  DictionaryData::TRANSFORM_NONE = 0;
+// const int32_t  DictionaryData::TRANSFORM_TYPE_OFFSET = 0x1000000;
+// const int32_t  DictionaryData::TRANSFORM_TYPE_MASK = 0x7f000000;
+// const int32_t  DictionaryData::TRANSFORM_OFFSET_MASK = 0x1fffff;
+
+// DictionaryMatcher::~DictionaryMatcher() {
+// }
+
+// UCharsDictionaryMatcher::~UCharsDictionaryMatcher() {
+//     udata_close(file);
+// }
+
+// int32_t UCharsDictionaryMatcher::getType() const {
+//     return DictionaryData::TRIE_TYPE_UCHARS;
+// }
+
+// int32_t UCharsDictionaryMatcher::matches(UText *text, int32_t maxLength, int32_t limit,
+//                             int32_t *lengths, int32_t *cpLengths, int32_t *values,
+//                             int32_t *prefix) const {
+
+//     UCharsTrie uct(characters);
+//     int32_t startingTextIndex = (int32_t)utext_getNativeIndex(text);
+//     int32_t wordCount = 0;
+//     int32_t codePointsMatched = 0;
+
+//     for (UChar32 c = utext_next32(text); c >= 0; c=utext_next32(text)) {
+//         UStringTrieResult result = (codePointsMatched == 0) ? uct.first(c) : uct.next(c);
+//         int32_t lengthMatched = (int32_t)utext_getNativeIndex(text) - startingTextIndex;
+//         codePointsMatched += 1;
+//         if (USTRINGTRIE_HAS_VALUE(result)) {
+//             if (wordCount < limit) {
+//                 if (values != NULL) {
+//                     values[wordCount] = uct.getValue();
+//                 }
+//                 if (lengths != NULL) {
+//                     lengths[wordCount] = lengthMatched;
+//                 }
+//                 if (cpLengths != NULL) {
+//                     cpLengths[wordCount] = codePointsMatched;
+//                 }
+//                 ++wordCount;
+//             }
+//             if (result == USTRINGTRIE_FINAL_VALUE) {
+//                 break;
+//             }
+//         }
+//         else if (result == USTRINGTRIE_NO_MATCH) {
+//             break;
+//         }
+//         if (lengthMatched >= maxLength) {
+//             break;
+//         }
+//     }
+
+//     if (prefix != NULL) {
+//         *prefix = codePointsMatched;
+//     }
+//     return wordCount;
+// }
+
+// BytesDictionaryMatcher::~BytesDictionaryMatcher() {
+//     udata_close(file);
+// }
+
+// UChar32 BytesDictionaryMatcher::transform(UChar32 c) const {
+//     if ((transformConstant & DictionaryData::TRANSFORM_TYPE_MASK) == DictionaryData::TRANSFORM_TYPE_OFFSET) {
+//         if (c == 0x200D) {
+//             return 0xFF;
+//         } else if (c == 0x200C) {
+//             return 0xFE;
+//         }
+//         int32_t delta = c - (transformConstant & DictionaryData::TRANSFORM_OFFSET_MASK);
+
+--- SOURCE: extension/icu/third_party/icu/common/dictionarydata.h ---
+// // © 2016 and later: Unicode, Inc. and others.
+// // License & terms of use: http://www.unicode.org/copyright.html
+// /*
+// *******************************************************************************
+// * Copyright (C) 2014, International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// *******************************************************************************
+// * dictionarydata.h
+// *
+// * created on: 2012may31
+// * created by: Markus W. Scherer & Maxime Serrano
+// */
+
+// #ifndef __DICTIONARYDATA_H__
+// #define __DICTIONARYDATA_H__
+
+// #include "unicode/utypes.h"
+
+// // #if !UCONFIG_NO_BREAK_ITERATION
+
+// // #include "unicode/utext.h"
+// // #include "unicode/udata.h"
+// // #include "udataswp.h"
+// // #include "unicode/uobject.h"
+// // #include "unicode/ustringtrie.h"
+
+// // U_NAMESPACE_BEGIN
+
+// // class UCharsTrie;
+// // class BytesTrie;
+
+// // class U_COMMON_API DictionaryData : public UMemory {
+// // public:
+// //     static const int32_t TRIE_TYPE_BYTES; // = 0;
+// //     static const int32_t TRIE_TYPE_UCHARS; // = 1;
+// //     static const int32_t TRIE_TYPE_MASK; // = 7;
+// //     static const int32_t TRIE_HAS_VALUES; // = 8;
+
+// //     static const int32_t TRANSFORM_NONE; // = 0;
+// //     static const int32_t TRANSFORM_TYPE_OFFSET; // = 0x1000000;
+// //     static const int32_t TRANSFORM_TYPE_MASK; // = 0x7f000000;
+// //     static const int32_t TRANSFORM_OFFSET_MASK; // = 0x1fffff;
+
+// //     enum {
+// //         // Byte offsets from the start of the data, after the generic header.
+// //         IX_STRING_TRIE_OFFSET,
+// //         IX_RESERVED1_OFFSET,
+// //         IX_RESERVED2_OFFSET,
+// //         IX_TOTAL_SIZE,
+
+// //         // Trie type: TRIE_HAS_VALUES | TRIE_TYPE_BYTES etc.
+// //         IX_TRIE_TYPE,
+// //         // Transform specification: TRANSFORM_TYPE_OFFSET | 0xe00 etc.
+// //         IX_TRANSFORM,
+
+// //         IX_RESERVED6,
+// //         IX_RESERVED7,
+// //         IX_COUNT
+// //     };
+// // };
+
+// // /**
+// //  * Wrapper class around generic dictionaries, implementing matches().
+// //  * getType() should return a TRIE_TYPE_??? constant from DictionaryData.
+// //  *
+// //  * All implementations of this interface must be thread-safe if they are to be used inside of the
+// //  * dictionary-based break iteration code.
+// //  */
+// // class U_COMMON_API DictionaryMatcher : public UMemory {
+// // public:
+// //     DictionaryMatcher() {}
+// //     virtual ~DictionaryMatcher();
+// //     // this should emulate CompactTrieDictionary::matches()
+// //     /*  @param text      The text in which to look for matching words. Matching begins
+// //      *                   at the current position of the UText.
+// //      *  @param maxLength The max length of match to consider. Units are the native indexing
+// //      *                   units of the UText.
+// //      *  @param limit     Capacity of output arrays, which is also the maximum number of
+// //      *                   matching words to be found.
+// //      *  @param lengths   output array, filled with the lengths of the matches, in order,
+// //      *                   from shortest to longest. Lengths are in native indexing units
+// //      *                   of the UText. May be NULL.
+// //      *  @param cpLengths output array, filled with the lengths of the matches, in order,
+// //      *                   from shortest to longest. Lengths are the number of Unicode code points.
+// //      *                   May be NULL.
+// //      *  @param values    Output array, filled with the values associated with the words found.
+// //      *                   May be NULL.
+// //      *  @param prefix    Output parameter, the code point length of the prefix match, even if that
+// //      *                   prefix didn't lead to a complete word. Will always be >= the cpLength
+// //      *                   of the longest complete word matched. May be NULL.
+// //      *  @return          Number of matching words found.
+// //      */
+// //     virtual int32_t matches(UText *text, int32_t maxLength, int32_t limit,
+// //                             int32_t *lengths, int32_t *cpLengths, int32_t *values,
+// //                             int32_t *prefix) const = 0;
+
+// //     /** @return DictionaryData::TRIE_TYPE_XYZ */
+// //     virtual int32_t getType() const = 0;
+// // };
+
+--- SOURCE: extension/icu/third_party/icu/common/dtintrv.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*******************************************************************************
+* Copyright (C) 2008, International Business Machines Corporation and
+* others. All Rights Reserved.
+*******************************************************************************
+*
+* File DTINTRV.CPP 
+*
+*******************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/common/errorcode.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+*
+*   Copyright (C) 2009-2011, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*
+*******************************************************************************
+*   file name:  errorcode.cpp
+*   encoding:   UTF-8
+*   tab size:   8 (not used)
+*   indentation:4
+*
+*   created on: 2009mar10
+*   created by: Markus W. Scherer
+*/
+
+--- SOURCE: extension/icu/third_party/icu/common/filteredbrk.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2014-2015, International Business Machines Corporation and
+* others. All Rights Reserved.
+*******************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/common/filterednormalizer2.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+*
+*   Copyright (C) 2009-2012, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*
+*******************************************************************************
+*   file name:  filterednormalizer2.cpp
+*   encoding:   UTF-8
+*   tab size:   8 (not used)
+*   indentation:4
+*
+*   created on: 2009dec10
+*   created by: Markus W. Scherer
+*/
+
+--- SOURCE: extension/icu/third_party/icu/common/hash.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+******************************************************************************
+*   Copyright (C) 1997-2014, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+******************************************************************************
+*   Date        Name        Description
+*   03/28/00    aliu        Creation.
+******************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/common/icudataver.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+******************************************************************************
+*
+*   Copyright (C) 2009-2011, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*
+******************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/common/icuplug.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+******************************************************************************
+*
+*   Copyright (C) 2009-2015, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*
+******************************************************************************
+*
+*  FILE NAME : icuplug.c
+*
+*   Date         Name        Description
+*   10/29/2009   sl          New.
+******************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/common/icuplugimp.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+******************************************************************************
+*
+*   Copyright (C) 2009-2015, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*
+******************************************************************************
+*
+*  FILE NAME : icuplugimp.h
+* 
+*  Internal functions for the ICU plugin system
+*
+*   Date         Name        Description
+*   10/29/2009   sl          New.
+******************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/common/loadednormalizer2impl.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2014, International Business Machines
+* Corporation and others.  All Rights Reserved.
+*******************************************************************************
+* loadednormalizer2impl.cpp
+*
+* created on: 2014sep03
+* created by: Markus W. Scherer
+*/
+
+--- SOURCE: extension/icu/third_party/icu/common/localsvc.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+***************************************************************************
+*   Copyright (C) 2006 International Business Machines Corporation        *
+*   and others. All rights reserved.                                      *
+***************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/common/locavailable.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+*
+*   Copyright (C) 1997-2013, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*
+*******************************************************************************
+*   file name:  locavailable.cpp
+*   encoding:   UTF-8
+*   tab size:   8 (not used)
+*   indentation:4
+*
+*   created on: 2010feb25
+*   created by: Markus W. Scherer
+*
+*   Code for available locales, separated out from other .cpp files
+*   that then do not depend on resource bundle code and res_index bundles.
+*/
+
+--- SOURCE: extension/icu/third_party/icu/common/locbased.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+**********************************************************************
+* Copyright (c) 2004-2014, International Business Machines
+* Corporation and others.  All Rights Reserved.
+**********************************************************************
+* Author: Alan Liu
+* Created: January 16 2004
+* Since: ICU 2.8
+**********************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/common/locbased.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+**********************************************************************
+* Copyright (c) 2004-2014, International Business Machines
+* Corporation and others.  All Rights Reserved.
+**********************************************************************
+* Author: Alan Liu
+* Created: January 16 2004
+* Since: ICU 2.8
+**********************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/common/locdispnames.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+*
+*   Copyright (C) 1997-2016, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*
+*******************************************************************************
+*   file name:  locdispnames.cpp
+*   encoding:   UTF-8
+*   tab size:   8 (not used)
+*   indentation:4
+*
+*   created on: 2010feb25
+*   created by: Markus W. Scherer
+*
+*   Code for locale display names, separated out from other .cpp files
+*   that then do not depend on resour…8336 tokens truncated…es Corporation and
+ * others. All Rights Reserved.
+ ********************************************************************/
+
+--- SOURCE: extension/icu/third_party/icu/common/rbbirb.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+//
+//  file:  rbbirb.cpp
+//
+//  Copyright (C) 2002-2011, International Business Machines Corporation and others.
+//  All Rights Reserved.
+//
+//  This file contains the RBBIRuleBuilder class implementation.  This is the main class for
+//    building (compiling) break rules into the tables required by the runtime
+//    RBBI engine.
+//
+
+--- SOURCE: extension/icu/third_party/icu/common/rbbirb.h ---
+// // © 2016 and later: Unicode, Inc. and others.
+// // License & terms of use: http://www.unicode.org/copyright.html
+// //
+// //  rbbirb.h
+// //
+// //  Copyright (C) 2002-2008, International Business Machines Corporation and others.
+// //  All Rights Reserved.
+// //
+// //  This file contains declarations for several classes from the
+// //    Rule Based Break Iterator rule builder.
+// //
+
+
+// #ifndef RBBIRB_H
+// #define RBBIRB_H
+
+// #include "unicode/utypes.h"
+
+// #if !UCONFIG_NO_BREAK_ITERATION
+
+// #include <utility>
+
+// #include "unicode/uobject.h"
+// #include "unicode/rbbi.h"
+// #include "unicode/uniset.h"
+// #include "unicode/parseerr.h"
+// #include "uhash.h"
+// #include "uvector.h"
+// #include "unicode/symtable.h"// For UnicodeSet parsing, is the interface that
+//                              //    looks up references to $variables within a set.
+
+
+// U_NAMESPACE_BEGIN
+
+// class               RBBIRuleScanner;
+// struct              RBBIRuleTableEl;
+// class               RBBISetBuilder;
+// class               RBBINode;
+// class               RBBITableBuilder;
+
+
+
+// //--------------------------------------------------------------------------------
+// //
+// //   RBBISymbolTable.    Implements SymbolTable interface that is used by the
+// //                       UnicodeSet parser to resolve references to $variables.
+// //
+// //--------------------------------------------------------------------------------
+// class RBBISymbolTableEntry : public UMemory { // The symbol table hash table contains one
+// public:                                       //   of these structs for each entry.
+//     RBBISymbolTableEntry();
+//     UnicodeString          key;
+//     RBBINode               *val;
+//     ~RBBISymbolTableEntry();
+
+// private:
+//     RBBISymbolTableEntry(const RBBISymbolTableEntry &other); // forbid copying of this class
+//     RBBISymbolTableEntry &operator=(const RBBISymbolTableEntry &other); // forbid copying of this class
+// };
+
+
+// class RBBISymbolTable : public UMemory, public SymbolTable {
+// private:
+//     const UnicodeString      &fRules;
+//     UHashtable               *fHashTable;
+//     RBBIRuleScanner          *fRuleScanner;
+
+//     // These next two fields are part of the mechanism for passing references to
+//     //   already-constructed UnicodeSets back to the UnicodeSet constructor
+//     //   when the pattern includes $variable references.
+//     const UnicodeString      ffffString;      // = "/uffff"
+//     UnicodeSet              *fCachedSetLookup;
+
+// public:
+//     //  API inherited from class SymbolTable
+//     virtual const UnicodeString*  lookup(const UnicodeString& s) const;
+//     virtual const UnicodeFunctor* lookupMatcher(UChar32 ch) const;
+//     virtual UnicodeString parseReference(const UnicodeString& text,
+//                                          ParsePosition& pos, int32_t limit) const;
+
+//     //  Additional Functions
+//     RBBISymbolTable(RBBIRuleScanner *, const UnicodeString &fRules, UErrorCode &status);
+//     virtual ~RBBISymbolTable();
+
+//     virtual RBBINode *lookupNode(const UnicodeString &key) const;
+//     virtual void      addEntry  (const UnicodeString &key, RBBINode *val, UErrorCode &err);
+
+// #ifdef RBBI_DEBUG
+//     virtual void      rbbiSymtablePrint() const;
+// #else
+//     // A do-nothing inline function for non-debug builds.  Member funcs can't be empty
+//     //  or the call sites won't compile.
+//     int32_t fFakeField;
+//     #define rbbiSymtablePrint() fFakeField=0;
+// #endif
+
+// private:
+//     RBBISymbolTable(const RBBISymbolTable &other); // forbid copying of this class
+//     RBBISymbolTable &operator=(const RBBISymbolTable &other); // forbid copying of this class
+// };
+
+--- SOURCE: extension/icu/third_party/icu/common/rbbirpt.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+//---------------------------------------------------------------------------------
+//
+// Generated Header File.  Do not edit by hand.
+//    This file contains the state table for the ICU Rule Based Break Iterator
+//    rule parser.
+//    It is generated by the Perl script "rbbicst.pl" from
+//    the rule parser state definitions file "rbbirpt.txt".
+//
+//   Copyright (C) 2002-2016 International Business Machines Corporation 
+//   and others. All rights reserved.  
+//
+//---------------------------------------------------------------------------------
+
+--- SOURCE: extension/icu/third_party/icu/common/rbbiscan.cpp ---
+// // © 2016 and later: Unicode, Inc. and others.
+// // License & terms of use: http://www.unicode.org/copyright.html
+// //
+// //  file:  rbbiscan.cpp
+// //
+// //  Copyright (C) 2002-2016, International Business Machines Corporation and others.
+// //  All Rights Reserved.
+// //
+// //  This file contains the Rule Based Break Iterator Rule Builder functions for
+// //   scanning the rules and assembling a parse tree.  This is the first phase
+// //   of compiling the rules.
+// //
+// //  The overall of the rules is managed by class RBBIRuleBuilder, which will
+// //  create and use an instance of this class as part of the process.
+// //
+
+// #include "unicode/utypes.h"
+
+// #if !UCONFIG_NO_BREAK_ITERATION
+
+// #include "unicode/unistr.h"
+// #include "unicode/uniset.h"
+// #include "unicode/uchar.h"
+// #include "unicode/uchriter.h"
+// #include "unicode/parsepos.h"
+// #include "unicode/parseerr.h"
+// #include "cmemory.h"
+// #include "cstring.h"
+
+// #include "rbbirpt.h"   // Contains state table for the rbbi rules parser.
+//                        //   generated by a Perl script.
+// #include "rbbirb.h"
+// #include "rbbinode.h"
+// #include "rbbiscan.h"
+// #include "rbbitblb.h"
+
+// #include "uassert.h"
+
+// //------------------------------------------------------------------------------
+// //
+// // Unicode Set init strings for each of the character classes needed for parsing a rule file.
+// //               (Initialized with hex values for portability to EBCDIC based machines.
+// //                Really ugly, but there's no good way to avoid it.)
+// //
+// //              The sets are referred to by name in the rbbirpt.txt, which is the
+// //              source form of the state transition table for the RBBI rule parser.
+// //
+// //------------------------------------------------------------------------------
+// static const UChar gRuleSet_rule_char_pattern[]       = {
+//  // Characters that may appear as literals in patterns without escaping or quoting.
+//  //   [    ^      [    \     p     {      Z     }     \     u    0      0    2      0
+//     0x5b, 0x5e, 0x5b, 0x5c, 0x70, 0x7b, 0x5a, 0x7d, 0x5c, 0x75, 0x30, 0x30, 0x32, 0x30,
+//  //   -    \      u    0     0     7      f     ]     -     [    \      p
+//     0x2d, 0x5c, 0x75, 0x30, 0x30, 0x37, 0x66, 0x5d, 0x2d, 0x5b, 0x5c, 0x70,
+//  //   {     L     }    ]     -     [      \     p     {     N    }      ]     ]
+//     0x7b, 0x4c, 0x7d, 0x5d, 0x2d, 0x5b, 0x5c, 0x70, 0x7b, 0x4e, 0x7d, 0x5d, 0x5d, 0};
+
+// static const UChar gRuleSet_name_char_pattern[]       = {
+// //    [    _      \    p     {     L      }     \     p     {    N      }     ]
+//     0x5b, 0x5f, 0x5c, 0x70, 0x7b, 0x4c, 0x7d, 0x5c, 0x70, 0x7b, 0x4e, 0x7d, 0x5d, 0};
+
+// static const UChar gRuleSet_digit_char_pattern[] = {
+// //    [    0      -    9     ]
+//     0x5b, 0x30, 0x2d, 0x39, 0x5d, 0};
+
+// static const UChar gRuleSet_name_start_char_pattern[] = {
+// //    [    _      \    p     {     L      }     ]
+//     0x5b, 0x5f, 0x5c, 0x70, 0x7b, 0x4c, 0x7d, 0x5d, 0 };
+
+// static const UChar kAny[] = {0x61, 0x6e, 0x79, 0x00};  // "any"
+
+
+// U_CDECL_BEGIN
+// static void U_CALLCONV RBBISetTable_deleter(void *p) {
+//     icu::RBBISetTableEl *px = (icu::RBBISetTableEl *)p;
+//     delete px->key;
+//     // Note:  px->val is owned by the linked list "fSetsListHead" in scanner.
+//     //        Don't delete the value nodes here.
+//     uprv_free(px);
+// }
+// U_CDECL_END
+
+// U_NAMESPACE_BEGIN
+
+// //------------------------------------------------------------------------------
+// //
+// //  Constructor.
+// //
+// //------------------------------------------------------------------------------
+// RBBIRuleScanner::RBBIRuleScanner(RBBIRuleBuilder *rb)
+// {
+//     fRB                 = rb;
+//     fScanIndex          = 0;
+//     fNextIndex          = 0;
+//     fQuoteMode          = FALSE;
+//     fLineNum            = 1;
+//     fCharNum            = 0;
+//     fLastChar           = 0;
+
+//     fStateTable         = NULL;
+
+--- SOURCE: extension/icu/third_party/icu/common/rbbiscan.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+//
+//  rbbiscan.h
+//
+//  Copyright (C) 2002-2016, International Business Machines Corporation and others.
+//  All Rights Reserved.
+//
+//  This file contains declarations for class RBBIRuleScanner
+//
+
+--- SOURCE: extension/icu/third_party/icu/common/rbbisetb.cpp ---
+// // © 2016 and later: Unicode, Inc. and others.
+// // License & terms of use: http://www.unicode.org/copyright.html
+// //
+// //  rbbisetb.cpp
+// //
+// /*
+// ***************************************************************************
+// *   Copyright (C) 2002-2008 International Business Machines Corporation   *
+// *   and others. All rights reserved.                                      *
+// ***************************************************************************
+// */
+// //
+// //  RBBISetBuilder   Handles processing of Unicode Sets from RBBI rules
+// //                   (part of the rule building process.)
+// //
+// //      Starting with the rules parse tree from the scanner,
+// //
+// //                   -  Enumerate the set of UnicodeSets that are referenced
+// //                      by the RBBI rules.
+// //                   -  compute a set of non-overlapping character ranges
+// //                      with all characters within a range belonging to the same
+// //                      set of input uniocde sets.
+// //                   -  Derive a set of non-overlapping UnicodeSet (like things)
+// //                      that will correspond to columns in the state table for
+// //                      the RBBI execution engine.  All characters within one
+// //                      of these sets belong to the same set of the original
+// //                      UnicodeSets from the user's rules.
+// //                   -  construct the trie table that maps input characters
+// //                      to the index of the matching non-overlapping set of set from
+// //                      the previous step.
+// //
+
+// #include "unicode/utypes.h"
+
+// #if !UCONFIG_NO_BREAK_ITERATION
+
+// #include "unicode/uniset.h"
+// #include "utrie2.h"
+// #include "uvector.h"
+// #include "uassert.h"
+// #include "cmemory.h"
+// #include "cstring.h"
+
+// #include "rbbisetb.h"
+// #include "rbbinode.h"
+
+// U_NAMESPACE_BEGIN
+
+// //------------------------------------------------------------------------
+// //
+// //   Constructor
+// //
+// //------------------------------------------------------------------------
+// RBBISetBuilder::RBBISetBuilder(RBBIRuleBuilder *rb)
+// {
+//     fRB             = rb;
+//     fStatus         = rb->fStatus;
+//     fRangeList      = 0;
+//     fTrie           = 0;
+//     fTrieSize       = 0;
+//     fGroupCount     = 0;
+//     fSawBOF         = FALSE;
+// }
+
+
+// //------------------------------------------------------------------------
+// //
+// //   Destructor
+// //
+// //------------------------------------------------------------------------
+// RBBISetBuilder::~RBBISetBuilder()
+// {
+//     RangeDescriptor   *nextRangeDesc;
+
+//     // Walk through & delete the linked list of RangeDescriptors
+//     for (nextRangeDesc = fRangeList; nextRangeDesc!=NULL;) {
+//         RangeDescriptor *r = nextRangeDesc;
+//         nextRangeDesc      = r->fNext;
+//         delete r;
+//     }
+
+//     utrie2_close(fTrie);
+// }
+
+
+
+
+// //------------------------------------------------------------------------
+// //
+// //   build          Build the list of non-overlapping character ranges
+// //                  from the Unicode Sets.
+// //
+// //------------------------------------------------------------------------
+// void RBBISetBuilder::buildRanges() {
+//     RBBINode        *usetNode;
+//     RangeDescriptor *rlRange;
+
+//     if (fRB->fDebugEnv && uprv_strstr(fRB->fDebugEnv, "usets")) {printSets();}
+
+//     //
+
+--- SOURCE: extension/icu/third_party/icu/common/rbbisetb.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+//
+//  rbbisetb.h
+/*
+**********************************************************************
+*   Copyright (c) 2001-2005, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+**********************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/common/rbbistbl.cpp ---
+// // © 2016 and later: Unicode, Inc. and others.
+// // License & terms of use: http://www.unicode.org/copyright.html
+// //
+// //  file:  rbbistbl.cpp    Implementation of the ICU RBBISymbolTable class
+// //
+// /*
+// ***************************************************************************
+// *   Copyright (C) 2002-2014 International Business Machines Corporation
+// *   and others. All rights reserved.
+// ***************************************************************************
+// */
+
+// #include "unicode/utypes.h"
+
+// #if !UCONFIG_NO_BREAK_ITERATION
+
+// #include "unicode/unistr.h"
+// #include "unicode/uniset.h"
+// #include "unicode/uchar.h"
+// #include "unicode/parsepos.h"
+
+// #include "cstr.h"
+// #include "rbbinode.h"
+// #include "rbbirb.h"
+// #include "umutex.h"
+
+
+// //
+// //  RBBISymbolTableEntry_deleter    Used by the UHashTable to delete the contents
+// //                                  when the hash table is deleted.
+// //
+// U_CDECL_BEGIN
+// static void U_CALLCONV RBBISymbolTableEntry_deleter(void *p) {
+//     icu::RBBISymbolTableEntry *px = (icu::RBBISymbolTableEntry *)p;
+//     delete px;
+// }
+// U_CDECL_END
+
+
+
+// U_NAMESPACE_BEGIN
+
+// RBBISymbolTable::RBBISymbolTable(RBBIRuleScanner *rs, const UnicodeString &rules, UErrorCode &status)
+//     :fRules(rules), fRuleScanner(rs), ffffString(UChar(0xffff))
+// {
+//     fHashTable       = NULL;
+//     fCachedSetLookup = NULL;
+
+//     fHashTable = uhash_open(uhash_hashUnicodeString, uhash_compareUnicodeString, NULL, &status);
+//     // uhash_open checks status
+//     if (U_FAILURE(status)) {
+//         return;
+//     }
+//     uhash_setValueDeleter(fHashTable, RBBISymbolTableEntry_deleter);
+// }
+
+
+
+// RBBISymbolTable::~RBBISymbolTable()
+// {
+//     uhash_close(fHashTable);
+// }
+
+
+// //
+// //  RBBISymbolTable::lookup       This function from the abstract symbol table inteface
+// //                                looks up a variable name and returns a UnicodeString
+// //                                containing the substitution text.
+// //
+// //                                The variable name does NOT include the leading $.
+// //
+// const UnicodeString  *RBBISymbolTable::lookup(const UnicodeString& s) const
+// {
+//     RBBISymbolTableEntry  *el;
+//     RBBINode              *varRefNode;
+//     RBBINode              *exprNode;
+//     RBBINode              *usetNode;
+//     const UnicodeString   *retString;
+//     RBBISymbolTable       *This = (RBBISymbolTable *)this;   // cast off const
+
+//     el = (RBBISymbolTableEntry *)uhash_get(fHashTable, &s);
+//     if (el == NULL) {
+//         return NULL;
+//     }
+
+//     varRefNode = el->val;
+//     exprNode   = varRefNode->fLeftChild;     // Root node of expression for variable
+//     if (exprNode->fType == RBBINode::setRef) {
+//         // The $variable refers to a single UnicodeSet
+//         //   return the ffffString, which will subsequently be interpreted as a
+//         //   stand-in character for the set by RBBISymbolTable::lookupMatcher()
+//         usetNode = exprNode->fLeftChild;
+//         This->fCachedSetLookup = usetNode->fInputSet;
+//         retString = &ffffString;
+//     }
+//     else
+//     {
+//         // The variable refers to something other than just a set.
+//         // return the original source string for the expression
+//         retString = &exprNode->fText;
+
+--- SOURCE: extension/icu/third_party/icu/common/rbbitblb.cpp ---
+// // © 2016 and later: Unicode, Inc. and others.
+// // License & terms of use: http://www.unicode.org/copyright.html
+// /*
+// **********************************************************************
+// *   Copyright (c) 2002-2016, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// **********************************************************************
+// */
+// //
+// //  rbbitblb.cpp
+// //
+
+
+// #include "unicode/utypes.h"
+
+// #if !UCONFIG_NO_BREAK_ITERATION
+
+// #include "unicode/unistr.h"
+// #include "rbbitblb.h"
+// #include "rbbirb.h"
+// #include "rbbisetb.h"
+// #include "rbbidata.h"
+// #include "cstring.h"
+// #include "uassert.h"
+// #include "uvectr32.h"
+// #include "cmemory.h"
+
+// U_NAMESPACE_BEGIN
+
+// RBBITableBuilder::RBBITableBuilder(RBBIRuleBuilder *rb, RBBINode **rootNode, UErrorCode &status) :
+//         fRB(rb),
+//         fTree(*rootNode),
+//         fStatus(&status),
+//         fDStates(nullptr),
+//         fSafeTable(nullptr) {
+//     if (U_FAILURE(status)) {
+//         return;
+//     }
+//     // fDStates is UVector<RBBIStateDescriptor *>
+//     fDStates = new UVector(status);
+//     if (U_SUCCESS(status) && fDStates == nullptr ) {
+//         status = U_MEMORY_ALLOCATION_ERROR;
+//     }
+// }
+
+
+
+// RBBITableBuilder::~RBBITableBuilder() {
+//     int i;
+//     for (i=0; i<fDStates->size(); i++) {
+//         delete (RBBIStateDescriptor *)fDStates->elementAt(i);
+//     }
+//     delete fDStates;
+//     delete fSafeTable;
+// }
+
+
+// //-----------------------------------------------------------------------------
+// //
+// //   RBBITableBuilder::buildForwardTable  -  This is the main function for building
+// //                               the DFA state transition table from the RBBI rules parse tree.
+// //
+// //-----------------------------------------------------------------------------
+// void  RBBITableBuilder::buildForwardTable() {
+
+//     if (U_FAILURE(*fStatus)) {
+//         return;
+//     }
+
+//     // If there were no rules, just return.  This situation can easily arise
+//     //   for the reverse rules.
+//     if (fTree==NULL) {
+//         return;
+//     }
+
+//     //
+//     // Walk through the tree, replacing any references to $variables with a copy of the
+//     //   parse tree for the substition expression.
+//     //
+//     fTree = fTree->flattenVariables();
+// #ifdef RBBI_DEBUG
+//     if (fRB->fDebugEnv && uprv_strstr(fRB->fDebugEnv, "ftree")) {
+//         RBBIDebugPuts("\nParse tree after flattening variable references.");
+//         RBBINode::printTree(fTree, TRUE);
+//     }
+// #endif
+
+//     //
+//     // If the rules contained any references to {bof}
+//     //   add a {bof} <cat> <former root of tree> to the
+//     //   tree.  Means that all matches must start out with the
+//     //   {bof} fake character.
+//     //
+//     if (fRB->fSetBuilder->sawBOF()) {
+//         RBBINode *bofTop    = new RBBINode(RBBINode::opCat);
+//         RBBINode *bofLeaf   = new RBBINode(RBBINode::leafChar);
+//         // Delete and exit if memory allocation failed.
+//         if (bofTop == NULL || bofLeaf == NULL) {
+//             *fStatus = U_MEMORY_ALLOCATION_ERROR;
+//             delete bofTop;
+
+--- SOURCE: extension/icu/third_party/icu/common/rbbitblb.h ---
+// // © 2016 and later: Unicode, Inc. and others.
+// // License & terms of use: http://www.unicode.org/copyright.html
+// //
+// //  rbbitblb.h
+// //
+
+// /*
+// **********************************************************************
+// *   Copyright (c) 2002-2016, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// **********************************************************************
+// */
+
+// #ifndef RBBITBLB_H
+// #define RBBITBLB_H
+
+// #include "unicode/utypes.h"
+
+// #if !UCONFIG_NO_BREAK_ITERATION
+
+// #include "unicode/uobject.h"
+// #include "unicode/rbbi.h"
+// #include "rbbirb.h"
+// #include "rbbinode.h"
+
+
+// U_NAMESPACE_BEGIN
+
+// class RBBIRuleScanner;
+// class RBBIRuleBuilder;
+// class UVector32;
+
+// //
+// //  class RBBITableBuilder is part of the RBBI rule compiler.
+// //                         It builds the state transition table used by the RBBI runtime
+// //                         from the expression syntax tree generated by the rule scanner.
+// //
+// //                         This class is part of the RBBI implementation only.
+// //                         There is no user-visible public API here.
+// //
+
+// class RBBITableBuilder : public UMemory {
+// public:
+//     RBBITableBuilder(RBBIRuleBuilder *rb, RBBINode **rootNode, UErrorCode &status);
+//     ~RBBITableBuilder();
+
+//     void     buildForwardTable();
+
+//     /** Return the runtime size in bytes of the built state table.  */
+//     int32_t  getTableSize() const;
+
+//     /** Fill in the runtime state table. Sufficient memory must exist at the specified location.
+//      */
+//     void     exportTable(void *where);
+
+//     /**
+//      *  Find duplicate (redundant) character classes. Begin looking with categories.first.
+//      *  Duplicate, if found are returned in the categories parameter.
+//      *  This is an iterator-like function, used to identify character classes
+//      *  (state table columns) that can be eliminated.
+//      *  @param categories in/out parameter, specifies where to start looking for duplicates,
+//      *                and returns the first pair of duplicates found, if any.
+//      *  @return true if duplicate char classes were found, false otherwise.
+//      */
+//     bool     findDuplCharClassFrom(IntPair *categories);
+
+//     /** Remove a column from the state table. Used when two character categories
+//      *  have been found equivalent, and merged together, to eliminate the uneeded table column.
+//      */
+//     void     removeColumn(int32_t column);
+
+//     /**
+//      * Check for, and remove dupicate states (table rows).
+//      * @return the number of states removed.
+//      */
+//     int32_t  removeDuplicateStates();
+
+//     /** Build the safe reverse table from the already-constructed forward table. */
+//     void     buildSafeReverseTable(UErrorCode &status);
+
+//     /** Return the runtime size in bytes of the built safe reverse state table. */
+//     int32_t  getSafeTableSize() const;
+
+//     /** Fill in the runtime safe state table. Sufficient memory must exist at the specified location.
+//      */
+//     void     exportSafeTable(void *where);
+
+
+// private:
+//     void     calcNullable(RBBINode *n);
+//     void     calcFirstPos(RBBINode *n);
+//     void     calcLastPos(RBBINode  *n);
+//     void     calcFollowPos(RBBINode *n);
+//     void     calcChainedFollowPos(RBBINode *n);
+//     void     bofFixup();
+//     void     buildStateTable();
+//     void     flagAcceptingStates();
+//     void     flagLookAheadStates();
+//     void     flagTaggedStates();
+//     void     mergeRuleStatusVals();
+
+--- SOURCE: extension/icu/third_party/icu/common/resbund.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+**********************************************************************
+*   Copyright (C) 1997-2013, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+**********************************************************************
+*
+* File resbund.cpp
+*
+* Modification History:
+*
+*   Date        Name        Description
+*   02/05/97    aliu        Fixed bug in chopLocale.  Added scanForLocaleInFile
+*                           based on code taken from scanForLocale.  Added
+*                           constructor which attempts to read resource bundle
+*                           from a specific file, without searching other files.
+*   02/11/97    aliu        Added UErrorCode return values to constructors. Fixed
+*                           infinite loops in scanForFile and scanForLocale.
+*                           Modified getRawResourceData to not delete storage in
+*                           localeData and resourceData which it doesn't own.
+*                           Added Mac compatibility #ifdefs for tellp() and
+*                           ios::nocreate.
+*   03/04/97    aliu        Modified to use ExpandingDataSink objects instead of
+*                           the highly inefficient ostrstream objects.
+*   03/13/97    aliu        Rewrote to load in entire resource bundle and store
+*                           it as a Hashtable of ResourceBundleData objects.
+*                           Added state table to govern parsing of files.
+*                           Modified to load locale index out of new file distinct
+*                           from default.txt.
+*   03/25/97    aliu        Modified to support 2-d arrays, needed for timezone data.
+*                           Added support for custom file suffixes.  Again, needed
+*                           to support timezone data.  Improved error handling to
+*                           detect duplicate tags and subtags.
+*   04/07/97    aliu        Fixed bug in getHashtableForLocale().  Fixed handling
+*                           of failing UErrorCode values on entry to API methods.
+*                           Fixed bugs in getArrayItem() for negative indices.
+*   04/29/97    aliu        Update to use new Hashtable deletion protocol.
+*   05/06/97    aliu        Flattened kTransitionTable for HP compiler.
+*                           Fixed usage of CharString.
+* 06/11/99      stephen     Removed parsing of .txt files.
+*                           Reworked to use new binary format.
+*                           Cleaned up.
+* 06/14/99      stephen     Removed methods taking a filename suffix.
+* 06/22/99      stephen     Added missing T_FileStream_close in parse()
+* 11/09/99      weiv        Added getLocale(), rewritten constructForLocale()
+* March 2000    weiv        complete overhaul.
+******************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/common/resbund_cnv.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+*
+*   Copyright (C) 1997-2006, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*
+*******************************************************************************
+*   file name:  resbund_cnv.cpp
+*   encoding:   UTF-8
+*   tab size:   8 (not used)
+*   indentation:4
+*
+*   created on: 2004aug25
+*   created by: Markus W. Scherer
+*
+*   Character conversion functions moved here from resbund.cpp
+*/
+
+--- SOURCE: extension/icu/third_party/icu/common/resource.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2015-2016, International Business Machines
+* Corporation and others.  All Rights Reserved.
+*******************************************************************************
+* resource.cpp
+*
+* created on: 2015nov04
+* created by: Markus W. Scherer
+*/
+
+--- SOURCE: extension/icu/third_party/icu/common/resource.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2015-2016, International Business Machines
+* Corporation and others.  All Rights Reserved.
+*******************************************************************************
+* resource.h
+*
+* created on: 2015nov04
+* created by: Markus W. Scherer
+*/
+
+--- SOURCE: extension/icu/third_party/icu/common/ruleiter.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+**********************************************************************
+* Copyright (c) 2003-2011, International Business Machines
+* Corporation and others.  All Rights Reserved.
+**********************************************************************
+* Author: Alan Liu
+* Created: September 24 2003
+* Since: ICU 2.8
+**********************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/common/ruleiter.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+**********************************************************************
+* Copyright (c) 2003-2011, International Business Machines
+* Corporation and others.  All Rights Reserved.
+**********************************************************************
+* Author: Alan Liu
+* Created: September 24 2003
+* Since: ICU 2.8
+**********************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/common/schriter.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+******************************************************************************
+* Copyright (C) 1998-2012, International Business Machines Corporation and
+* others. All Rights Reserved.
+******************************************************************************
+*
+* File schriter.cpp
+*
+* Modification History:
+*
+*   Date        Name        Description
+*  05/05/99     stephen     Cleaned up.
+******************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/common/serv.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/**
+*******************************************************************************
+* Copyright (C) 2001-2014, International Business Machines Corporation.
+* All Rights Reserved.
+*******************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/common/serv.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/**
+ *******************************************************************************
+ * Copyright (C) 2001-2011, International Business Machines Corporation.       *
+ * All Rights Reserved.                                                        *
+ *******************************************************************************
+ */
+
+--- SOURCE: extension/icu/third_party/icu/common/servlk.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/**
+ *******************************************************************************
+ * Copyright (C) 2001-2014, International Business Machines Corporation and    *
+ * others. All Rights Reserved.                                                *
+ *******************************************************************************
+ *
+ *******************************************************************************
+ */
+
+

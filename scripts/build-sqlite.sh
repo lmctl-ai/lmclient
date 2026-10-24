@@ -63,12 +63,14 @@ cp "$HEADERS/org_sqlite_core_NativeDB.h" "$HEADERS/NativeDB.h"
 # into SQLite, and sqlite3_api is made a real pointer for the core build.
 sed 's/sqlite3_api;/sqlite3_api = 0;/g' "$AMALG/sqlite3.c" > "$BUILD/work/sqlite3.c"
 cat "$SOURCE/src/main/ext/extension-functions.c" >> "$BUILD/work/sqlite3.c"
-COMMON=(-fPIC -O2 -I"$AMALG" -I"$SOURCE/lib/inc_linux" -I"$JAVA_INCLUDE" -I"$JAVA_PLATFORM_INCLUDE" -I"$HEADERS")
+COMMON=(-fPIC -O2 -I"$JAVA_INCLUDE" -I"$JAVA_PLATFORM_INCLUDE" -I"$HEADERS" -I"$AMALG" -I"$SOURCE/lib/inc_linux")
 DEFS=(-DSQLITE_ENABLE_LOAD_EXTENSION=1 -DSQLITE_HAVE_ISNAN -DHAVE_USLEEP=1 -DSQLITE_ENABLE_COLUMN_METADATA -DSQLITE_CORE -DSQLITE_ENABLE_FTS3 -DSQLITE_ENABLE_FTS3_PARENTHESIS -DSQLITE_ENABLE_FTS5 -DSQLITE_ENABLE_RTREE -DSQLITE_ENABLE_STAT4 -DSQLITE_ENABLE_DBSTAT_VTAB -DSQLITE_ENABLE_MATH_FUNCTIONS -DSQLITE_THREADSAFE=1 -DSQLITE_DEFAULT_MEMSTATUS=0 -DSQLITE_DEFAULT_FILE_PERMISSIONS=0666 -DSQLITE_MAX_VARIABLE_NUMBER=250000 -DSQLITE_MAX_MMAP_SIZE=1099511627776 -DSQLITE_MAX_LENGTH=2147483647 -DSQLITE_MAX_COLUMN=32767 -DSQLITE_MAX_SQL_LENGTH=1073741824 -DSQLITE_MAX_FUNCTION_ARG=127 -DSQLITE_MAX_ATTACHED=125 -DSQLITE_MAX_PAGE_COUNT=4294967294 -DSQLITE_DISABLE_PAGECACHE_OVERFLOW_STATS)
 run "$CC" -c "${COMMON[@]}" "${DEFS[@]}" "$BUILD/work/sqlite3.c" -o "$BUILD/work/sqlite3.o"
 # Static native-image registration calls a namespaced loader so multiple JDBC
 # archives can coexist without colliding on JNI_OnLoad.
-sed -e 's/JNI_OnLoad(/JNI_OnLoad_sqlitejdbc(/g' -e 's/JNI_OnUnload(/JNI_OnUnload_sqlitejdbc(/g' "$SOURCE/src/main/java/org/sqlite/core/NativeDB.c" > "$BUILD/work/NativeDB.c"
+sed -e 's/JNI_OnLoad(/JNI_OnLoad_sqlitejdbc(/g' -e 's/JNI_OnUnload(/JNI_OnUnload_sqlitejdbc(/g' \
+  -e 's/return JNI_VERSION_1_2;/return JNI_VERSION_1_8;/' \
+  "$SOURCE/src/main/java/org/sqlite/core/NativeDB.c" > "$BUILD/work/NativeDB.c"
 run "$CC" -c "${COMMON[@]}" "$BUILD/work/NativeDB.c" -o "$BUILD/work/NativeDB.o"
 run "$AR" rcs "$OUT" "$BUILD/work/sqlite3.o" "$BUILD/work/NativeDB.o"
 

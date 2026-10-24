@@ -22,7 +22,10 @@ def invoke(args, cwd, timeout, expected=0, env=None):
     try:
         process_env = dict(os.environ if env is None else env)
         process_env["PATH"] = str(LAUNCHER.parent) + os.pathsep + os.environ.get("PATH", "")
-        p = subprocess.run(args, cwd=cwd, env=process_env, text=True, encoding="utf-8",
+        command = args
+        if os.environ.get("LMDB_TEST_ADDRESS_SPACE_LIMIT") == "1" and args[0] == str(LAUNCHER):
+            command = ["bash","-c",'ulimit -v 6291456; exec "$@"',"lmdb-memory-limit",*args]
+        p = subprocess.run(command, cwd=cwd, env=process_env, text=True, encoding="utf-8",
                            stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=timeout)
     except (OSError, subprocess.TimeoutExpired):
         raise AssertionError("bounded DSL subprocess failed or timed out") from None
@@ -120,6 +123,12 @@ let after = c.query("SELECT id,label FROM child ORDER BY id"); after.csv("after.
     invoke([str(LAUNCHER), "--dsl", str(bounded)], directory, 180)
     cycles = compile_fixture(directory, 'let i = 0; while (i < 100) { let c = connect("jdbc:h2:mem:cycles"); c.close(); i = i + 1; }', "cycles")
     invoke([str(LAUNCHER), "--dsl", str(cycles)], directory, 90)
+    native_close = compile_fixture(directory, 'let a = connect("jdbc:duckdb:"); let b = connect("jdbc:duckdb:"); a.close(); let c = connect("jdbc:duckdb:"); c.close(); b.close();', "native_close")
+    invoke([str(LAUNCHER), "--dsl", str(native_close)], directory, 90)
+    native_limit = compile_fixture(directory, 'let a = connect("jdbc:duckdb:"); let b = connect("jdbc:duckdb:"); let c = connect("jdbc:duckdb:");', "native_limit")
+    result = invoke([str(LAUNCHER), "--dsl", str(native_limit)], directory, 90, expected=3)
+    if "native connection limit" not in report(result).get("message", ""):
+        raise AssertionError("native connection limit report mismatch")
     if os.environ.get("LMDB_TEST_DEFAULT_BUDGET") == "1":
         default_env = dict(os.environ)
         default_env.pop("LMDB_MAX_MEMORY_MB", None)

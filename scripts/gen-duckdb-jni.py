@@ -10,7 +10,7 @@ import re
 
 root = Path(__file__).resolve().parents[1]
 source = (root / "third_party/duckdb-java/src/jni/refs.cpp").read_text(encoding="utf-8")
-class_names = dict(re.findall(r'(\w+)\s*=\s*make_class_ref\(env,\s*"([^"]+)"\)', source))
+class_names = dict(re.findall(r'(\w+)\s*=\s*make_class_ref\(\s*env,\s*"([^"]+)"\)', source))
 entries = {}
 
 def type_name(descriptor):
@@ -33,7 +33,7 @@ def parameter_types(signature):
 
 literal = r'((?:"[^"\n]*"\s*)+)'
 for pattern in (
-    r'(?:get_method_id|get_static_method_id|make_static_method_call_ref)\(env,\s*(\w+),\s*"([^"]+)",\s*' + literal + r'\)',
+    r'(?:get_method_id|get_static_method_id|make_static_method_call_ref)\(\s*env,\s*(\w+),\s*"([^"]+)",\s*' + literal + r'\)',
     r'env->Get(?:Static)?MethodID\(\s*(\w+),\s*"([^"]+)",\s*' + literal + r'\)',
 ):
     for variable, name, strings in re.findall(pattern, source):
@@ -46,13 +46,16 @@ for pattern in (
         methods = entry(declaring).setdefault("methods",[])
         if method not in methods:
             methods.append(method)
-for variable, name in re.findall(r'(?:get_field_id|make_static_object_field_ref)\(env,\s*(\w+),\s*"([^"]+)"', source):
+for variable, name in re.findall(r'(?:get_field_id|make_static_object_field_ref)\(\s*env,\s*(\w+),\s*"([^"]+)"', source):
     field = {"name":name}
     fields = entry(class_names[variable]).setdefault("fields",[])
     if field not in fields:
         fields.append(field)
 for name in ("java/sql/SQLException", "java/sql/SQLTimeoutException", "java/lang/RuntimeException", "java/lang/NoSuchMethodError"):
     entry(name).setdefault("methods",[]).append({"name":"<init>","parameterTypes":["java.lang.String"]})
+assert {field["name"] for field in entry("org/duckdb/ProfilerPrintFormat")["fields"]} == {
+    "QUERY_TREE", "JSON", "QUERY_TREE_OPTIMIZER", "NO_OUTPUT", "HTML", "GRAPHVIZ"
+}, "incomplete JNI enum metadata for pinned DuckDB release"
 output = root / "src/main/resources/META-INF/native-image/ai.lmctl/lmdb-duckdb/jni-config.json"
 output.parent.mkdir(parents=True,exist_ok=True)
 output.write_text(json.dumps(sorted(entries.values(),key=lambda item:item["name"]),indent=2) + "\n",encoding="utf-8")

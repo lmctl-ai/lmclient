@@ -1,0 +1,1574 @@
+DuckDB JNI source pin: a561d2ddadde231402411ce76112779bc34b57f0 (v1.5.6.0)
+This file preserves top-of-file copyright/license notices from the pinned source.
+Warning: truncated output (original token count: 21872)
+Total output lines: 2073
+
+--- SOURCE: third_party/mbedtls/library/psa_crypto_core.h ---
+/*
+ *  PSA crypto core internal interfaces
+ */
+/*
+ *  Copyright The Mbed TLS Contributors
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+ */
+
+--- SOURCE: third_party/mbedtls/library/psa_util_internal.h ---
+/**
+ * \file psa_util_internal.h
+ *
+ * \brief Internal utility functions for use of PSA Crypto.
+ */
+/*
+ *  Copyright The Mbed TLS Contributors
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+ */
+
+--- SOURCE: third_party/mbedtls/library/rsa.cpp ---
+/*
+ *  The RSA public-key cryptosystem
+ *
+ *  Copyright The Mbed TLS Contributors
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+ */
+
+/*
+ *  The following sources were referenced in the design of this implementation
+ *  of the RSA algorithm:
+ *
+ *  [1] A method for obtaining digital signatures and public-key cryptosystems
+ *      R Rivest, A Shamir, and L Adleman
+ *      http://people.csail.mit.edu/rivest/pubs.html#RSA78
+ *
+ *  [2] Handbook of Applied Cryptography - 1997, Chapter 8
+ *      Menezes, van Oorschot and Vanstone
+ *
+ *  [3] Malware Guard Extension: Using SGX to Conceal Cache Attacks
+ *      Michael Schwarz, Samuel Weiser, Daniel Gruss, Clémentine Maurice and
+ *      Stefan Mangard
+ *      https://arxiv.org/abs/1702.08719v2
+ *
+ */
+
+--- SOURCE: third_party/mbedtls/library/rsa_alt_helpers.cpp ---
+/*
+ *  Helper functions for the RSA module
+ *
+ *  Copyright The Mbed TLS Contributors
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+ *
+ */
+
+--- SOURCE: third_party/mbedtls/library/rsa_alt_helpers.h ---
+/**
+ * \file rsa_alt_helpers.h
+ *
+ * \brief Context-independent RSA helper functions
+ *
+ *  This module declares some RSA-related helper functions useful when
+ *  implementing the RSA interface. These functions are provided in a separate
+ *  compilation unit in order to make it easy for designers of alternative RSA
+ *  implementations to use them in their own code, as it is conceived that the
+ *  functionality they provide will be necessary for most complete
+ *  implementations.
+ *
+ *  End-users of Mbed TLS who are not providing their own alternative RSA
+ *  implementations should not use these functions directly, and should instead
+ *  use only the functions declared in rsa.h.
+ *
+ *  The interface provided by this module will be maintained through LTS (Long
+ *  Term Support) branches of Mbed TLS, but may otherwise be subject to change,
+ *  and must be considered an internal interface of the library.
+ *
+ *  There are two classes of helper functions:
+ *
+ *  (1) Parameter-generating helpers. These are:
+ *      - mbedtls_rsa_deduce_primes
+ *      - mbedtls_rsa_deduce_private_exponent
+ *      - mbedtls_rsa_deduce_crt
+ *       Each of these functions takes a set of core RSA parameters and
+ *       generates some other, or CRT related parameters.
+ *
+ *  (2) Parameter-checking helpers. These are:
+ *      - mbedtls_rsa_validate_params
+ *      - mbedtls_rsa_validate_crt
+ *      They take a set of core or CRT related RSA parameters and check their
+ *      validity.
+ *
+ */
+/*
+ *  Copyright The Mbed TLS Contributors
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+ */
+
+--- SOURCE: third_party/mbedtls/library/rsa_internal.h ---
+/**
+ * \file rsa_internal.h
+ *
+ * \brief Internal-only RSA public-key cryptosystem API.
+ *
+ * This file declares RSA-related functions that are to be used
+ * only from within the Mbed TLS library itself.
+ *
+ */
+/*
+ *  Copyright The Mbed TLS Contributors
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+ */
+
+--- SOURCE: third_party/mbedtls/library/sha1.cpp ---
+/*
+ *  FIPS-180-1 compliant SHA-1 implementation
+ *
+ *  Copyright The Mbed TLS Contributors
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+ */
+/*
+ *  The SHA-1 standard was published by NIST in 1993.
+ *
+ *  http://www.itl.nist.gov/fipspubs/fip180-1.htm
+ */
+
+--- SOURCE: third_party/mbedtls/library/sha256.cpp ---
+/*
+ *  FIPS-180-2 compliant SHA-256 implementation
+ *
+ *  Copyright The Mbed TLS Contributors
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+ */
+/*
+ *  The SHA-256 Secure Hash Standard was published by NIST in 2002.
+ *
+ *  http://csrc.nist.gov/publications/fips/fips180-2/fips180-2.pdf
+ */
+
+--- SOURCE: third_party/miniz/miniz.cpp ---
+/**************************************************************************
+ *
+ * Copyright 2013-2014 RAD Game Tools and Valve Software
+ * Copyright 2010-2014 Rich Geldreich and Tenacious Software LLC
+ * All Rights Reserved.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ *
+ **************************************************************************/
+
+--- SOURCE: third_party/pcg/pcg_extras.hpp ---
+/*
+ * PCG Random Number Generation for C++
+ *
+ * Copyright 2014-2017 Melissa O'Neill <oneill@pcg-random.org>,
+ *                     and the PCG Project contributors.
+ *
+ * SPDX-License-Identifier: (Apache-2.0 OR MIT)
+ *
+ * Licensed under the Apache License, Version 2.0 (provided in
+ * LICENSE-APACHE.txt and at http://www.apache.org/licenses/LICENSE-2.0)
+ * or under the MIT license (provided in LICENSE-MIT.txt and at
+ * http://opensource.org/licenses/MIT), at your option. This file may not
+ * be copied, modified, or distributed except according to those terms.
+ *
+ * Distributed on an "AS IS" BASIS, WITHOUT WARRANTY OF ANY KIND, either
+ * express or implied.  See your chosen license for details.
+ *
+ * For additional information about the PCG random number generation scheme,
+ * visit http://www.pcg-random.org/.
+ */
+
+/*
+ * This file provides support code that is useful for random-number generation
+ * but not specific to the PCG generation scheme, including:
+ *      - 128-bit int support for platforms where it isn't available natively
+ *      - bit twiddling operations
+ *      - I/O of 128-bit and 8-bit integers
+ *      - Handling the evilness of SeedSeq
+ *      - Support for efficiently producing random numbers less than a given
+ *        bound
+ */
+
+--- SOURCE: third_party/pcg/pcg_random.hpp ---
+/*
+ * PCG Random Number Generation for C++
+ *
+ * Copyright 2014-2019 Melissa O'Neill <oneill@pcg-random.org>,
+ *                     and the PCG Project contributors.
+ *
+ * SPDX-License-Identifier: (Apache-2.0 OR MIT)
+ *
+ * Licensed under the Apache License, Version 2.0 (provided in
+ * LICENSE-APACHE.txt and at http://www.apache.org/licenses/LICENSE-2.0)
+ * or under the MIT license (provided in LICENSE-MIT.txt and at
+ * http://opensource.org/licenses/MIT), at your option. This file may not
+ * be copied, modified, or distributed except according to those terms.
+ *
+ * Distributed on an "AS IS" BASIS, WITHOUT WARRANTY OF ANY KIND, either
+ * express or implied.  See your chosen license for details.
+ *
+ * For additional information about the PCG random number generation scheme,
+ * visit http://www.pcg-random.org/.
+ */
+
+/*
+ * This code provides the reference implementation of the PCG family of
+ * random number generators.  The code is complex because it implements
+ *
+ *      - several members of the PCG family, specifically members corresponding
+ *        to the output functions:
+ *             - XSH RR         (good for 64-bit state, 32-bit output)
+ *             - XSH RS         (good for 64-bit state, 32-bit output)
+ *             - XSL RR         (good for 128-bit state, 64-bit output)
+ *             - RXS M XS       (statistically most powerful generator)
+ *             - XSL RR RR      (good for 128-bit state, 128-bit output)
+ *             - and RXS, RXS M, XSH, XSL       (mostly for testing)
+ *      - at potentially *arbitrary* bit sizes
+ *      - with four different techniques for random streams (MCG, one-stream
+ *        LCG, settable-stream LCG, unique-stream LCG)
+ *      - and the extended generation schemes allowing arbitrary periods
+ *      - with all features of C++11 random number generation (and more),
+ *        some of which are somewhat painful, including
+ *            - initializing with a SeedSequence which writes 32-bit values
+ *              to memory, even though the state of the generator may not
+ *              use 32-bit values (it might use smaller or larger integers)
+ *            - I/O for RNGs and a prescribed format, which needs to handle
+ *              the issue that 8-bit and 128-bit integers don't have working
+ *              I/O routines (e.g., normally 8-bit = char, not integer)
+ *            - equality and inequality for RNGs
+ *      - and a number of convenience typedefs to mask all the complexity
+ *
+ * The code employes a fairly heavy level of abstraction, and has to deal
+ * with various C++ minutia.  If you're looking to learn about how the PCG
+ * scheme works, you're probably best of starting with one of the other
+ * codebases (see www.pcg-random.org).  But if you're curious about the
+ * constants for the various output functions used in those other, simpler,
+ * codebases, this code shows how they are calculated.
+ *
+ * On the positive side, at least there are convenience typedefs so that you
+ * can say
+ *
+ *      pcg32 myRNG;
+ *
+ * rather than:
+ *
+ *      pcg_detail::engine<
+ *          uint32_t,                                           // Output Type
+ *          uint64_t,                                           // State Type
+ *          pcg_detail::xsh_rr_mixin<uint32_t, uint64_t>, true, // Output Func
+ *          pcg_detail::specific_stream<uint64_t>,              // Stream Kind
+ *          pcg_detail::default_multiplier<uint64_t>            // LCG Mult
+ *      > myRNG;
+ *
+ */
+
+--- SOURCE: third_party/pcg/pcg_uint128.hpp ---
+/*
+ * PCG Random Number Generation for C++
+ *
+ * Copyright 2014-2017 Melissa O'Neill <oneill@pcg-random.org>,
+ *                     and the PCG Project contributors.
+ *
+ * SPDX-License-Identifier: (Apache-2.0 OR MIT)
+ *
+ * Licensed under the Apache License, Version 2.0 (provided in
+ * LICENSE-APACHE.txt and at http://www.apache.org/licenses/LICENSE-2.0)
+ * or under the MIT license (provided in LICENSE-MIT.txt and at
+ * http://opensource.org/licenses/MIT), at your option. This file may not
+ * be copied, modified, or distributed except according to those terms.
+ *
+ * Distributed on an "AS IS" BASIS, WITHOUT WARRANTY OF ANY KIND, either
+ * express or implied.  See your chosen license for details.
+ *
+ * For additional information about the PCG random number generation scheme,
+ * visit http://www.pcg-random.org/.
+ */
+
+/*
+ * This code provides a a C++ class that can provide 128-bit (or higher)
+ * integers.  To produce 2K-bit integers, it uses two K-bit integers,
+ * placed in a union that allowes the code to also see them as four K/2 bit
+ * integers (and access them either directly name, or by index).
+ *
+ * It may seem like we're reinventing the wheel here, because several
+ * libraries already exist that support large integers, but most existing
+ * libraries provide a very generic multiprecision code, but here we're
+ * operating at a fixed size.  Also, most other libraries are fairly
+ * heavyweight.  So we use a direct implementation.  Sadly, it's much slower
+ * than hand-coded assembly or direct CPU support.
+ */
+
+--- SOURCE: third_party/pdqsort/pdqsort.h ---
+/*
+
+--- SOURCE: third_party/re2/util/rune.cc ---
+/*
+ * The authors of this software are Rob Pike and Ken Thompson.
+ *              Copyright (c) 2002 by Lucent Technologies.
+ * Permission to use, copy, modify, and distribute this software for any
+ * purpose without fee is hereby granted, provided that this entire notice
+ * is included in all copies of any software which is or includes a copy
+ * or modification of this software and in all copies of the supporting
+ * documentation for such software.
+ * THIS SOFTWARE IS BEING PROVIDED "AS IS", WITHOUT ANY EXPRESS OR IMPLIED
+ * WARRANTY.  IN PARTICULAR, NEITHER THE AUTHORS NOR LUCENT TECHNOLOGIES MAKE ANY
+ * REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
+ * OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
+ */
+
+--- SOURCE: third_party/re2/util/utf.h ---
+/*
+ * The authors of this software are Rob Pike and Ken Thompson.
+ *              Copyright (c) 2002 by Lucent Technologies.
+ * Permission to use, copy, modify, and distribute this software for any
+ * purpose without fee is hereby granted, provided that this entire notice
+ * is included in all copies of any software which is or includes a copy
+ * or modification of this software and in all copies of the supporting
+ * documentation for such software.
+ * THIS SOFTWARE IS BEING PROVIDED "AS IS", WITHOUT ANY EXPRESS OR IMPLIED
+ * WARRANTY.  IN PARTICULAR, NEITHER THE AUTHORS NOR LUCENT TECHNOLOGIES MAKE ANY
+ * REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
+ * OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
+ *
+ * This file and rune.cc have been converted to compile as C++ code
+ * in name space re2.
+ */
+
+--- SOURCE: third_party/skiplist/HeadNode.h ---
+/**
+ * @file
+ *
+ * Project: skiplist
+ *
+ * Created by Paul Ross on 03/12/2015.
+ *
+ * Copyright (c) 2015-2023 Paul Ross. All rights reserved.
+ *
+ * @code
+ * MIT License
+ *
+ * Copyright (c) 2017-2023 Paul Ross
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ * @endcode
+ */
+
+--- SOURCE: third_party/skiplist/IntegrityEnums.h ---
+/**
+ * @file
+ *
+ * Project: skiplist
+ *
+ * Integrity codes for structures in this code.
+ *
+ * Created by Paul Ross on 11/12/2015.
+ *
+ * Copyright (c) 2015-2023 Paul Ross. All rights reserved.
+ *
+ * @code
+ * MIT License
+ *
+ * Copyright (c) 2015-2023 Paul Ross
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ * @endcode
+ */
+
+/**
+ * Various integrity codes for structures in this code.
+ */
+
+--- SOURCE: third_party/skiplist/Node.h ---
+/**
+ * @file
+ *
+ * Project: skiplist
+ *
+ * Concurrency Tests.
+ *
+ * Created by Paul Ross on 03/12/2015.
+ *
+ * Copyright (c) 2015-2023 Paul Ross. All rights reserved.
+ *
+ * @code
+ * MIT License
+ *
+ * Copyright (c) 2015-2023 Paul Ross
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ * @endcode
+ */
+
+--- SOURCE: third_party/skiplist/NodeRefs.h ---
+//
+//  NodeRefs.h
+//  SkipList
+//
+//  Created by Paul Ross on 03/12/2015.
+//  Copyright (c) 2017 Paul Ross. All rights reserved.
+//
+
+--- SOURCE: third_party/skiplist/RollingMedian.h ---
+/**
+ * @file
+ *
+ * Project: skiplist
+ *
+ * Rolling Median.
+ *
+ * Created by Paul Ross on 18/12/2015.
+ *
+ * Copyright (c) 2015-2023 Paul Ross. All rights reserved.
+ *
+ * @code
+ * MIT License
+ *
+ * Copyright (c) 2015-2023 Paul Ross
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ * @endcode
+ */
+
+--- SOURCE: third_party/skiplist/SkipList.cpp ---
+//
+//  SkipList.cpp
+//  SkipList
+//
+//  Created by Paul Ross on 19/12/2015.
+//  Copyright (c) 2017 Paul Ross. All rights reserved.
+//
+
+--- SOURCE: third_party/skiplist/SkipList.h ---
+/**
+ * @file
+ *
+ * Project: skiplist
+ *
+ * Created by Paul Ross on 15/11/2015.
+ *
+ * Copyright (c) 2015-2023 Paul Ross. All rights reserved.
+ *
+ * @code
+ * MIT License
+ *
+ * Copyright (c) 2017-2023 Paul Ross
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ * @endcode
+ */
+
+/** @mainpage
+ *
+ * General
+ * =======
+ * This is a generic skip list implementation for any type T.
+ * There only restriction on the size of this skip list is the available memory.
+ *
+ * A skip list is a singly linked list of ordered nodes with a series of other, coarser, lists that reference a subset
+ * of nodes in order.
+ * 'Level' is an size_t that specifies the coarseness of the linked list, level 0 is the linked list to every node.
+ *
+ * Typically:
+ * - The list at level 1 links (ideally) to every other node.
+ * - The list at level 2 links (ideally) to every fourth node and so on.
+ *
+ * In general the list at level n links (ideally) to every 2**n node.
+ *
+ * These additional lists allow rapid location, insertion and removal of nodes.
+ * These lists are created and updated in a probabilistic manner and this is achieved at node creation time by tossing a
+ * virtual coin.
+ * These lists are not explicit, they are implied by the references between Nodes at a particular level.
+ *
+ * Skip lists are alternatives to balanced trees for operations such as a rolling median.
+ * The disadvantages of skip lists are:
+    - Less space efficient than balanced trees (see 'Space Complexity' below).
+    - performance is similar to balanced trees except finding the mid-point which is @c O(log(N)) for a skip list
+        compared with @c O(1) for a balanced tree.
+ *
+ * The advantages claimed for skip lists are:
+    - The insert() and remove() logic is simpler (I do not subscribe to this).
+ *
+ * Examples of Usage
+ * =================
+ *
+ * C++
+ * ---
+ * @code
+ * #include "SkipList.h"
+ *
+ * OrderedStructs::SkipList::HeadNode<double> sl;
+ *
+ * sl.insert(42.0);
+ * sl.insert(21.0);
+ * sl.insert(84.0);
+ * sl.has(42.0) // true
+ * sl.size() // 3
+ * sl.at(1) // 42.0
+ * @endcode
+ *
+ * Python
+ * ------
+ * @code
+ * import orderedstructs
+ *
+ * sl = orderedstructs.SkipList(float)
+ * sl.insert(42.0)
+ * sl.insert(21.0)
+ * sl.insert(84.0)
+ * sl.has(42.0) # True
+ * sl.size() # 3
+ * sl.at(1) # 42.0
+ * @endcode
+ *
+
+--- SOURCE: third_party/snappy/snappy-internal.h ---
+// Copyright 2008 Google Inc. All Rights Reserved.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions are
+// met:
+//
+//     * Redistributions of source code must retain the above copyright
+// notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above
+// copyright notice, this list of conditions and the following disclaimer
+// in the documentation and/or other materials provided with the
+// distribution.
+//     * Neither the name of Google Inc. nor the names of its
+// contributors may be used to endorse or promote products derived from
+// this software without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+// OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+// Internals shared between the Snappy implementation and its unittest.
+
+--- SOURCE: third_party/snappy/snappy-sinksource.cc ---
+// Copyright 2011 Google Inc. All Rights Reserved.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions are
+// met:
+//
+//     * Redistributions of source code must retain the above copyright
+// notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above
+// copyright notice, this list of conditions and the following disclaimer
+// in the documentation and/or other materials provided with the
+// distribution.
+//     * Neither the name of Google Inc. nor the names of its
+// contributors may be used to endorse or promote products derived from
+// this software without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+// OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+--- SOURCE: third_party/snappy/snappy-sinksource.h ---
+// Copyright 2011 Google Inc. All Rights Reserved.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions are
+// met:
+//
+//     * Redistributions of source code must retain the above copyright
+// notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above
+// copyright notice, this list of conditions and the following disclaimer
+// in the documentation and/or other materials provided with the
+// distribution.
+//     * Neither the name of Google Inc. nor the names of its
+// contributors may be used to endorse or promote products derived from
+// this software without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+// OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+--- SOURCE: third_party/snappy/snappy-stubs-internal.h ---
+// Copyright 2011 Google Inc. All Rights Reserved.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions are
+// met:
+//
+//     * Redistributions of source code must retain the above copyright
+// notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above
+// copyright notice, this list of conditions and the following disclaimer
+// in the documentation and/or other materials provided with the
+// distribution.
+//     * Neither the name of Google Inc. nor the names of its
+// contributors may be used to endorse or promote products derived from
+// this software without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+// OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+// Various stubs for the open-source version of Snappy.
+
+--- SOURCE: third_party/snappy/snappy-stubs-public.h ---
+// Copyright 2011 Google Inc. All Rights Reserved.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions are
+// met:
+//
+//     * Redistributions of source code must retain the above copyright
+// notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above
+// copyright notice, this list of conditions and the following disclaimer
+// in the documentation and/or other materials provided with the
+// distribution.
+//     * Neither the name of Google Inc. nor the names of its
+// contributors may be used to endorse or promote products derived from
+// this software without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+// OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+// Various type stubs for the open-source version of Snappy.
+//
+// This file cannot include config.h, as it is included from snappy.h,
+// which is a public header. Instead, snappy-stubs-public.h is generated by
+// from snappy-stubs-public.h.in at configure time.
+
+--- SOURCE: third_party/snappy/snappy.cc ---
+// Copyright 2005 Google Inc. All Rights Reserved.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions are
+// met:
+//
+//     * Redistributions of source code must retain the above copyright
+// notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must…5872 tokens truncated…
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ *
+ *  You can contact the author at :
+ *  - FSE+HUF source repository : https://github.com/Cyan4973/FiniteStateEntropy
+ *  - Public forum : https://groups.google.com/forum/#!forum/lz4c
+ *
+ * This source code is licensed under both the BSD-style license (found in the
+ * LICENSE file in the root directory of this source tree) and the GPLv2 (found
+ * in the COPYING file in the root directory of this source tree).
+ * You may select, at your option, one of the above-listed licenses.
+****************************************************************** */
+
+/* **************************************************************
+*  Compiler specifics
+****************************************************************/
+#ifdef _MSC_VER    /* Visual Studio */
+#  pragma warning(disable : 4127)        /* disable: C4127: conditional expression is constant */
+
+--- SOURCE: third_party/zstd/compress/zstd_compress.cpp ---
+/*
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ * All rights reserved.
+ *
+ * This source code is licensed under both the BSD-style license (found in the
+ * LICENSE file in the root directory of this source tree) and the GPLv2 (found
+ * in the COPYING file in the root directory of this source tree).
+ * You may select, at your option, one of the above-listed licenses.
+ */
+
+/*-*************************************
+*  Dependencies
+***************************************/
+#include "zstd/common/allocations.h"  /* ZSTD_customMalloc, ZSTD_customCalloc, ZSTD_customFree */
+#include "zstd/common/zstd_deps.h"  /* INT_MAX, ZSTD_memset, ZSTD_memcpy */
+
+--- SOURCE: third_party/zstd/compress/zstd_compress_literals.cpp ---
+/*
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ * All rights reserved.
+ *
+ * This source code is licensed under both the BSD-style license (found in the
+ * LICENSE file in the root directory of this source tree) and the GPLv2 (found
+ * in the COPYING file in the root directory of this source tree).
+ * You may select, at your option, one of the above-listed licenses.
+ */
+
+ /*-*************************************
+ *  Dependencies
+ ***************************************/
+
+--- SOURCE: third_party/zstd/compress/zstd_compress_sequences.cpp ---
+/*
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ * All rights reserved.
+ *
+ * This source code is licensed under both the BSD-style license (found in the
+ * LICENSE file in the root directory of this source tree) and the GPLv2 (found
+ * in the COPYING file in the root directory of this source tree).
+ * You may select, at your option, one of the above-listed licenses.
+ */
+
+ /*-*************************************
+ *  Dependencies
+ ***************************************/
+
+--- SOURCE: third_party/zstd/compress/zstd_compress_superblock.cpp ---
+/*
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ * All rights reserved.
+ *
+ * This source code is licensed under both the BSD-style license (found in the
+ * LICENSE file in the root directory of this source tree) and the GPLv2 (found
+ * in the COPYING file in the root directory of this source tree).
+ * You may select, at your option, one of the above-listed licenses.
+ */
+
+ /*-*************************************
+ *  Dependencies
+ ***************************************/
+
+--- SOURCE: third_party/zstd/compress/zstd_double_fast.cpp ---
+/*
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ * All rights reserved.
+ *
+ * This source code is licensed under both the BSD-style license (found in the
+ * LICENSE file in the root directory of this source tree) and the GPLv2 (found
+ * in the COPYING file in the root directory of this source tree).
+ * You may select, at your option, one of the above-listed licenses.
+ */
+
+--- SOURCE: third_party/zstd/compress/zstd_fast.cpp ---
+/*
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ * All rights reserved.
+ *
+ * This source code is licensed under both the BSD-style license (found in the
+ * LICENSE file in the root directory of this source tree) and the GPLv2 (found
+ * in the COPYING file in the root directory of this source tree).
+ * You may select, at your option, one of the above-listed licenses.
+ */
+
+#include "zstd/compress/zstd_compress_internal.h"  /* ZSTD_hashPtr, ZSTD_count, ZSTD_storeSeq */
+
+--- SOURCE: third_party/zstd/compress/zstd_lazy.cpp ---
+/*
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ * All rights reserved.
+ *
+ * This source code is licensed under both the BSD-style license (found in the
+ * LICENSE file in the root directory of this source tree) and the GPLv2 (found
+ * in the COPYING file in the root directory of this source tree).
+ * You may select, at your option, one of the above-listed licenses.
+ */
+
+--- SOURCE: third_party/zstd/compress/zstd_ldm.cpp ---
+/*
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ * All rights reserved.
+ *
+ * This source code is licensed under both the BSD-style license (found in the
+ * LICENSE file in the root directory of this source tree) and the GPLv2 (found
+ * in the COPYING file in the root directory of this source tree).
+ * You may select, at your option, one of the above-listed licenses.
+ */
+
+--- SOURCE: third_party/zstd/compress/zstd_opt.cpp ---
+/*
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ * All rights reserved.
+ *
+ * This source code is licensed under both the BSD-style license (found in the
+ * LICENSE file in the root directory of this source tree) and the GPLv2 (found
+ * in the COPYING file in the root directory of this source tree).
+ * You may select, at your option, one of the above-listed licenses.
+ */
+
+--- SOURCE: third_party/zstd/compress/zstdmt_compress.cpp ---
+/*
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ * All rights reserved.
+ *
+ * This source code is licensed under both the BSD-style license (found in the
+ * LICENSE file in the root directory of this source tree) and the GPLv2 (found
+ * in the COPYING file in the root directory of this source tree).
+ * You may select, at your option, one of the above-listed licenses.
+ */
+
+
+/* ======   Compiler specifics   ====== */
+
+--- SOURCE: third_party/zstd/decompress/huf_decompress.cpp ---
+/* ******************************************************************
+ * huff0 huffman decoder,
+ * part of Finite State Entropy library
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ *
+ *  You can contact the author at :
+ *  - FSE+HUF source repository : https://github.com/Cyan4973/FiniteStateEntropy
+ *
+ * This source code is licensed under both the BSD-style license (found in the
+ * LICENSE file in the root directory of this source tree) and the GPLv2 (found
+ * in the COPYING file in the root directory of this source tree).
+ * You may select, at your option, one of the above-listed licenses.
+****************************************************************** */
+
+/* **************************************************************
+*  Dependencies
+****************************************************************/
+#include "zstd/common/zstd_deps.h"  /* ZSTD_memcpy, ZSTD_memset */
+
+--- SOURCE: third_party/zstd/decompress/zstd_ddict.cpp ---
+/*
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ * All rights reserved.
+ *
+ * This source code is licensed under both the BSD-style license (found in the
+ * LICENSE file in the root directory of this source tree) and the GPLv2 (found
+ * in the COPYING file in the root directory of this source tree).
+ * You may select, at your option, one of the above-listed licenses.
+ */
+
+/* zstd_ddict.c :
+ * concentrates all logic that needs to know the internals of ZSTD_DDict object */
+
+/*-*******************************************************
+*  Dependencies
+*********************************************************/
+#include "zstd/common/allocations.h"  /* ZSTD_customMalloc, ZSTD_customFree */
+#include "zstd/common/zstd_deps.h"   /* ZSTD_memcpy, ZSTD_memmove, ZSTD_memset */
+#include "zstd/common/cpu.h"         /* bmi2 */
+#include "zstd/common/mem.h"         /* low level memory routines */
+
+--- SOURCE: third_party/zstd/decompress/zstd_decompress.cpp ---
+/*
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ * All rights reserved.
+ *
+ * This source code is licensed under both the BSD-style license (found in the
+ * LICENSE file in the root directory of this source tree) and the GPLv2 (found
+ * in the COPYING file in the root directory of this source tree).
+ * You may select, at your option, one of the above-listed licenses.
+ */
+
+
+/* ***************************************************************
+*  Tuning parameters
+*****************************************************************/
+/*!
+ * HEAPMODE :
+ * Select how default decompression function ZSTD_decompress() allocates its context,
+ * on stack (0), or into heap (1, default; requires malloc()).
+ * Note that functions with explicit context such as ZSTD_decompressDCtx() are unaffected.
+ */
+
+--- SOURCE: third_party/zstd/decompress/zstd_decompress_block.cpp ---
+/*
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ * All rights reserved.
+ *
+ * This source code is licensed under both the BSD-style license (found in the
+ * LICENSE file in the root directory of this source tree) and the GPLv2 (found
+ * in the COPYING file in the root directory of this source tree).
+ * You may select, at your option, one of the above-listed licenses.
+ */
+
+/* zstd_decompress_block :
+ * this module takes care of decompressing _compressed_ block */
+
+/*-*******************************************************
+*  Dependencies
+*********************************************************/
+#include "zstd/common/zstd_deps.h"   /* ZSTD_memcpy, ZSTD_memmove, ZSTD_memset */
+#include "zstd/common/compiler.h"    /* prefetch */
+#include "zstd/common/cpu.h"         /* bmi2 */
+#include "zstd/common/mem.h"         /* low level memory routines */
+
+--- SOURCE: third_party/zstd/deprecated/zbuff_common.cpp ---
+/*
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ * All rights reserved.
+ *
+ * This source code is licensed under both the BSD-style license (found in the
+ * LICENSE file in the root directory of this source tree) and the GPLv2 (found
+ * in the COPYING file in the root directory of this source tree).
+ * You may select, at your option, one of the above-listed licenses.
+ */
+
+/*-*************************************
+*  Dependencies
+***************************************/
+
+--- SOURCE: third_party/zstd/deprecated/zbuff_compress.cpp ---
+/*
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ * All rights reserved.
+ *
+ * This source code is licensed under both the BSD-style license (found in the
+ * LICENSE file in the root directory of this source tree) and the GPLv2 (found
+ * in the COPYING file in the root directory of this source tree).
+ * You may select, at your option, one of the above-listed licenses.
+ */
+
+
+
+/* *************************************
+*  Dependencies
+***************************************/
+
+--- SOURCE: third_party/zstd/deprecated/zbuff_decompress.cpp ---
+/*
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ * All rights reserved.
+ *
+ * This source code is licensed under both the BSD-style license (found in the
+ * LICENSE file in the root directory of this source tree) and the GPLv2 (found
+ * in the COPYING file in the root directory of this source tree).
+ * You may select, at your option, one of the above-listed licenses.
+ */
+
+
+
+/* *************************************
+*  Dependencies
+***************************************/
+#define ZSTD_DISABLE_DEPRECATE_WARNINGS  /* suppress warning on ZSTD_initDStream_usingDict */
+#include "zstd.h"        /* ZSTD_CStream, ZSTD_DStream, ZSTDLIB_API */
+
+--- SOURCE: third_party/zstd/dict/cover.cpp ---
+/*
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ * All rights reserved.
+ *
+ * This source code is licensed under both the BSD-style license (found in the
+ * LICENSE file in the root directory of this source tree) and the GPLv2 (found
+ * in the COPYING file in the root directory of this source tree).
+ * You may select, at your option, one of the above-listed licenses.
+ */
+
+/* *****************************************************************************
+ * Constructs a dictionary using a heuristic based on the following paper:
+ *
+ * Liao, Petri, Moffat, Wirth
+ * Effective Construction of Relative Lempel-Ziv Dictionaries
+ * Published in WWW 2016.
+ *
+ * Adapted from code originally written by @ot (Giuseppe Ottaviano).
+ ******************************************************************************/
+
+/*-*************************************
+*  Dependencies
+***************************************/
+#include <stdio.h>  /* fprintf */
+#include <stdlib.h> /* malloc, free, qsort */
+#include <string.h> /* memset */
+#include <time.h>   /* clock */
+
+--- SOURCE: third_party/zstd/dict/divsufsort.cpp ---
+/*
+ * divsufsort.c for libdivsufsort-lite
+ * Copyright (c) 2003-2008 Yuta Mori All Rights Reserved.
+ *
+ * Permission is hereby granted, free of charge, to any person
+ * obtaining a copy of this software and associated documentation
+ * files (the "Software"), to deal in the Software without
+ * restriction, including without limitation the rights to use,
+ * copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the
+ * Software is furnished to do so, subject to the following
+ * conditions:
+ *
+ * The above copyright notice and this permission notice shall be
+ * included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+ * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+ * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+ * OTHER DEALINGS IN THE SOFTWARE.
+ */
+
+/*- Compiler specifics -*/
+
+--- SOURCE: third_party/zstd/dict/fastcover.cpp ---
+/*
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ * All rights reserved.
+ *
+ * This source code is licensed under both the BSD-style license (found in the
+ * LICENSE file in the root directory of this source tree) and the GPLv2 (found
+ * in the COPYING file in the root directory of this source tree).
+ * You may select, at your option, one of the above-listed licenses.
+ */
+
+/*-*************************************
+*  Dependencies
+***************************************/
+#include <stdio.h>  /* fprintf */
+#include <stdlib.h> /* malloc, free, qsort */
+#include <string.h> /* memset */
+#include <time.h>   /* clock */
+
+--- SOURCE: third_party/zstd/dict/zdict.cpp ---
+/*
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ * All rights reserved.
+ *
+ * This source code is licensed under both the BSD-style license (found in the
+ * LICENSE file in the root directory of this source tree) and the GPLv2 (found
+ * in the COPYING file in the root directory of this source tree).
+ * You may select, at your option, one of the above-listed licenses.
+ */
+
+
+/*-**************************************
+*  Tuning parameters
+****************************************/
+#define MINRATIO 4   /* minimum nb of apparition to be selected in dictionary */
+
+--- SOURCE: third_party/zstd/include/zdict.h ---
+/*
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ * All rights reserved.
+ *
+ * This source code is licensed under both the BSD-style license (found in the
+ * LICENSE file in the root directory of this source tree) and the GPLv2 (found
+ * in the COPYING file in the root directory of this source tree).
+ * You may select, at your option, one of the above-listed licenses.
+ */
+
+--- SOURCE: third_party/zstd/include/zstd.h ---
+/*
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ * All rights reserved.
+ *
+ * This source code is licensed under both the BSD-style license (found in the
+ * LICENSE file in the root directory of this source tree) and the GPLv2 (found
+ * in the COPYING file in the root directory of this source tree).
+ * You may select, at your option, one of the above-listed licenses.
+ */
+
+--- SOURCE: third_party/zstd/include/zstd/common/allocations.h ---
+/*
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ * All rights reserved.
+ *
+ * This source code is licensed under both the BSD-style license (found in the
+ * LICENSE file in the root directory of this source tree) and the GPLv2 (found
+ * in the COPYING file in the root directory of this source tree).
+ * You may select, at your option, one of the above-listed licenses.
+ */
+
+/* This file provides custom allocation primitives
+ */
+
+--- SOURCE: third_party/zstd/include/zstd/common/bits.h ---
+/*
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ * All rights reserved.
+ *
+ * This source code is licensed under both the BSD-style license (found in the
+ * LICENSE file in the root directory of this source tree) and the GPLv2 (found
+ * in the COPYING file in the root directory of this source tree).
+ * You may select, at your option, one of the above-listed licenses.
+ */
+
+--- SOURCE: third_party/zstd/include/zstd/common/bitstream.h ---
+/* ******************************************************************
+ * bitstream
+ * Part of FSE library
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ *
+ * You can contact the author at :
+ * - Source repository : https://github.com/Cyan4973/FiniteStateEntropy
+ *
+ * This source code is licensed under both the BSD-style license (found in the
+ * LICENSE file in the root directory of this source tree) and the GPLv2 (found
+ * in the COPYING file in the root directory of this source tree).
+ * You may select, at your option, one of the above-listed licenses.
+****************************************************************** */
+
+--- SOURCE: third_party/zstd/include/zstd/common/compiler.h ---
+/*
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ * All rights reserved.
+ *
+ * This source code is licensed under both the BSD-style license (found in the
+ * LICENSE file in the root directory of this source tree) and the GPLv2 (found
+ * in the COPYING file in the root directory of this source tree).
+ * You may select, at your option, one of the above-listed licenses.
+ */
+
+--- SOURCE: third_party/zstd/include/zstd/common/cpu.h ---
+/*
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ * All rights reserved.
+ *
+ * This source code is licensed under both the BSD-style license (found in the
+ * LICENSE file in the root directory of this source tree) and the GPLv2 (found
+ * in the COPYING file in the root directory of this source tree).
+ * You may select, at your option, one of the above-listed licenses.
+ */
+
+--- SOURCE: third_party/zstd/include/zstd/common/debug.h ---
+/* ******************************************************************
+ * debug
+ * Part of FSE library
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ *
+ * You can contact the author at :
+ * - Source repository : https://github.com/Cyan4973/FiniteStateEntropy
+ *
+ * This source code is licensed under both the BSD-style license (found in the
+ * LICENSE file in the root directory of this source tree) and the GPLv2 (found
+ * in the COPYING file in the root directory of this source tree).
+ * You may select, at your option, one of the above-listed licenses.
+****************************************************************** */
+
+
+/*
+ * The purpose of this header is to enable debug functions.
+ * They regroup assert(), DEBUGLOG() and RAWLOG() for run-time,
+ * and DEBUG_STATIC_ASSERT() for compile-time.
+ *
+ * By default, DEBUGLEVEL==0, which means run-time debug is disabled.
+ *
+ * Level 1 enables assert() only.
+ * Starting level 2, traces can be generated and pushed to stderr.
+ * The higher the level, the more verbose the traces.
+ *
+ * It's possible to dynamically adjust level using variable g_debug_level,
+ * which is only declared if DEBUGLEVEL>=2,
+ * and is a global variable, not multi-thread protected (use with care)
+ */
+
+--- SOURCE: third_party/zstd/include/zstd/common/error_private.h ---
+/*
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ * All rights reserved.
+ *
+ * This source code is licensed under both the BSD-style license (found in the
+ * LICENSE file in the root directory of this source tree) and the GPLv2 (found
+ * in the COPYING file in the root directory of this source tree).
+ * You may select, at your option, one of the above-listed licenses.
+ */
+
+/* Note : this module is expected to remain private, do not expose it */
+
+--- SOURCE: third_party/zstd/include/zstd/common/fse.h ---
+/* ******************************************************************
+ * FSE : Finite State Entropy codec
+ * Public Prototypes declaration
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ *
+ * You can contact the author at :
+ * - Source repository : https://github.com/Cyan4973/FiniteStateEntropy
+ *
+ * This source code is licensed under both the BSD-style license (found in the
+ * LICENSE file in the root directory of this source tree) and the GPLv2 (found
+ * in the COPYING file in the root directory of this source tree).
+ * You may select, at your option, one of the above-listed licenses.
+****************************************************************** */
+
+--- SOURCE: third_party/zstd/include/zstd/common/huf.h ---
+/* ******************************************************************
+ * huff0 huffman codec,
+ * part of Finite State Entropy library
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ *
+ * You can contact the author at :
+ * - Source repository : https://github.com/Cyan4973/FiniteStateEntropy
+ *
+ * This source code is licensed under both the BSD-style license (found in the
+ * LICENSE file in the root directory of this source tree) and the GPLv2 (found
+ * in the COPYING file in the root directory of this source tree).
+ * You may select, at your option, one of the above-listed licenses.
+****************************************************************** */
+
+--- SOURCE: third_party/zstd/include/zstd/common/mem.h ---
+/*
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ * All rights reserved.
+ *
+ * This source code is licensed under both the BSD-style license (found in the
+ * LICENSE file in the root directory of this source tree) and the GPLv2 (found
+ * in the COPYING file in the root directory of this source tree).
+ * You may select, at your option, one of the above-listed licenses.
+ */
+
+--- SOURCE: third_party/zstd/include/zstd/common/pool.h ---
+/*
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ * All rights reserved.
+ *
+ * This source code is licensed under both the BSD-style license (found in the
+ * LICENSE file in the root directory of this source tree) and the GPLv2 (found
+ * in the COPYING file in the root directory of this source tree).
+ * You may select, at your option, one of the above-listed licenses.
+ */
+
+--- SOURCE: third_party/zstd/include/zstd/common/portability_macros.h ---
+/*
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ * All rights reserved.
+ *
+ * This source code is licensed under both the BSD-style license (found in the
+ * LICENSE file in the root directory of this source tree) and the GPLv2 (found
+ * in the COPYING file in the root directory of this source tree).
+ * You may select, at your option, one of the above-listed licenses.
+ */
+
+--- SOURCE: third_party/zstd/include/zstd/common/threading.h ---
+/**
+ * Copyright (c) 2016 Tino Reichardt
+ * All rights reserved.
+ *
+ * You can contact the author at:
+ * - zstdmt source repository: https://github.com/mcmilk/zstdmt
+ *
+ * This source code is licensed under both the BSD-style license (found in the
+ * LICENSE file in the root directory of this source tree) and the GPLv2 (found
+ * in the COPYING file in the root directory of this source tree).
+ * You may select, at your option, one of the above-listed licenses.
+ */
+
+--- SOURCE: third_party/zstd/include/zstd/common/xxhash.hpp ---
+/*
+ * xxHash - Extremely Fast Hash algorithm
+ * Header File
+ * Copyright (c) 2012-2020, Yann Collet, Facebook, Inc.
+ *
+ * You can contact the author at :
+ * - xxHash source repository : https://github.com/Cyan4973/xxHash
+ *
+ * This source code is licensed under both the BSD-style license (found in the
+ * LICENSE file in the root directory of this source tree) and the GPLv2 (found
+ * in the COPYING file in the root directory of this source tree).
+ * You may select, at your option, one of the above-listed licenses.
+*/
+
+/* Notice extracted from xxHash homepage :
+
+xxHash is an extremely fast Hash algorithm, running at RAM speed limits.
+It also successfully passes all tests from the SMHasher suite.
+
+Comparison (single thread, Windows Seven 32 bits, using SMHasher on a Core 2 Duo @3GHz)
+
+Name            Speed       Q.Score   Author
+xxHash          5.4 GB/s     10
+CrapWow         3.2 GB/s      2       Andrew
+MumurHash 3a    2.7 GB/s     10       Austin Appleby
+SpookyHash      2.0 GB/s     10       Bob Jenkins
+SBox            1.4 GB/s      9       Bret Mulvey
+Lookup3         1.2 GB/s      9       Bob Jenkins
+SuperFastHash   1.2 GB/s      1       Paul Hsieh
+CityHash64      1.05 GB/s    10       Pike & Alakuijala
+FNV             0.55 GB/s     5       Fowler, Noll, Vo
+CRC32           0.43 GB/s     9
+MD5-32          0.33 GB/s    10       Ronald L. Rivest
+SHA1-32         0.28 GB/s    10
+
+Q.Score is a measure of quality of the hash function.
+It depends on successfully passing SMHasher test set.
+10 is a perfect score.
+
+A 64-bits version, named XXH64, is available since r35.
+It offers much better speed, but for 64-bits applications only.
+Name     Speed on 64 bits    Speed on 32 bits
+XXH64       13.8 GB/s            1.9 GB/s
+XXH32        6.8 GB/s            6.0 GB/s
+*/
+
+--- SOURCE: third_party/zstd/include/zstd/common/zstd_deps.h ---
+/*
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ * All rights reserved.
+ *
+ * This source code is licensed under both the BSD-style license (found in the
+ * LICENSE file in the root directory of this source tree) and the GPLv2 (found
+ * in the COPYING file in the root directory of this source tree).
+ * You may select, at your option, one of the above-listed licenses.
+ */
+
+/* This file provides common libc dependencies that zstd requires.
+ * The purpose is to allow replacing this file with a custom implementation
+ * to compile zstd without libc support.
+ */
+
+/* Need:
+ * NULL
+ * INT_MAX
+ * UINT_MAX
+ * ZSTD_memcpy()
+ * ZSTD_memset()
+ * ZSTD_memmove()
+ */
+
+--- SOURCE: third_party/zstd/include/zstd/common/zstd_internal.h ---
+/*
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ * All rights reserved.
+ *
+ * This source code is licensed under both the BSD-style license (found in the
+ * LICENSE file in the root directory of this source tree) and the GPLv2 (found
+ * in the COPYING file in the root directory of this source tree).
+ * You may select, at your option, one of the above-listed licenses.
+ */
+
+--- SOURCE: third_party/zstd/include/zstd/common/zstd_trace.h ---
+/*
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ * All rights reserved.
+ *
+ * This source code is licensed under both the BSD-style license (found in the
+ * LICENSE file in the root directory of this source tree) and the GPLv2 (found
+ * in the COPYING file in the root directory of this source tree).
+ * You may select, at your option, one of the above-listed licenses.
+ */
+
+--- SOURCE: third_party/zstd/include/zstd/compress/clevels.h ---
+/*
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ * All rights reserved.
+ *
+ * This source code is licensed under both the BSD-style license (found in the
+ * LICENSE file in the root directory of this source tree) and the GPLv2 (found
+ * in the COPYING file in the root directory of this source tree).
+ * You may select, at your option, one of the above-listed licenses.
+ */
+
+--- SOURCE: third_party/zstd/include/zstd/compress/hist.h ---
+/* ******************************************************************
+ * hist : Histogram functions
+ * part of Finite State Entropy project
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ *
+ *  You can contact the author at :
+ *  - FSE source repository : https://github.com/Cyan4973/FiniteStateEntropy
+ *  - Public forum : https://groups.google.com/forum/#!forum/lz4c
+ *
+ * This source code is licensed under both the BSD-style license (found in the
+ * LICENSE file in the root directory of this source tree) and the GPLv2 (found
+ * in the COPYING file in the root directory of this source tree).
+ * You may select, at your option, one of the above-listed licenses.
+****************************************************************** */
+
+/* --- dependencies --- */
+#include "zstd/common/zstd_deps.h"   /* size_t */
+
+--- SOURCE: third_party/zstd/include/zstd/compress/zstd_compress_internal.h ---
+/*
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ * All rights reserved.
+ *
+ * This source code is licensed under both the BSD-style license (found in the
+ * LICENSE file in the root directory of this source tree) and the GPLv2 (found
+ * in the COPYING file in the root directory of this source tree).
+ * You may select, at your option, one of the above-listed licenses.
+ */
+
+/* This header contains definitions
+ * that shall **only** be used by modules within lib/compress.
+ */
+
+--- SOURCE: third_party/zstd/include/zstd/compress/zstd_compress_literals.h ---
+/*
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ * All rights reserved.
+ *
+ * This source code is licensed under both the BSD-style license (found in the
+ * LICENSE file in the root directory of this source tree) and the GPLv2 (found
+ * in the COPYING file in the root directory of this source tree).
+ * You may select, at your option, one of the above-listed licenses.
+ */
+
+--- SOURCE: third_party/zstd/include/zstd/compress/zstd_compress_sequences.h ---
+/*
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ * All rights reserved.
+ *
+ * This source code is licensed under both the BSD-style license (found in the
+ * LICENSE file in the root directory of this source tree) and the GPLv2 (found
+ * in the COPYING file in the root directory of this source tree).
+ * You may select, at your option, one of the above-listed licenses.
+ */
+
+--- SOURCE: third_party/zstd/include/zstd/compress/zstd_compress_superblock.h ---
+/*
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ * All rights reserved.
+ *
+ * This source code is licensed under both the BSD-style license (found in the
+ * LICENSE file in the root directory of this source tree) and the GPLv2 (found
+ * in the COPYING file in the root directory of this source tree).
+ * You may select, at your option, one of the above-listed licenses.
+ */
+
+--- SOURCE: third_party/zstd/include/zstd/compress/zstd_cwksp.h ---
+/*
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ * All rights reserved.
+ *
+ * This source code is licensed under both the BSD-style license (found in the
+ * LICENSE file in the root directory of this source tree) and the GPLv2 (found
+ * in the COPYING file in the root directory of this source tree).
+ * You may select, at your option, one of the above-listed licenses.
+ */
+
+--- SOURCE: third_party/zstd/include/zstd/compress/zstd_double_fast.h ---
+/*
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ * All rights reserved.
+ *
+ * This source code is licensed under both the BSD-style license (found in the
+ * LICENSE file in the root directory of this source tree) and the GPLv2 (found
+ * in the COPYING file in the root directory of this source tree).
+ * You may select, at your option, one of the above-listed licenses.
+ */
+
+--- SOURCE: third_party/zstd/include/zstd/compress/zstd_fast.h ---
+/*
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ * All rights reserved.
+ *
+ * This source code is licensed under both the BSD-style license (found in the
+ * LICENSE file in the root directory of this source tree) and the GPLv2 (found
+ * in the COPYING file in the root directory of this source tree).
+ * You may select, at your option, one of the above-listed licenses.
+ */
+
+

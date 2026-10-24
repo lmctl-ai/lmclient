@@ -1,0 +1,1576 @@
+DuckDB JNI source pin: a561d2ddadde231402411ce76112779bc34b57f0 (v1.5.6.0)
+This file preserves top-of-file copyright/license notices from the pinned source.
+--- SOURCE: third_party/jaro_winkler/details/jaro_impl.hpp ---
+/* SPDX-License-Identifier: MIT */
+/* Copyright © 2022 Max Bachmann */
+
+--- SOURCE: third_party/jaro_winkler/jaro_winkler.hpp ---
+/* SPDX-License-Identifier: MIT */
+/* Copyright © 2022 Max Bachmann */
+
+--- SOURCE: third_party/jemalloc/include/msvc_compat/C99/stdint.h ---
+// ISO C9x  compliant stdint.h for Microsoft Visual Studio
+// Based on ISO/IEC 9899:TC2 Committee draft (May 6, 2005) WG14/N1124
+//
+//  Copyright (c) 2006-2008 Alexander Chemeris
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions are met:
+//
+//   1. Redistributions of source code must retain the above copyright notice,
+//      this list of conditions and the following disclaimer.
+//
+//   2. Redistributions in binary form must reproduce the above copyright
+//      notice, this list of conditions and the following disclaimer in the
+//      documentation and/or other materials provided with the distribution.
+//
+//   3. The name of the author may be used to endorse or promote products
+//      derived from this software without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR IMPLIED
+// WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+// MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
+// EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+// PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+// OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+// WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+// OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+// ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+///////////////////////////////////////////////////////////////////////////////
+
+--- SOURCE: third_party/libpg_query/include/access/attnum.hpp ---
+/*-------------------------------------------------------------------------
+ *
+ * attnum.h
+ *	  POSTGRES attribute number definitions.
+ *
+ *
+ * Portions Copyright (c) 1996-2017, PostgreSQL Global Development PGGroup
+ * Portions Copyright (c) 1994, Regents of the University of California
+ *
+ * src/include/access/attnum.h
+ *
+ *-------------------------------------------------------------------------
+ */
+
+--- SOURCE: third_party/libpg_query/include/catalog/genbki.hpp ---
+/*-------------------------------------------------------------------------
+ *
+ * genbki.h
+ *	  Required include file for all POSTGRES catalog header files
+ *
+ * genbki.h defines CATALOG(), DATA(), BKI_BOOTSTRAP and related macros
+ * so that the catalog header files can be read by the C compiler.
+ * (These same words are recognized by genbki.pl to build the BKI
+ * bootstrap file from these header files.)
+ *
+ *
+ * Portions Copyright (c) 1996-2017, PostgreSQL Global Development PGGroup
+ * Portions Copyright (c) 1994, Regents of the University of California
+ *
+ * src/include/catalog/genbki.h
+ *
+ *-------------------------------------------------------------------------
+ */
+
+--- SOURCE: third_party/libpg_query/include/common/keywords.hpp ---
+/*-------------------------------------------------------------------------
+ *
+ * keywords.h
+ *	  lexical token lookup for key words in PostgreSQL
+ *
+ *
+ * Portions Copyright (c) 1996-2017, PostgreSQL Global Development PGGroup
+ * Portions Copyright (c) 1994, Regents of the University of California
+ *
+ * src/include/common/keywords.h
+ *
+ *-------------------------------------------------------------------------
+ */
+
+--- SOURCE: third_party/libpg_query/include/datatype/timestamp.hpp ---
+/*-------------------------------------------------------------------------
+ *
+ * timestamp.h
+ *	  PGTimestamp and PGInterval typedefs and related macros.
+ *
+ * Note: this file must be includable in both frontend and backend contexts.
+ *
+ * Portions Copyright (c) 1996-2017, PostgreSQL Global Development PGGroup
+ * Portions Copyright (c) 1994, Regents of the University of California
+ *
+ * src/include/datatype/timestamp.h
+ *
+ *-------------------------------------------------------------------------
+ */
+
+--- SOURCE: third_party/libpg_query/include/fmgr.hpp ---
+/*-------------------------------------------------------------------------
+ *
+ * fmgr.h
+ *	  Definitions for the Postgres function manager and function-call
+ *	  interface.
+ *
+ * This file must be included by all Postgres modules that either define
+ * or call fmgr-callable functions.
+ *
+ *
+ * Portions Copyright (c) 1996-2017, PostgreSQL Global Development PGGroup
+ * Portions Copyright (c) 1994, Regents of the University of California
+ *
+ * src/include/fmgr.h
+ *
+ *-------------------------------------------------------------------------
+ */
+
+--- SOURCE: third_party/libpg_query/include/mb/pg_wchar.hpp ---
+/*-------------------------------------------------------------------------
+ *
+ * pg_wchar.h
+ *	  multibyte-character support
+ *
+ * Portions Copyright (c) 1996-2017, PostgreSQL Global Development PGGroup
+ * Portions Copyright (c) 1994, Regents of the University of California
+ *
+ * src/include/mb/pg_wchar.h
+ *
+ *	NOTES
+ *		This is used both by the backend and by libpq, but should not be
+ *		included by libpq client programs.  In particular, a libpq client
+ *		should not assume that the encoding IDs used by the version of libpq
+ *		it's linked to match up with the IDs declared here.
+ *
+ *-------------------------------------------------------------------------
+ */
+
+--- SOURCE: third_party/libpg_query/include/nodes/bitmapset.hpp ---
+/*-------------------------------------------------------------------------
+ *
+ * bitmapset.h
+ *	  PostgreSQL generic bitmap set package
+ *
+ * A bitmap set can represent any set of nonnegative integers, although
+ * it is mainly intended for sets where the maximum value is not large,
+ * say at most a few hundred.  By convention, a NULL pointer is always
+ * accepted by all operations to represent the empty set.  (But beware
+ * that this is not the only representation of the empty set.  Use
+ * bms_is_empty() in preference to testing for NULL.)
+ *
+ *
+ * Copyright (c) 2003-2017, PostgreSQL Global Development PGGroup
+ *
+ * src/include/nodes/bitmapset.h
+ *
+ *-------------------------------------------------------------------------
+ */
+
+--- SOURCE: third_party/libpg_query/include/nodes/lockoptions.hpp ---
+/*-------------------------------------------------------------------------
+ *
+ * lockoptions.h
+ *	  Common header for some locking-related declarations.
+ *
+ *
+ * Copyright (c) 2014-2017, PostgreSQL Global Development PGGroup
+ *
+ * src/include/nodes/lockoptions.h
+ *
+ *-------------------------------------------------------------------------
+ */
+
+--- SOURCE: third_party/libpg_query/include/nodes/makefuncs.hpp ---
+/*-------------------------------------------------------------------------
+ *
+ * makefuncs.h
+ *	  prototypes for the creator functions (for primitive nodes)
+ *
+ *
+ * Portions Copyright (c) 1996-2017, PostgreSQL Global Development PGGroup
+ * Portions Copyright (c) 1994, Regents of the University of California
+ *
+ * src/include/nodes/makefuncs.h
+ *
+ *-------------------------------------------------------------------------
+ */
+
+--- SOURCE: third_party/libpg_query/include/nodes/nodeFuncs.hpp ---
+/*-------------------------------------------------------------------------
+ *
+ * nodeFuncs.h
+ *		Various general-purpose manipulations of PGNode trees
+ *
+ * Portions Copyright (c) 1996-2017, PostgreSQL Global Development PGGroup
+ * Portions Copyright (c) 1994, Regents of the University of California
+ *
+ * src/include/nodes/nodeFuncs.h
+ *
+ *-------------------------------------------------------------------------
+ */
+
+--- SOURCE: third_party/libpg_query/include/nodes/nodes.hpp ---
+/*-------------------------------------------------------------------------
+ *
+ * nodes.h
+ *	  Definitions for tagged nodes.
+ *
+ *
+ * Portions Copyright (c) 1996-2017, PostgreSQL Global Development PGGroup
+ * Portions Copyright (c) 1994, Regents of the University of California
+ *
+ * src/include/nodes/nodes.h
+ *
+ *-------------------------------------------------------------------------
+ */
+
+--- SOURCE: third_party/libpg_query/include/nodes/parsenodes.hpp ---
+/*-------------------------------------------------------------------------
+ *
+ * parsenodes.h
+ *	  definitions for parse tree nodes
+ *
+ * Many of the node types used in parsetrees include a "location" field.
+ * This is a byte (not character) offset in the original source text, to be
+ * used for positioning an error cursor when there is an error related to
+ * the node.  Access to the original source text is needed to make use of
+ * the location.  At the topmost (statement) level, we also provide a
+ * statement length, likewise measured in bytes, for convenience in
+ * identifying statement boundaries in multi-statement source strings.
+ *
+ *
+ * Portions Copyright (c) 1996-2017, PostgreSQL Global Development PGGroup
+ * Portions Copyright (c) 1994, Regents of the University of California
+ *
+ * src/include/nodes/parsenodes.h
+ *
+ *-------------------------------------------------------------------------
+ */
+
+--- SOURCE: third_party/libpg_query/include/nodes/pg_list.hpp ---
+/*-------------------------------------------------------------------------
+ *
+ * pg_list.h
+ *	  interface for PostgreSQL generic linked list package
+ *
+ * This package implements singly-linked homogeneous lists.
+ *
+ * It is important to have constant-time length, append, and prepend
+ * operations. To achieve this, we deal with two distinct data
+ * structures:
+ *
+ *		1. A set of "list cells": each cell contains a data field and
+ *		   a link to the next cell in the list or NULL.
+ *		2. A single structure containing metadata about the list: the
+ *		   type of the list, pointers to the head and tail cells, and
+ *		   the length of the list.
+ *
+ * We support three types of lists:
+ *
+ *	duckdb_libpgquery::T_PGList: lists of pointers
+ *		(in practice usually pointers to Nodes, but not always;
+ *		declared as "void *" to minimize casting annoyances)
+ *	duckdb_libpgquery::T_PGIntList: lists of integers
+ *	duckdb_libpgquery::T_PGOidList: lists of Oids
+ *
+ * (At the moment, ints and Oids are the same size, but they may not
+ * always be so; try to be careful to maintain the distinction.)
+ *
+ *
+ * Portions Copyright (c) 1996-2017, PostgreSQL Global Development PGGroup
+ * Portions Copyright (c) 1994, Regents of the University of California
+ *
+ * src/include/nodes/pg_list.h
+ *
+ *-------------------------------------------------------------------------
+ */
+
+--- SOURCE: third_party/libpg_query/include/nodes/primnodes.hpp ---
+/*-------------------------------------------------------------------------
+ *
+ * primnodes.h
+ *	  Definitions for "primitive" node types, those that are used in more
+ *	  than one of the parse/plan/execute stages of the query pipeline.
+ *	  Currently, these are mostly nodes for executable expressions
+ *	  and join trees.
+ *
+ *
+ * Portions Copyright (c) 1996-2017, PostgreSQL Global Development PGGroup
+ * Portions Copyright (c) 1994, Regents of the University of California
+ *
+ * src/include/nodes/primnodes.h
+ *
+ *-------------------------------------------------------------------------
+ */
+
+--- SOURCE: third_party/libpg_query/include/nodes/value.hpp ---
+/*-------------------------------------------------------------------------
+ *
+ * value.h
+ *	  interface for PGValue nodes
+ *
+ *
+ * Copyright (c) 2003-2017, PostgreSQL Global Development PGGroup
+ *
+ * src/include/nodes/value.h
+ *
+ *-------------------------------------------------------------------------
+ */
+
+--- SOURCE: third_party/libpg_query/include/parser/gram.hpp ---
+/* A Bison parser, made by GNU Bison 2.3.  */
+
+/* Skeleton interface for Bison's Yacc-like parsers in C
+
+--- SOURCE: third_party/libpg_query/include/parser/gramparse.hpp ---
+/*-------------------------------------------------------------------------
+ *
+ * gramparse.h
+ *		Shared definitions for the "raw" parser (flex and bison phases only)
+ *
+ * NOTE: this file is only meant to be included in the core parsing files,
+ * ie, parser.c, gram.y, scan.l, and src/common/keywords.c.
+ * Definitions that are needed outside the core parser should be in parser.h.
+ *
+ *
+ * Portions Copyright (c) 1996-2017, PostgreSQL Global Development PGGroup
+ * Portions Copyright (c) 1994, Regents of the University of California
+ *
+ * src/include/parser/gramparse.h
+ *
+ *-------------------------------------------------------------------------
+ */
+
+--- SOURCE: third_party/libpg_query/include/parser/parser.hpp ---
+/*-------------------------------------------------------------------------
+ *
+ * parser.h
+ *		Definitions for the "raw" parser (flex and bison phases only)
+ *
+ * This is the external API for the raw lexing/parsing functions.
+ *
+ * Portions Copyright (c) 1996-2017, PostgreSQL Global Development PGGroup
+ * Portions Copyright (c) 1994, Regents of the University of California
+ *
+ * src/include/parser/parser.h
+ *
+ *-------------------------------------------------------------------------
+ */
+
+--- SOURCE: third_party/libpg_query/include/parser/scanner.hpp ---
+/*-------------------------------------------------------------------------
+ *
+ * scanner.h
+ *		API for the core scanner (flex machine)
+ *
+ * The core scanner is also used by PL/pgSQL, so we provide a public API
+ * for it.  However, the rest of the backend is only expected to use the
+ * higher-level API provided by parser.h.
+ *
+ *
+ * Portions Copyright (c) 1996-2017, PostgreSQL Global Development PGGroup
+ * Portions Copyright (c) 1994, Regents of the University of California
+ *
+ * src/include/parser/scanner.h
+ *
+ *-------------------------------------------------------------------------
+ */
+
+--- SOURCE: third_party/libpg_query/include/parser/scansup.hpp ---
+/*-------------------------------------------------------------------------
+ *
+ * scansup.h
+ *	  scanner support routines.  used by both the bootstrap lexer
+ * as well as the normal lexer
+ *
+ * Portions Copyright (c) 1996-2017, PostgreSQL Global Development PGGroup
+ * Portions Copyright (c) 1994, Regents of the University of California
+ *
+ * src/include/parser/scansup.h
+ *
+ *-------------------------------------------------------------------------
+ */
+
+--- SOURCE: third_party/libpg_query/include/pgtime.hpp ---
+/*-------------------------------------------------------------------------
+ *
+ * pgtime.h
+ *	  PostgreSQL internal timezone library
+ *
+ * Portions Copyright (c) 1996-2017, PostgreSQL Global Development PGGroup
+ *
+ * IDENTIFICATION
+ *	  src/include/pgtime.h
+ *
+ *-------------------------------------------------------------------------
+ */
+
+--- SOURCE: third_party/libpg_query/include/utils/datetime.hpp ---
+/*-------------------------------------------------------------------------
+ *
+ * datetime.h
+ *	  Definitions for date/time support code.
+ *	  The support code is shared with other date data types,
+ *	   including abstime, reltime, date, and time.
+ *
+ *
+ * Portions Copyright (c) 1996-2015, PostgreSQL Global Development PGGroup
+ * Portions Copyright (c) 1994, Regents of the University of California
+ *
+ * src/include/utils/datetime.h
+ *
+ *-------------------------------------------------------------------------
+ */
+
+--- SOURCE: third_party/libpg_query/include/utils/timestamp.hpp ---
+/*-------------------------------------------------------------------------
+ *
+ * timestamp.h
+ *	  Definitions for the SQL "timestamp" and "interval" types.
+ *
+ * Portions Copyright (c) 1996-2015, PostgreSQL Global Development PGGroup
+ * Portions Copyright (c) 1994, Regents of the University of California
+ *
+ * src/include/utils/timestamp.h
+ *
+ *-------------------------------------------------------------------------
+ */
+
+--- SOURCE: third_party/libpg_query/src_backend_nodes_list.cpp ---
+/*--------------------------------------------------------------------
+ * Symbols referenced in this file:
+ * - lappend
+ * - new_list
+ * - new_tail_cell
+ * - lcons
+ * - new_head_cell
+ * - list_concat
+ * - list_nth
+ * - list_nth_cell
+ * - list_delete_cell
+ * - list_free
+ * - list_free_private
+ * - list_copy
+ * - list_copy_tail
+ * - list_truncate
+ *--------------------------------------------------------------------
+ */
+
+/*-------------------------------------------------------------------------
+ *
+ * list.c
+ *	  implementation for PostgreSQL generic linked list package
+ *
+ *
+ * Portions Copyright (c) 1996-2017, PostgreSQL Global Development PGGroup
+ * Portions Copyright (c) 1994, Regents of the University of California
+ *
+ *
+ * IDENTIFICATION
+ *	  src/backend/nodes/list.c
+ *
+ *-------------------------------------------------------------------------
+ */
+
+--- SOURCE: third_party/libpg_query/src_backend_nodes_makefuncs.cpp ---
+/*--------------------------------------------------------------------
+ * Symbols referenced in this file:
+ * - makeDefElem
+ * - makeTypeNameFromNameList
+ * - makeDefElemExtended
+ * - makeAlias
+ * - makeSimpleAExpr
+ * - makeGroupingSet
+ * - makeTypeName
+ * - makeFuncCall
+ * - makeAExpr
+ * - makeRangeVar
+ * - makeBoolExpr
+ *--------------------------------------------------------------------
+ */
+
+/*-------------------------------------------------------------------------
+ *
+ * makefuncs.c
+ *	  creator functions for primitive nodes. The functions here are for
+ *	  the most frequently created nodes.
+ *
+ * Portions Copyright (c) 1996-2017, PostgreSQL Global Development PGGroup
+ * Portions Copyright (c) 1994, Regents of the University of California
+ *
+ *
+ * IDENTIFICATION
+ *	  src/backend/nodes/makefuncs.c
+ *
+ *-------------------------------------------------------------------------
+ */
+
+--- SOURCE: third_party/libpg_query/src_backend_nodes_value.cpp ---
+/*--------------------------------------------------------------------
+ * Symbols referenced in this file:
+ * - makeInteger
+ * - makeString
+ * - makeFloat
+ *--------------------------------------------------------------------
+ */
+
+/*-------------------------------------------------------------------------
+ *
+ * value.c
+ *	  implementation of PGValue nodes
+ *
+ *
+ * Copyright (c) 2003-2017, PostgreSQL Global Development PGGroup
+ *
+ *
+ * IDENTIFICATION
+ *	  src/backend/nodes/value.c
+ *
+ *-------------------------------------------------------------------------
+ */
+
+--- SOURCE: third_party/libpg_query/src_backend_parser_gram.cpp ---
+/* A Bison parser, made by GNU Bison 2.3.  */
+
+/* Skeleton implementation for Bison's Yacc-like parsers in C
+
+--- SOURCE: third_party/libpg_query/src_backend_parser_parser.cpp ---
+/*--------------------------------------------------------------------
+ * Symbols referenced in this file:
+ * - raw_parser
+ * - base_yylex
+ * - raw_parser
+ *--------------------------------------------------------------------
+ */
+
+/*-------------------------------------------------------------------------
+ *
+ * parser.c
+ *		Main entry point/driver for PostgreSQL grammar
+ *
+ * Note that the grammar is not allowed to perform any table access
+ * (since we need to be able to do basic parsing even while inside an
+ * aborted transaction).  Therefore, the data structures returned by
+ * the grammar are "raw" parsetrees that still need to be analyzed by
+ * analyze.c and related files.
+ *
+ *
+ * Portions Copyright (c) 1996-2017, PostgreSQL Global Development PGGroup
+ * Portions Copyright (c) 1994, Regents of the University of California
+ *
+ * IDENTIFICATION
+ *	  src/backend/parser/parser.c
+ *
+ *-------------------------------------------------------------------------
+ */
+
+--- SOURCE: third_party/libpg_query/src_backend_parser_scan.cpp ---
+/*-------------------------------------------------------------------------
+ *
+ * scan.l
+ *	  lexical scanner for PostgreSQL
+ *
+ * NOTE NOTE NOTE:
+ *
+ * The rules in this file must be kept in sync with src/fe_utils/psqlscan.l!
+ *
+ * The rules are designed so that the scanner never has to backtrack,
+ * in the sense that there is always a rule that can match the input
+ * consumed so far (the rule action may internally throw back some input
+ * with yyless(), however).  As explained in the flex manual, this makes
+ * for a useful speed increase --- about a third faster than a plain -CF
+ * lexer, in simple testing.  The extra complexity is mostly in the rules
+ * for handling float numbers and continued string literals.  If you change
+ * the lexical rules, verify that you haven't broken the no-backtrack '
+ * property by running flex with the "-b" option and checking that the
+ * resulting "lex.backup" file says that no backing up is needed.  (As of
+ * Postgres 9.2, this check is made automatically by the Makefile.)
+ *
+ *
+ * Portions Copyright (c) 1996-2018, PostgreSQL Global Development Group
+ * Portions Copyright (c) 1994, Regents of the University of California
+ *
+ * IDENTIFICATION
+ *	  src/backend/parser/scan.l
+ *
+ *-------------------------------------------------------------------------
+ */
+
+--- SOURCE: third_party/libpg_query/src_backend_parser_scansup.cpp ---
+/*--------------------------------------------------------------------
+ * Symbols referenced in this file:
+ * - truncate_identifier
+ * - downcase_truncate_identifier
+ * - downcase_identifier
+ * - scanner_isspace
+ *--------------------------------------------------------------------
+ */
+
+/*-------------------------------------------------------------------------
+ *
+ * scansup.c
+ *	  support routines for the lex/flex scanner, used by both the normal
+ * backend as well as the bootstrap backend
+ *
+ * Portions Copyright (c) 1996-2017, PostgreSQL Global Development PGGroup
+ * Portions Copyright (c) 1994, Regents of the University of California
+ *
+ *
+ * IDENTIFICATION
+ *	  src/backend/parser/scansup.c
+ *
+ *-------------------------------------------------------------------------
+ */
+
+--- SOURCE: third_party/libpg_query/src_common_keywords.cpp ---
+/*--------------------------------------------------------------------
+ * Symbols referenced in this file:
+ * - ScanKeywords
+ * - NumScanKeywords
+ * - ScanKeywordLookup
+ *--------------------------------------------------------------------
+ */
+
+/*-------------------------------------------------------------------------
+ *
+ * keywords.c
+ *	  lexical token lookup for key words in PostgreSQL
+ *
+ *
+ * Portions Copyright (c) 1996-2017, PostgreSQL Global Development PGGroup
+ * Portions Copyright (c) 1994, Regents of the University of California
+ *
+ *
+ * IDENTIFICATION
+ *	  src/common/keywords.c
+ *
+ *-------------------------------------------------------------------------
+ */
+
+--- SOURCE: third_party/lz4/lz4.cpp ---
+/*
+
+--- SOURCE: third_party/lz4/lz4.hpp ---
+/*
+ *  LZ4 - Fast LZ compression algorithm
+ *  Header File
+ *  Copyright (C) 2011-2020, Yann Collet.
+
+--- SOURCE: third_party/mbedtls/include/mbedtls/aes.h ---
+/**
+ * \file aes.h
+ *
+ * \brief   This file contains AES definitions and functions.
+ *
+ *          The Advanced Encryption Standard (AES) specifies a FIPS-approved
+ *          cryptographic algorithm that can be used to protect electronic
+ *          data.
+ *
+ *          The AES algorithm is a symmetric block cipher that can
+ *          encrypt and decrypt information. For more information, see
+ *          <em>FIPS Publication 197: Advanced Encryption Standard</em> and
+ *          <em>ISO/IEC 18033-2:2006: Information technology -- Security
+ *          techniques -- Encryption algorithms -- Part 2: Asymmetric
+ *          ciphers</em>.
+ *
+ *          The AES-XTS block mode is standardized by NIST SP 800-38E
+ *          <https://nvlpubs.nist.gov/nistpubs/legacy/sp/nistspecialpublication800-38e.pdf>
+ *          and described in detail by IEEE P1619
+ *          <https://ieeexplore.ieee.org/servlet/opac?punumber=4375278>.
+ */
+
+/*
+ *  Copyright The Mbed TLS Contributors
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+ */
+
+--- SOURCE: third_party/mbedtls/include/mbedtls/asn1.h ---
+/**
+ * \file asn1.h
+ *
+ * \brief Generic ASN.1 parsing
+ */
+/*
+ *  Copyright The Mbed TLS Contributors
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+ */
+
+--- SOURCE: third_party/mbedtls/include/mbedtls/asn1write.h ---
+/**
+ * \file asn1write.h
+ *
+ * \brief ASN.1 buffer writing functionality
+ */
+/*
+ *  Copyright The Mbed TLS Contributors
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+ */
+
+--- SOURCE: third_party/mbedtls/include/mbedtls/base64.h ---
+/**
+ * \file base64.h
+ *
+ * \brief RFC 1521 base64 encoding/decoding
+ */
+/*
+ *  Copyright The Mbed TLS Contributors
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+ */
+
+--- SOURCE: third_party/mbedtls/include/mbedtls/bignum.h ---
+/**
+ * \file bignum.h
+ *
+ * \brief Multi-precision integer library
+ */
+/*
+ *  Copyright The Mbed TLS Contributors
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+ */
+
+--- SOURCE: third_party/mbedtls/include/mbedtls/build_info.h ---
+/**
+ * \file mbedtls/build_info.h
+ *
+ * \brief Build-time configuration info
+ *
+ *  Include this file if you need to depend on the
+ *  configuration options defined in mbedtls_config.h or MBEDTLS_CONFIG_FILE
+ */
+/*
+ *  Copyright The Mbed TLS Contributors
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+ */
+
+--- SOURCE: third_party/mbedtls/include/mbedtls/ccm.h ---
+/**
+ * \file ccm.h
+ *
+ * \brief This file provides an API for the CCM authenticated encryption
+ *        mode for block ciphers.
+ *
+ * CCM combines Counter mode encryption with CBC-MAC authentication
+ * for 128-bit block ciphers.
+ *
+ * Input to CCM includes the following elements:
+ * <ul><li>Payload - data that is both authenticated and encrypted.</li>
+ * <li>Associated data (Adata) - data that is authenticated but not
+ * encrypted, For example, a header.</li>
+ * <li>Nonce - A unique value that is assigned to the payload and the
+ * associated data.</li></ul>
+ *
+ * Definition of CCM:
+ * http://csrc.nist.gov/publications/nistpubs/800-38C/SP800-38C_updated-July20_2007.pdf
+ * RFC 3610 "Counter with CBC-MAC (CCM)"
+ *
+ * Related:
+ * RFC 5116 "An Interface and Algorithms for Authenticated Encryption"
+ *
+ * Definition of CCM*:
+ * IEEE 802.15.4 - IEEE Standard for Local and metropolitan area networks
+ * Integer representation is fixed most-significant-octet-first order and
+ * the representation of octets is most-significant-bit-first order. This is
+ * consistent with RFC 3610.
+ */
+/*
+ *  Copyright The Mbed TLS Contributors
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+ */
+
+--- SOURCE: third_party/mbedtls/include/mbedtls/check_config.h ---
+/**
+ * \file check_config.h
+ *
+ * \brief Consistency checks for configuration options
+ *
+ * This is an internal header. Do not include it directly.
+ *
+ * This header is included automatically by all public Mbed TLS headers
+ * (via mbedtls/build_info.h). Do not include it directly in a configuration
+ * file such as mbedtls/mbedtls_config.h or #MBEDTLS_USER_CONFIG_FILE!
+ * It would run at the wrong time due to missing derived symbols.
+ */
+/*
+ *  Copyright The Mbed TLS Contributors
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+ */
+
+--- SOURCE: third_party/mbedtls/include/mbedtls/cipher.h ---
+/**
+ * \file cipher.h
+ *
+ * \brief This file contains an abstraction interface for use with the cipher
+ * primitives provided by the library. It provides a common interface to all of
+ * the available cipher operations.
+ *
+ * \author Adriaan de Jong <dejong@fox-it.com>
+ */
+/*
+ *  Copyright The Mbed TLS Contributors
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+ */
+
+--- SOURCE: third_party/mbedtls/include/mbedtls/constant_time.h ---
+/**
+ *  Constant-time functions
+ */
+/*
+ *  Copyright The Mbed TLS Contributors
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+ */
+
+--- SOURCE: third_party/mbedtls/include/mbedtls/des.h ---
+/**
+ * \file des.h
+ *
+ * \brief DES block cipher
+ *
+ * \warning   DES/3DES are considered weak ciphers and their use constitutes a
+ *            security risk. We recommend considering stronger ciphers
+ *            instead.
+ */
+/*
+ *  Copyright The Mbed TLS Contributors
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+ *
+ */
+
+--- SOURCE: third_party/mbedtls/include/mbedtls/ecp.h ---
+/**
+ * \file ecp.h
+ *
+ * \brief This file provides an API for Elliptic Curves over GF(P) (ECP).
+ *
+ * The use of ECP in cryptography and TLS is defined in
+ * <em>Standards for Efficient Cryptography Group (SECG): SEC1
+ * Elliptic Curve Cryptography</em> and
+ * <em>RFC-4492: Elliptic Curve Cryptography (ECC) Cipher Suites
+ * for Transport Layer Security (TLS)</em>.
+ *
+ * <em>RFC-2409: The Internet Key Exchange (IKE)</em> defines ECP
+ * group types.
+ *
+ */
+
+/*
+ *  Copyright The Mbed TLS Contributors
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+ */
+
+--- SOURCE: third_party/mbedtls/include/mbedtls/error.h ---
+/**
+ * \file error.h
+ *
+ * \brief Error to string translation
+ */
+/*
+ *  Copyright The Mbed TLS Contributors
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+ */
+
+--- SOURCE: third_party/mbedtls/include/mbedtls/gcm.h ---
+/**
+ * \file gcm.h
+ *
+ * \brief This file contains GCM definitions and functions.
+ *
+ * The Galois/Counter Mode (GCM) for 128-bit block ciphers is defined
+ * in <em>D. McGrew, J. Viega, The Galois/Counter Mode of Operation
+ * (GCM), Natl. Inst. Stand. Technol.</em>
+ *
+ * For more information on GCM, see <em>NIST SP 800-38D: Recommendation for
+ * Block Cipher Modes of Operation: Galois/Counter Mode (GCM) and GMAC</em>.
+ *
+ */
+/*
+ *  Copyright The Mbed TLS Contributors
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+ */
+
+--- SOURCE: third_party/mbedtls/include/mbedtls/md.h ---
+/**
+ * \file md.h
+ *
+ * \brief   This file contains the generic functions for message-digest
+ *          (hashing) and HMAC.
+ *
+ * \author Adriaan de Jong <dejong@fox-it.com>
+ */
+/*
+ *  Copyright The Mbed TLS Contributors
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+ */
+
+--- SOURCE: third_party/mbedtls/include/mbedtls/memory_buffer_alloc.h ---
+/**
+ * \file memory_buffer_alloc.h
+ *
+ * \brief Buffer-based memory allocator
+ */
+/*
+ *  Copyright The Mbed TLS Contributors
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+ */
+
+--- SOURCE: third_party/mbedtls/include/mbedtls/oid.h ---
+/**
+ * \file oid.h
+ *
+ * \brief Object Identifier (OID) database
+ */
+/*
+ *  Copyright The Mbed TLS Contributors
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+ */
+
+--- SOURCE: third_party/mbedtls/include/mbedtls/pem.h ---
+/**
+ * \file pem.h
+ *
+ * \brief Privacy Enhanced Mail (PEM) decoding
+ */
+/*
+ *  Copyright The Mbed TLS Contributors
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+ */
+
+--- SOURCE: third_party/mbedtls/include/mbedtls/pk.h ---
+/**
+ * \file pk.h
+ *
+ * \brief Public Key abstraction layer
+ */
+/*
+ *  Copyright The Mbed TLS Contributors
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+ */
+
+--- SOURCE: third_party/mbedtls/include/mbedtls/platform.h ---
+/**
+ * \file platform.h
+ *
+ * \brief This file contains the definitions and functions of the
+ *        Mbed TLS platform abstraction layer.
+ *
+ *        The platform abstraction layer removes the need for the library
+ *        to directly link to standard C library functions or operating
+ *        system services, making the library easier to port and embed.
+ *        Application developers and users of the library can provide their own
+ *        implementations of these functions, or implementations specific to
+ *        their platform, which can be statically linked to the library or
+ *        dynamically configured at runtime.
+ *
+ *        When all compilation options related to platform abstraction are
+ *        disabled, this header just defines `mbedtls_xxx` function names
+ *        as aliases to the standard `xxx` function.
+ *
+ *        Most modules in the library and example programs are expected to
+ *        include this header.
+ */
+/*
+ *  Copyright The Mbed TLS Contributors
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+ */
+
+--- SOURCE: third_party/mbedtls/include/mbedtls/platform_time.h ---
+/**
+ * \file platform_time.h
+ *
+ * \brief Mbed TLS Platform time abstraction
+ */
+/*
+ *  Copyright The Mbed TLS Contributors
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+ */
+
+--- SOURCE: third_party/mbedtls/include/mbedtls/platform_util.h ---
+/**
+ * \file platform_util.h
+ *
+ * \brief Common and shared functions used by multiple modules in the Mbed TLS
+ *        library.
+ */
+/*
+ *  Copyright The Mbed TLS Contributors
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+ */
+
+--- SOURCE: third_party/mbedtls/include/mbedtls/private_access.h ---
+/**
+ * \file private_access.h
+ *
+ * \brief Macro wrapper for struct's members.
+ */
+/*
+ *  Copyright The Mbed TLS Contributors
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+ */
+
+--- SOURCE: third_party/mbedtls/include/mbedtls/rsa.h ---
+/**
+ * \file rsa.h
+ *
+ * \brief This file provides an API for the RSA public-key cryptosystem.
+ *
+ * The RSA public-key cryptosystem is defined in <em>Public-Key
+ * Cryptography Standards (PKCS) #1 v1.5: RSA Encryption</em>
+ * and <em>Public-Key Cryptography Standards (PKCS) #1 v2.1:
+ * RSA Cryptography Specifications</em>.
+ *
+ */
+/*
+ *  Copyright The Mbed TLS Contributors
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+ */
+
+--- SOURCE: third_party/mbedtls/include/mbedtls/sha1.h ---
+/**
+ * \file sha1.h
+ *
+ * \brief This file contains SHA-1 definitions and functions.
+ *
+ * The Secure Hash Algorithm 1 (SHA-1) cryptographic hash function is defined in
+ * <em>FIPS 180-4: Secure Hash Standard (SHS)</em>.
+ *
+ * \warning   SHA-1 is considered a weak message digest and its use constitutes
+ *            a security risk. We recommend considering stronger message
+ *            digests instead.
+ */
+/*
+ *  Copyright The Mbed TLS Contributors
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+ */
+
+--- SOURCE: third_party/mbedtls/include/mbedtls/sha256.h ---
+/**
+ * \file sha256.h
+ *
+ * \brief This file contains SHA-224 and SHA-256 definitions and functions.
+ *
+ * The Secure Hash Algorithms 224 and 256 (SHA-224 and SHA-256) cryptographic
+ * hash functions are defined in <em>FIPS 180-4: Secure Hash Standard (SHS)</em>.
+ */
+/*
+ *  Copyright The Mbed TLS Contributors
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+ */
+
+--- SOURCE: third_party/mbedtls/include/psa/build_info.h ---
+/**
+ * \file psa/build_info.h
+ *
+ * \brief Build-time PSA configuration info
+ *
+ *  Include this file if you need to depend on the
+ *  configuration options defined in mbedtls_config.h or MBEDTLS_CONFIG_FILE
+ *  in PSA cryptography core specific files.
+ */
+/*
+ *  Copyright The Mbed TLS Contributors
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+ */
+
+--- SOURCE: third_party/mbedtls/library/aes.cpp ---
+/*
+ *  FIPS-197 compliant AES implementation
+ *
+ *  Copyright The Mbed TLS Contributors
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+ */
+/*
+ *  The AES block cipher was designed by Vincent Rijmen and Joan Daemen.
+ *
+ *  https://csrc.nist.gov/csrc/media/projects/cryptographic-standards-and-guidelines/documents/aes-development/rijndael-ammended.pdf
+ *  http://csrc.nist.gov/publications/fips/fips197/fips-197.pdf
+ */
+
+--- SOURCE: third_party/mbedtls/library/aesce.h ---
+/**
+ * \file aesce.h
+ *
+ * \brief Support hardware AES acceleration on Armv8-A processors with
+ *        the Armv8-A Cryptographic Extension.
+ *
+ * \warning These functions are only for internal use by other library
+ *          functions; you must not call them directly.
+ */
+/*
+ *  Copyright The Mbed TLS Contributors
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+ */
+
+--- SOURCE: third_party/mbedtls/library/aesni.h ---
+/**
+ * \file aesni.h
+ *
+ * \brief AES-NI for hardware AES acceleration on some Intel processors
+ *
+ * \warning These functions are only for internal use by other library
+ *          functions; you must not call them directly.
+ */
+/*
+ *  Copyright The Mbed TLS Contributors
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+ */
+
+--- SOURCE: third_party/mbedtls/library/alignment.h ---
+/**
+ * \file alignment.h
+ *
+ * \brief Utility code for dealing with unaligned memory accesses
+ */
+/*
+ *  Copyright The Mbed TLS Contributors
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+ */
+
+--- SOURCE: third_party/mbedtls/library/asn1parse.cpp ---
+/*
+ *  Generic ASN.1 parsing
+ *
+ *  Copyright The Mbed TLS Contributors
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+ */
+
+--- SOURCE: third_party/mbedtls/library/asn1write.cpp ---
+/*
+ * ASN.1 buffer writing functionality
+ *
+ *  Copyright The Mbed TLS Contributors
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+ */
+
+--- SOURCE: third_party/mbedtls/library/base64.cpp ---
+/*
+ *  RFC 1521 base64 encoding/decoding
+ *
+ *  Copyright The Mbed TLS Contributors
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+ */
+
+--- SOURCE: third_party/mbedtls/library/base64_internal.h ---
+/**
+ * \file base64_internal.h
+ *
+ * \brief RFC 1521 base64 encoding/decoding: interfaces for invasive testing
+ */
+/*
+ *  Copyright The Mbed TLS Contributors
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+ */
+
+--- SOURCE: third_party/mbedtls/library/bignum.cpp ---
+/*
+ *  Multi-precision integer library
+ *
+ *  Copyright The Mbed TLS Contributors
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+ */
+
+/*
+ *  The following sources were referenced in the design of this Multi-precision
+ *  Integer library:
+ *
+ *  [1] Handbook of Applied Cryptography - 1997
+ *      Menezes, van Oorschot and Vanstone
+ *
+ *  [2] Multi-Precision Math
+ *      Tom St Denis
+ *      https://github.com/libtom/libtommath/blob/develop/tommath.pdf
+ *
+ *  [3] GNU Multi-Precision Arithmetic Library
+ *      https://gmplib.org/manual/index.html
+ *
+ */
+
+--- SOURCE: third_party/mbedtls/library/bignum_core.cpp ---
+/*
+ *  Core bignum functions
+ *
+ *  Copyright The Mbed TLS Contributors
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+ */
+
+--- SOURCE: third_party/mbedtls/library/bignum_core.h ---
+/**
+ *  Core bignum functions
+ *
+ *  This interface should only be used by the legacy bignum module (bignum.h)
+ *  and the modular bignum modules (bignum_mod.c, bignum_mod_raw.c). All other
+ *  modules should use the high-level modular bignum interface (bignum_mod.h)
+ *  or the legacy bignum interface (bignum.h).
+ *
+ * This module is about processing non-negative integers with a fixed upper
+ * bound that's of the form 2^n-1 where n is a multiple of #biL.
+ * These can be thought of integers written in base 2^#biL with a fixed
+ * number of digits. Digits in this base are called *limbs*.
+ * Many operations treat these numbers as the principal representation of
+ * a number modulo 2^n or a smaller bound.
+ *
+ * The functions in this module obey the following conventions unless
+ * explicitly indicated otherwise:
+ *
+ * - **Overflow**: some functions indicate overflow from the range
+ *   [0, 2^n-1] by returning carry parameters, while others operate
+ *   modulo and so cannot overflow. This should be clear from the function
+ *   documentation.
+ * - **Bignum parameters**: Bignums are passed as pointers to an array of
+ *   limbs. A limb has the type #mbedtls_mpi_uint. Unless otherwise specified:
+ *     - Bignum parameters called \p A, \p B, ... are inputs, and are
+ *       not modified by the function.
+ *     - For operations modulo some number, the modulus is called \p N
+ *       and is input-only.
+ *     - Bignum parameters called \p X, \p Y are outputs or input-output.
+ *       The initial content of output-only parameters is ignored.
+ *     - Some functions use different names that reflect traditional
+ *       naming of operands of certain operations (e.g.
+ *       divisor/dividend/quotient/remainder).
+ *     - \p T is a temporary storage area. The initial content of such
+ *       parameter is ignored and the final content is unspecified.
+ * - **Bignum sizes**: bignum sizes are always expressed in limbs.
+ *   Most functions work on bignums of a given size and take a single
+ *   \p limbs parameter that applies to all parameters that are limb arrays.
+ *   All bignum sizes must be at least 1 and must be significantly less than
+ *   #SIZE_MAX. The behavior if a size is 0 is undefined. The behavior if the
+ *   total size of all parameters overflows #SIZE_MAX is undefined.
+ * - **Parameter ordering**: for bignum parameters, outputs come before inputs.
+ *   Temporaries come last.
+ * - **Aliasing**: in general, output bignums may be aliased to one or more
+ *   inputs. As an exception, parameters that are documented as a modulus value
+ *   may not be aliased to an output. Outputs may not be aliased to one another.
+ *   Temporaries may not be aliased to any other parameter.
+ * - **Overlap**: apart from aliasing of limb array pointers (where two
+ *   arguments are equal pointers), overlap is not supported and may result
+ *   in undefined behavior.
+ * - **Error handling**: This is a low-level module. Functions generally do not
+ *   try to protect against invalid arguments such as nonsensical sizes or
+ *   null pointers. Note that some functions that operate on bignums of
+ *   different sizes have constraints about their size, and violating those
+ *   constraints may lead to buffer overflows.
+ * - **Modular representatives**: functions that operate modulo \p N expect
+ *   all modular inputs to be in the range [0, \p N - 1] and guarantee outputs
+ *   in the range [0, \p N - 1]. If an input is out of range, outputs are
+ *   fully unspecified, though bignum values out of range should not cause
+ *   buffer overflows (beware that this is not extensively tested).
+ */
+
+/*
+ *  Copyright The Mbed TLS Contributors
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+ */
+
+--- SOURCE: third_party/mbedtls/library/bignum_internal.h ---
+/**
+ * \file bignum_internal.h
+ *
+ * \brief Internal-only bignum public-key cryptosystem API.
+ *
+ * This file declares bignum-related functions that are to be used
+ * only from within the Mbed TLS library itself.
+ *
+ */
+/*
+ *  Copyright The Mbed TLS Contributors
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+ */
+
+--- SOURCE: third_party/mbedtls/library/block_cipher_internal.h ---
+/**
+ * \file block_cipher_internal.h
+ *
+ * \brief Lightweight abstraction layer for block ciphers with 128 bit blocks,
+ * for use by the GCM and CCM modules.
+ */
+/*
+ *  Copyright The Mbed TLS Contributors
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+ */
+
+--- SOURCE: third_party/mbedtls/library/bn_mul.h ---
+/**
+ * \file bn_mul.h
+ *
+ * \brief Multi-precision integer library
+ */
+/*
+ *  Copyright The Mbed TLS Contributors
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+ */
+/*
+ *      Multiply source vector [s] with b, add result
+ *       to destination vector [d] and set carry c.
+ *
+ *      Currently supports:
+ *
+ *         . IA-32 (386+)         . AMD64 / EM64T
+ *         . IA-32 (SSE2)         . Motorola 68000
+ *         . PowerPC, 32-bit      . MicroBlaze
+ *         . PowerPC, 64-bit      . TriCore
+ *         . SPARC v8             . ARM v3+
+ *         . Alpha                . MIPS32
+ *         . C, longlong          . C, generic
+ */
+
+--- SOURCE: third_party/mbedtls/library/check_crypto_config.h ---
+/**
+ * \file check_crypto_config.h
+ *
+ * \brief Consistency checks for PSA configuration options
+ */
+/*
+ *  Copyright The Mbed TLS Contributors
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+ */
+
+/*
+ * It is recommended to include this file from your crypto_config.h
+ * in order to catch dependency issues early.
+ */
+
+--- SOURCE: third_party/mbedtls/library/cipher.cpp ---
+/**
+ * \file cipher.c
+ *
+ * \brief Generic cipher wrapper for Mbed TLS
+ *
+ * \author Adriaan de Jong <dejong@fox-it.com>
+ *
+ *  Copyright The Mbed TLS Contributors
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+ */
+
+--- SOURCE: third_party/mbedtls/library/cipher_wrap.cpp ---
+/**
+ * \file cipher_wrap.c
+ *
+ * \brief Generic cipher wrapper for Mbed TLS
+ *
+ * \author Adriaan de Jong <dejong@fox-it.com>
+ *
+ *  Copyright The Mbed TLS Contributors
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+ */
+
+--- SOURCE: third_party/mbedtls/library/cipher_wrap.h ---
+/**
+ * \file cipher_wrap.h
+ *
+ * \brief Cipher wrappers.
+ *
+ * \author Adriaan de Jong <dejong@fox-it.com>
+ */
+/*
+ *  Copyright The Mbed TLS Contributors
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+ */
+
+--- SOURCE: third_party/mbedtls/library/common.h ---
+/**
+ * \file common.h
+ *
+ * \brief Utility macros for internal use in the library
+ */
+/*
+ *  Copyright The Mbed TLS Contributors
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+ */
+
+--- SOURCE: third_party/mbedtls/library/constant_time.cpp ---
+/**
+ *  Constant-time functions
+ *
+ *  Copyright The Mbed TLS Contributors
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+ */
+
+/*
+ * The following functions are implemented without using comparison operators, as those
+ * might be translated to branches by some compilers on some platforms.
+ */
+
+--- SOURCE: third_party/mbedtls/library/constant_time_impl.h ---
+/**
+ *  Constant-time functions
+ *
+ *  Copyright The Mbed TLS Contributors
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+ */
+
+--- SOURCE: third_party/mbedtls/library/constant_time_internal.h ---
+/**
+ *  Constant-time functions
+ *
+ *  Copyright The Mbed TLS Contributors
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+ */
+
+--- SOURCE: third_party/mbedtls/library/ctr.h ---
+/**
+ * \file ctr.h
+ *
+ * \brief    This file contains common functionality for counter algorithms.
+ *
+ *  Copyright The Mbed TLS Contributors
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+ */
+
+--- SOURCE: third_party/mbedtls/library/gcm.cpp ---
+/*
+ *  NIST SP800-38D compliant GCM implementation
+ *
+ *  Copyright The Mbed TLS Contributors
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+ */
+
+/*
+ * http://csrc.nist.gov/publications/nistpubs/800-38D/SP-800-38D.pdf
+ *
+ * See also:
+ * [MGV] http://csrc.nist.gov/groups/ST/toolkit/BCM/documents/proposedmodes/gcm/gcm-revised-spec.pdf
+ *
+ * We use the algorithm described as Shoup's method with 4-bit tables in
+ * [MGV] 4.1, pp. 12-13, to enhance speed without using too much memory.
+ */
+
+--- SOURCE: third_party/mbedtls/library/md.cpp ---
+/**
+ * \file md.c
+ *
+ * \brief Generic message digest wrapper for Mbed TLS
+ *
+ * \author Adriaan de Jong <dejong@fox-it.com>
+ *
+ *  Copyright The Mbed TLS Contributors
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+ */
+
+--- SOURCE: third_party/mbedtls/library/md_wrap.h ---
+/**
+ * \file md_wrap.h
+ *
+ * \brief Message digest wrappers.
+ *
+ * \warning This in an internal header. Do not include directly.
+ *
+ * \author Adriaan de Jong <dejong@fox-it.com>
+ */
+/*
+ *  Copyright The Mbed TLS Contributors
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+ */
+
+--- SOURCE: third_party/mbedtls/library/oid.cpp ---
+/**
+ * \file oid.c
+ *
+ * \brief Object Identifier (OID) database
+ *
+ *  Copyright The Mbed TLS Contributors
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+ */
+
+--- SOURCE: third_party/mbedtls/library/padlock.h ---
+/**
+ * \file padlock.h
+ *
+ * \brief VIA PadLock ACE for HW encryption/decryption supported by some
+ *        processors
+ *
+ * \warning These functions are only for internal use by other library
+ *          functions; you must not call them directly.
+ */
+/*
+ *  Copyright The Mbed TLS Contributors
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+ */
+
+--- SOURCE: third_party/mbedtls/library/pem.cpp ---
+/*
+ *  Privacy Enhanced Mail (PEM) decoding
+ *
+ *  Copyright The Mbed TLS Contributors
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+ */
+
+--- SOURCE: third_party/mbedtls/library/pk.cpp ---
+/*
+ *  Public Key abstraction layer
+ *
+ *  Copyright The Mbed TLS Contributors
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+ */
+
+--- SOURCE: third_party/mbedtls/library/pk_internal.h ---
+/**
+ * \file pk_internal.h
+ *
+ * \brief Public Key abstraction layer: internal (i.e. library only) functions
+ *        and definitions.
+ */
+/*
+ *  Copyright The Mbed TLS Contributors
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+ */
+
+--- SOURCE: third_party/mbedtls/library/pk_wrap.cpp ---
+/*
+ *  Public Key abstraction layer: wrapper functions
+ *
+ *  Copyright The Mbed TLS Contributors
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+ */
+
+--- SOURCE: third_party/mbedtls/library/pk_wrap.h ---
+/**
+ * \file pk_wrap.h
+ *
+ * \brief Public Key abstraction layer: wrapper functions
+ */
+/*
+ *  Copyright The Mbed TLS Contributors
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+ */
+
+--- SOURCE: third_party/mbedtls/library/pkparse.cpp ---
+/*
+ *  Public Key layer for parsing key files and structures
+ *
+ *  Copyright The Mbed TLS Contributors
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+ */
+
+--- SOURCE: third_party/mbedtls/library/pkwrite.h ---
+/**
+ * \file pkwrite.h
+ *
+ * \brief Internal defines shared by the PK write module
+ */
+/*
+ *  Copyright The Mbed TLS Contributors
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+ */
+
+--- SOURCE: third_party/mbedtls/library/platform.cpp ---
+/*
+ *  Platform abstraction layer
+ *
+ *  Copyright The Mbed TLS Contributors
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+ */
+
+--- SOURCE: third_party/mbedtls/library/platform_util.cpp ---
+/*
+ * Common and shared functions used by multiple modules in the Mbed TLS
+ * library.
+ *
+ *  Copyright The Mbed TLS Contributors
+ *  SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+ */
+
+/*
+ * Ensure gmtime_r is available even with -std=c99; must be defined before
+ * mbedtls_config.h, which pulls in glibc's features.h. Harmless on other platforms
+ * except OpenBSD, where it stops us accessing explicit_bzero.
+ */
+
+

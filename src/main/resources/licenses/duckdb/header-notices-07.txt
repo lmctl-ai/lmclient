@@ -1,0 +1,1429 @@
+DuckDB JNI source pin: a561d2ddadde231402411ce76112779bc34b57f0 (v1.5.6.0)
+This file preserves top-of-file copyright/license notices from the pinned source.
+Warning: truncated output (original token count: 23029)
+Total output lines: 2089
+
+--- SOURCE: extension/icu/third_party/icu/i18n/unicode/gregocal.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+* Copyright (C) 1997-2013, International Business Machines Corporation and others.
+* All Rights Reserved.
+********************************************************************************
+*
+* File GREGOCAL.H
+*
+* Modification History:
+*
+*   Date        Name        Description
+*   04/22/97    aliu        Overhauled header.
+*    07/28/98    stephen        Sync with JDK 1.2
+*    09/04/98    stephen        Re-sync with JDK 8/31 putback
+*    09/14/98    stephen        Changed type of kOneDay, kOneWeek to double.
+*                            Fixed bug in roll()
+*   10/15/99    aliu        Fixed j31, incorrect WEEK_OF_YEAR computation.
+*                           Added documentation of WEEK_OF_YEAR computation.
+*   10/15/99    aliu        Fixed j32, cannot set date to Feb 29 2000 AD.
+*                           {JDK bug 4210209 4209272}
+*   11/07/2003  srl         Update, clean up documentation.
+********************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/unicode/listformatter.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+*
+*   Copyright (C) 2012-2016, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*
+*******************************************************************************
+*   file name:  listformatter.h
+*   encoding:   UTF-8
+*   tab size:   8 (not used)
+*   indentation:4
+*
+*   created on: 20120426
+*   created by: Umesh P. Nair
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/unicode/measfmt.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+**********************************************************************
+* Copyright (c) 2004-2016, International Business Machines
+* Corporation and others.  All Rights Reserved.
+**********************************************************************
+* Author: Alan Liu
+* Created: April 20, 2004
+* Since: ICU 3.0
+**********************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/unicode/measunit.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+**********************************************************************
+* Copyright (c) 2004-2016, International Business Machines
+* Corporation and others.  All Rights Reserved.
+**********************************************************************
+* Author: Alan Liu
+* Created: April 26, 2004
+* Since: ICU 3.0
+**********************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/unicode/measure.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+**********************************************************************
+* Copyright (c) 2004-2015, International Business Machines
+* Corporation and others.  All Rights Reserved.
+**********************************************************************
+* Author: Alan Liu
+* Created: April 26, 2004
+* Since: ICU 3.0
+**********************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/unicode/msgfmt.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+* Copyright (C) 2007-2013, International Business Machines Corporation and
+* others. All Rights Reserved.
+********************************************************************************
+*
+* File MSGFMT.H
+*
+* Modification History:
+*
+*   Date        Name        Description
+*   02/19/97    aliu        Converted from java.
+*   03/20/97    helena      Finished first cut of implementation.
+*   07/22/98    stephen     Removed operator!= (defined in Format)
+*   08/19/2002  srl         Removing Javaisms
+*******************************************************************************/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/unicode/nounit.h ---
+// © 2017 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+ *******************************************************************************
+ * Copyright (C) 2009-2017, International Business Machines Corporation,       *
+ * Google, and others. All Rights Reserved.                                    *
+ *******************************************************************************
+ */
+
+--- SOURCE: extension/icu/third_party/icu/i18n/unicode/numfmt.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+********************************************************************************
+* Copyright (C) 1997-2016, International Business Machines Corporation and others.
+* All Rights Reserved.
+********************************************************************************
+*
+* File NUMFMT.H
+*
+* Modification History:
+*
+*   Date        Name        Description
+*   02/19/97    aliu        Converted from java.
+*   03/18/97    clhuang     Updated per C++ implementation.
+*   04/17/97    aliu        Changed DigitCount to int per code review.
+*    07/20/98    stephen        JDK 1.2 sync up. Added scientific support.
+*                            Changed naming conventions to match C++ guidelines
+*                            Derecated Java style constants (eg, INTEGER_FIELD)
+********************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/unicode/numsys.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2010-2014, International Business Machines Corporation and
+* others. All Rights Reserved.
+*******************************************************************************
+*
+*
+* File NUMSYS.H
+*
+* Modification History:*
+*   Date        Name        Description
+*
+********************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/unicode/plurfmt.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2007-2014, International Business Machines Corporation and
+* others. All Rights Reserved.
+*******************************************************************************
+*
+
+* File PLURFMT.H
+********************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/unicode/plurrule.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2008-2015, International Business Machines Corporation and
+* others. All Rights Reserved.
+*******************************************************************************
+*
+*
+* File PLURRULE.H
+*
+* Modification History:*
+*   Date        Name        Description
+*
+********************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/unicode/rbnf.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 1997-2015, International Business Machines Corporation and others.
+* All Rights Reserved.
+*******************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/unicode/rbtz.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2007-2013, International Business Machines Corporation and    *
+* others. All Rights Reserved.                                                *
+*******************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/unicode/region.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+ *******************************************************************************
+ * Copyright (C) 2014-2016, International Business Machines Corporation and others.
+ * All Rights Reserved.
+ *******************************************************************************
+ */
+
+--- SOURCE: extension/icu/third_party/icu/i18n/unicode/reldatefmt.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*****************************************************************************
+* Copyright (C) 2014-2016, International Business Machines Corporation and
+* others.
+* All Rights Reserved.
+*****************************************************************************
+*
+* File RELDATEFMT.H
+*****************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/unicode/scientificnumberformatter.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+**********************************************************************
+* Copyright (c) 2014-2016, International Business Machines
+* Corporation and others.  All Rights Reserved.
+**********************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/unicode/search.h ---
+// // © 2016 and later: Unicode, Inc. and others.
+// // License & terms of use: http://www.unicode.org/copyright.html
+// /*
+// **********************************************************************
+// *   Copyright (C) 2001-2011 IBM and others. All rights reserved.
+// **********************************************************************
+// *   Date        Name        Description
+// *  03/22/2000   helena      Creation.
+// **********************************************************************
+// */
+
+// #ifndef SEARCH_H
+// #define SEARCH_H
+
+// #include "unicode/utypes.h"
+
+// #if U_SHOW_CPLUSPLUS_API
+
+// /**
+//  * \file
+//  * \brief C++ API: SearchIterator object.
+//  */
+
+// #if !UCONFIG_NO_COLLATION && !UCONFIG_NO_BREAK_ITERATION
+
+// #include "unicode/uobject.h"
+// #include "unicode/unistr.h"
+// #include "unicode/chariter.h"
+// #include "unicode/brkiter.h"
+// #include "unicode/usearch.h"
+
+// /**
+// * @stable ICU 2.0
+// */
+// struct USearch;
+// /**
+// * @stable ICU 2.0
+// */
+// typedef struct USearch USearch;
+
+// U_NAMESPACE_BEGIN
+
+// /**
+//  *
+//  * <tt>SearchIterator</tt> is an abstract base class that provides
+//  * methods to search for a pattern within a text string. Instances of
+//  * <tt>SearchIterator</tt> maintain a current position and scans over the
+//  * target text, returning the indices the pattern is matched and the length
+//  * of each match.
+//  * <p>
+//  * <tt>SearchIterator</tt> defines a protocol for text searching.
+//  * Subclasses provide concrete implementations of various search algorithms.
+//  * For example, <tt>StringSearch</tt> implements language-sensitive pattern
+//  * matching based on the comparison rules defined in a
+//  * <tt>RuleBasedCollator</tt> object.
+//  * <p>
+//  * Other options for searching includes using a BreakIterator to restrict
+//  * the points at which matches are detected.
+//  * <p>
+//  * <tt>SearchIterator</tt> provides an API that is similar to that of
+//  * other text iteration classes such as <tt>BreakIterator</tt>. Using
+//  * this class, it is easy to scan through text looking for all occurances of
+//  * a given pattern. The following example uses a <tt>StringSearch</tt>
+//  * object to find all instances of "fox" in the target string. Any other
+//  * subclass of <tt>SearchIterator</tt> can be used in an identical
+//  * manner.
+//  * <pre><code>
+//  * UnicodeString target("The quick brown fox jumped over the lazy fox");
+//  * UnicodeString pattern("fox");
+//  *
+//  * SearchIterator *iter  = new StringSearch(pattern, target);
+//  * UErrorCode      error = U_ZERO_ERROR;
+//  * for (int pos = iter->first(error); pos != USEARCH_DONE;
+//  *                               pos = iter->next(error)) {
+//  *     printf("Found match at %d pos, length is %d\n", pos, iter.getMatchedLength());
+//  * }
+//  * </code></pre>
+//  *
+//  * @see StringSearch
+//  * @see RuleBasedCollator
+//  */
+// class U_I18N_API SearchIterator : public UObject {
+
+// public:
+
+//     // public constructors and destructors -------------------------------
+
+//     /**
+//     * Copy constructor that creates a SearchIterator instance with the same
+//     * behavior, and iterating over the same text.
+//     * @param other the SearchIterator instance to be copied.
+//     * @stable ICU 2.0
+//     */
+//     SearchIterator(const SearchIterator &other);
+
+//     /**
+//      * Destructor. Cleans up the search iterator data struct.
+//      * @stable ICU 2.0
+//      */
+//     virtual ~SearchIterator();
+
+--- SOURCE: extension/icu/third_party/icu/i18n/unicode/selfmt.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/********************************************************************
+ * COPYRIGHT:
+ * Copyright (c) 1997-2011, International Business Machines Corporation and
+ * others. All Rights Reserved.
+ * Copyright (C) 2010 , Yahoo! Inc.
+ ********************************************************************
+ *
+ * File SELFMT.H
+ *
+ * Modification History:
+ *
+ *   Date        Name        Description
+ *   11/11/09    kirtig      Finished first cut of implementation.
+ ********************************************************************/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/unicode/simpletz.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+ ********************************************************************************
+ * Copyright (C) 1997-2013, International Business Machines                     *
+ * Corporation and others. All Rights Reserved.                                 *
+ ********************************************************************************
+ *
+ * File SIMPLETZ.H
+ *
+ * Modification History:
+ *
+ *   Date        Name        Description
+ *   04/21/97    aliu        Overhauled header.
+ *   08/10/98    stephen     JDK 1.2 sync
+ *                           Added setStartRule() / setEndRule() overloads
+ *                           Added hasSameRules()
+ *   09/02/98    stephen     Added getOffset(monthLen)
+ *                           Changed getOffset() to take UErrorCode
+ *   07/09/99    stephen     Removed millisPerHour (unused, for HP compiler)
+ *   12/02/99    aliu        Added TimeMode and constructor and setStart/EndRule
+ *                           methods that take TimeMode. Added to docs.
+ ********************************************************************************
+ */
+
+--- SOURCE: extension/icu/third_party/icu/i18n/unicode/smpdtfmt.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+* Copyright (C) 1997-2016, International Business Machines Corporation and
+* others. All Rights Reserved.
+*******************************************************************************
+*
+* File SMPDTFMT.H
+*
+* Modification History:
+*
+*   Date        Name        Description
+*   02/19/97    aliu        Converted from java.
+*   07/09/97    helena      Make ParsePosition into a class.
+*   07/21/98    stephen     Added GMT_PLUS, GMT_MINUS
+*                            Changed setTwoDigitStartDate to set2DigitYearStart
+*                            Changed getTwoDigitStartDate to get2DigitYearStart
+*                            Removed subParseLong
+*                            Removed getZoneIndex (added in DateFormatSymbols)
+*   06/14/99    stephen     Removed fgTimeZoneDataSuffix
+*   10/14/99    aliu        Updated class doc to describe 2-digit year parsing
+*                           {j28 4182066}.
+*******************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/unicode/sortkey.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+ *****************************************************************************
+ * Copyright (C) 1996-2014, International Business Machines Corporation and others.
+ * All Rights Reserved.
+ *****************************************************************************
+ *
+ * File sortkey.h
+ *
+ * Created by: Helena Shih
+ *
+ * Modification History:
+ *
+ *  Date         Name          Description
+ *
+ *  6/20/97     helena      Java class name change.
+ *  8/18/97     helena      Added internal API documentation.
+ *  6/26/98     erm         Changed to use byte arrays and memcmp.
+ *****************************************************************************
+ */
+
+--- SOURCE: extension/icu/third_party/icu/i18n/unicode/stsearch.h ---
+// // © 2016 and later: Unicode, Inc. and others.
+// // License & terms of use: http://www.unicode.org/copyright.html
+// /*
+// **********************************************************************
+// *   Copyright (C) 2001-2014 IBM and others. All rights reserved.
+// **********************************************************************
+// *   Date        Name        Description
+// *  03/22/2000   helena      Creation.
+// **********************************************************************
+// */
+
+// #ifndef STSEARCH_H
+// #define STSEARCH_H
+
+// #include "unicode/utypes.h"
+
+// #if U_SHOW_CPLUSPLUS_API
+
+// /**
+//  * \file
+//  * \brief C++ API: Service for searching text based on RuleBasedCollator.
+//  */
+
+// #if !UCONFIG_NO_COLLATION && !UCONFIG_NO_BREAK_ITERATION
+
+// #include "unicode/tblcoll.h"
+// #include "unicode/coleitr.h"
+// #include "unicode/search.h"
+
+// U_NAMESPACE_BEGIN
+
+// /**
+//  *
+//  * <tt>StringSearch</tt> is a <tt>SearchIterator</tt> that provides
+//  * language-sensitive text searching based on the comparison rules defined
+//  * in a {@link RuleBasedCollator} object.
+//  * StringSearch ensures that language eccentricity can be
+//  * handled, e.g. for the German collator, characters &szlig; and SS will be matched
+//  * if case is chosen to be ignored.
+//  * See the <a href="http://source.icu-project.org/repos/icu/icuhtml/trunk/design/collation/ICU_collation_design.htm">
+//  * "ICU Collation Design Document"</a> for more information.
+//  * <p>
+//  * There are 2 match options for selection:<br>
+//  * Let S' be the sub-string of a text string S between the offsets start and
+//  * end [start, end].
+//  * <br>
+//  * A pattern string P matches a text string S at the offsets [start, end]
+//  * if
+//  * <pre>
+//  * option 1. Some canonical equivalent of P matches some canonical equivalent
+//  *           of S'
+//  * option 2. P matches S' and if P starts or ends with a combining mark,
+//  *           there exists no non-ignorable combining mark before or after S?
+//  *           in S respectively.
+//  * </pre>
+//  * Option 2. will be the default.
+//  * <p>
+//  * This search has APIs similar to that of other text iteration mechanisms
+//  * such as the break iterators in <tt>BreakIterator</tt>. Using these
+//  * APIs, it is easy to scan through text looking for all occurrences of
+//  * a given pattern. This search iterator allows changing of direction by
+//  * calling a <tt>reset</tt> followed by a <tt>next</tt> or <tt>previous</tt>.
+//  * Though a direction change can occur without calling <tt>reset</tt> first,
+//  * this operation comes with some speed penalty.
+//  * Match results in the forward direction will match the result matches in
+//  * the backwards direction in the reverse order
+//  * <p>
+//  * <tt>SearchIterator</tt> provides APIs to specify the starting position
+//  * within the text string to be searched, e.g. <tt>setOffset</tt>,
+//  * <tt>preceding</tt> and <tt>following</tt>. Since the
+//  * starting position will be set as it is specified, please take note that
+//  * there are some danger points which the search may render incorrect
+//  * results:
+//  * <ul>
+//  * <li> The midst of a substring that requires normalization.
+//  * <li> If the following match is to be found, the position should not be the
+//  *      second character which requires to be swapped with the preceding
+//  *      character. Vice versa, if the preceding match is to be found,
+//  *      position to search from should not be the first character which
+//  *      requires to be swapped with the next character. E.g certain Thai and
+//  *      Lao characters require swapping.
+//  * <li> If a following pattern match is to be found, any position within a
+//  *      contracting sequence except the first will fail. Vice versa if a
+//  *      preceding pattern match is to be found, a invalid starting point
+//  *      would be any character within a contracting sequence except the last.
+//  * </ul>
+//  * <p>
+//  * A <tt>BreakIterator</tt> can be used if only matches at logical breaks are desired.
+//  * Using a <tt>BreakIterator</tt> will only give you results that exactly matches the
+//  * boundaries given by the breakiterator. For instance the pattern "e" will
+//  * not be found in the string "\u00e9" if a character break iterator is used.
+//  * <p>
+//  * Options are provided to handle overlapping matches.
+//  * E.g. In English, overlapping matches produces the result 0 and 2
+//  * for the pattern "abab" in the text "ababab", where else mutually
+//  * exclusive matches only produce the result of 0.
+//  * <p>
+//  * Though collator attributes will be taken into consideration while
+//  * performing matches, there are no APIs here for setting and getting the
+//  * attributes. These attributes can be set by getting the collator
+
+--- SOURCE: extension/icu/third_party/icu/i18n/unicode/tblcoll.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+******************************************************************************
+* Copyright (C) 1996-2016, International Business Machines Corporation and
+* others. All Rights Reserved.
+******************************************************************************
+*/
+
+/**
+ * \file
+ * \brief C++ API: The RuleBasedCollator class implements the Collator abstract base class.
+ */
+
+/**
+* File tblcoll.h
+*
+* Created by: Helena Shih
+*
+* Modification History:
+*
+*  Date        Name        Description
+*  2/5/97      aliu        Added streamIn and streamOut methods.  Added
+*                          constructor which reads RuleBasedCollator object from
+*                          a binary file.  Added writeToFile method which streams
+*                          RuleBasedCollator out to a binary file.  The streamIn
+*                          and streamOut methods use istream and ostream objects
+*                          in binary mode.
+*  2/12/97     aliu        Modified to use TableCollationData sub-object to
+*                          hold invariant data.
+*  2/13/97     aliu        Moved several methods into this class from Collation.
+*                          Added a private RuleBasedCollator(Locale&) constructor,
+*                          to be used by Collator::createDefault().  General
+*                          clean up.
+*  2/20/97     helena      Added clone, operator==, operator!=, operator=, and copy
+*                          constructor and getDynamicClassID.
+*  3/5/97      aliu        Modified constructFromFile() to add parameter
+*                          specifying whether or not binary loading is to be
+*                          attempted.  This is required for dynamic rule loading.
+* 05/07/97     helena      Added memory allocation error detection.
+*  6/17/97     helena      Added IDENTICAL strength for compare, changed getRules to
+*                          use MergeCollation::getPattern.
+*  6/20/97     helena      Java class name change.
+*  8/18/97     helena      Added internal API documentation.
+* 09/03/97     helena      Added createCollationKeyValues().
+* 02/10/98     damiba      Added compare with "length" parameter
+* 08/05/98     erm         Synched with 1.2 version of RuleBasedCollator.java
+* 04/23/99     stephen     Removed EDecompositionMode, merged with
+*                          Normalizer::EMode
+* 06/14/99     stephen     Removed kResourceBundleSuffix
+* 11/02/99     helena      Collator performance enhancements.  Eliminates the
+*                          UnicodeString construction and special case for NO_OP.
+* 11/23/99     srl         More performance enhancements. Updates to NormalizerIterator
+*                          internal state management.
+* 12/15/99     aliu        Update to support Thai collation.  Move NormalizerIterator
+*                          to implementation file.
+* 01/29/01     synwee      Modified into a C++ wrapper which calls C API
+*                          (ucol.h)
+* 2012-2014    markus      Rewritten in C++ again.
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/unicode/timezone.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*************************************************************************
+* Copyright (c) 1997-2016, International Business Machines Corporation
+* and others. All Rights Reserved.
+**************************************************************************
+*
+* File TIMEZONE.H
+*
+* Modification History:
+*
+*   Date        Name        Description
+*   04/21/97    aliu        Overhauled header.
+*   07/09/97    helena      Changed createInstance to createDefault.
+*   08/06/97    aliu        Removed dependency on internal header for Hashtable.
+*   08/10/98    stephen        Changed getDisplayName() API conventions to match
+*   08/19/98    stephen        Changed createTimeZone() to never return 0
+*   09/02/98    stephen        Sync to JDK 1.2 8/31
+*                            - Added getOffset(... monthlen ...)
+*                            - Added hasSameRules()
+*   09/15/98    stephen        Added getStaticClassID
+*   12/03/99    aliu        Moved data out of static table into icudata.dll.
+*                           Hashtable replaced by new static data structures.
+*   12/14/99    aliu        Made GMT public.
+*   08/15/01    grhoten     Made GMT private and added the getGMT() function
+**************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/unicode/tmunit.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+ *******************************************************************************
+ * Copyright (C) 2009-2016, International Business Machines Corporation,       *
+ * Google, and others. All Rights Reserved.                                    *
+ *******************************************************************************
+ */
+
+--- SOURCE: extension/icu/third_party/icu/i18n/unicode/tmutamt.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+ *******************************************************************************
+ * Copyright (C) 2009-2010, Google, International Business Machines Corporation and *
+ * others. All Rights Reserved.                                                *
+ *******************************************************************************
+ */
+
+--- SOURCE: extension/icu/third_party/icu/i18n/unicode/tmutfmt.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+ *******************************************************************************
+ * Copyright (C) 2008-2014, Google, International Business Machines Corporation
+ * and others. All Rights Reserved.
+ *******************************************************************************
+ */
+
+--- SOURCE: extension/icu/third_party/icu/i18n/unicode/translit.h ---
+// // © 2016 and later: Unicode, Inc. and others.
+// // License & terms of use: http://www.unicode.org/copyright.html
+// /*
+// **********************************************************************
+// * Copyright (C) 1999-2014, International Business Machines
+// * Corporation and others. All Rights Reserved.
+// **********************************************************************
+// *   Date        Name        Description
+// *   11/17/99    aliu        Creation.
+// **********************************************************************
+// */
+// #ifndef TRANSLIT_H
+// #define TRANSLIT_H
+
+// #include "unicode/utypes.h"
+
+// #if U_SHOW_CPLUSPLUS_API
+
+// /**
+//  * \file
+//  * \brief C++ API: Tranforms text from one format to another.
+//  */
+
+// #if !UCONFIG_NO_TRANSLITERATION
+
+// #include "unicode/uobject.h"
+// #include "unicode/unistr.h"
+// #include "unicode/parseerr.h"
+// #include "unicode/utrans.h" // UTransPosition, UTransDirection
+// #include "unicode/strenum.h"
+
+// U_NAMESPACE_BEGIN
+
+// class UnicodeFilter;
+// class UnicodeSet;
+// class TransliteratorParser;
+// class NormalizationTransliterator;
+// class TransliteratorIDParser;
+
+// /**
+//  *
+//  * <code>Transliterator</code> is an abstract class that
+//  * transliterates text from one format to another.  The most common
+//  * kind of transliterator is a script, or alphabet, transliterator.
+//  * For example, a Russian to Latin transliterator changes Russian text
+//  * written in Cyrillic characters to phonetically equivalent Latin
+//  * characters.  It does not <em>translate</em> Russian to English!
+//  * Transliteration, unlike translation, operates on characters, without
+//  * reference to the meanings of words and sentences.
+//  *
+//  * <p>Although script conversion is its most common use, a
+//  * transliterator can actually perform a more general class of tasks.
+//  * In fact, <code>Transliterator</code> defines a very general API
+//  * which specifies only that a segment of the input text is replaced
+//  * by new text.  The particulars of this conversion are determined
+//  * entirely by subclasses of <code>Transliterator</code>.
+//  *
+//  * <p><b>Transliterators are stateless</b>
+//  *
+//  * <p><code>Transliterator</code> objects are <em>stateless</em>; they
+//  * retain no information between calls to
+//  * <code>transliterate()</code>.  (However, this does <em>not</em>
+//  * mean that threads may share transliterators without synchronizing
+//  * them.  Transliterators are not immutable, so they must be
+//  * synchronized when shared between threads.)  This might seem to
+//  * limit the complexity of the transliteration operation.  In
+//  * practice, subclasses perform complex transliterations by delaying
+//  * the replacement of text until it is known that no other
+//  * replacements are possible.  In other words, although the
+//  * <code>Transliterator</code> objects are stateless, the source text
+//  * itself embodies all the needed information, and delayed operation
+//  * allows arbitrary complexity.
+//  *
+//  * <p><b>Batch transliteration</b>
+//  *
+//  * <p>The simplest way to perform transliteration is all at once, on a
+//  * string of existing text.  This is referred to as <em>batch</em>
+//  * transliteration.  For example, given a string <code>input</code>
+//  * and a transliterator <co…7029 tokens truncated…URCE: extension/icu/third_party/icu/i18n/usrchimp.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+**********************************************************************
+*   Copyright (C) 2001-2015 IBM and others. All rights reserved.
+**********************************************************************
+*   Date        Name        Description
+*  08/13/2001   synwee      Creation.
+**********************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/utf16collationiterator.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2010-2014, International Business Machines
+* Corporation and others.  All Rights Reserved.
+*******************************************************************************
+* utf16collationiterator.cpp
+*
+* created on: 2010oct27
+* created by: Markus W. Scherer
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/utf16collationiterator.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2010-2014, International Business Machines
+* Corporation and others.  All Rights Reserved.
+*******************************************************************************
+* utf16collationiterator.h
+*
+* created on: 2010oct27
+* created by: Markus W. Scherer
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/utf8collationiterator.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2012-2014, International Business Machines
+* Corporation and others.  All Rights Reserved.
+*******************************************************************************
+* utf8collationiterator.cpp
+*
+* created on: 2012nov12 (from utf16collationiterator.cpp & uitercollationiterator.cpp)
+* created by: Markus W. Scherer
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/utf8collationiterator.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2012-2016, International Business Machines
+* Corporation and others.  All Rights Reserved.
+*******************************************************************************
+* utf8collationiterator.h
+*
+* created on: 2012nov12 (from utf16collationiterator.h & uitercollationiterator.h)
+* created by: Markus W. Scherer
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/utmscale.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2004-2012, International Business Machines Corporation and
+* others. All Rights Reserved.
+*******************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/vtzone.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2007-2016, International Business Machines Corporation and
+* others. All Rights Reserved.
+*******************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/vzone.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2009-2011, International Business Machines Corporation and
+* others. All Rights Reserved.
+*******************************************************************************
+*/
+
+/**
+ * \file 
+ * \brief C API: VTimeZone classes
+ */
+
+--- SOURCE: extension/icu/third_party/icu/i18n/vzone.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2009-2016, International Business Machines Corporation and
+* others. All Rights Reserved.
+*******************************************************************************
+*/
+
+/**
+* \file
+* \brief C API: RFC2445 VTIMEZONE support
+*
+* <p>This is a C wrapper around the C++ VTimeZone class.</p>
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/windtfmt.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+********************************************************************************
+*   Copyright (C) 2005-2016, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+********************************************************************************
+*
+* File WINDTFMT.CPP
+*
+********************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/windtfmt.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+********************************************************************************
+*   Copyright (C) 2005-2015, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+********************************************************************************
+*
+* File WINDTFMT.H
+*
+********************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/winnmfmt.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+********************************************************************************
+*   Copyright (C) 2005-2016, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+********************************************************************************
+*
+* File WINNMFMT.CPP
+*
+********************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/winnmfmt.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+********************************************************************************
+*   Copyright (C) 2005-2015, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+********************************************************************************
+*
+* File WINNMFMT.H
+*
+********************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/wintzimpl.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+********************************************************************************
+*   Copyright (C) 2009-2013, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+********************************************************************************
+*
+* File WINTZIMPL.CPP
+*
+********************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/wintzimpl.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+********************************************************************************
+*   Copyright (C) 2008-2011, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+********************************************************************************
+*
+* File WINTZIMPL.H
+*
+********************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/zonemeta.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2007-2014, International Business Machines Corporation and
+* others. All Rights Reserved.
+*******************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/zonemeta.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2007-2013, International Business Machines Corporation and    *
+* others. All Rights Reserved.                                                *
+*******************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/zrule.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2009-2011, International Business Machines Corporation and
+* others. All Rights Reserved.
+*******************************************************************************
+*/
+
+/**
+ * \file 
+ * \brief C API: Time zone rule classes
+ */
+
+--- SOURCE: extension/icu/third_party/icu/i18n/zrule.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2009-2016, International Business Machines Corporation and
+* others. All Rights Reserved.
+*******************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/ztrans.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2009-2010, International Business Machines Corporation and         *
+* others. All Rights Reserved.                                                *
+*******************************************************************************
+*/
+
+/**
+ * \file 
+ * \brief C API: Time zone transition classes
+ */
+
+--- SOURCE: extension/icu/third_party/icu/i18n/ztrans.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2009-2016, International Business Machines Corporation and
+* others. All Rights Reserved.
+*******************************************************************************
+*/
+
+--- SOURCE: src/common/checksum.cpp ---
+// MIT License
+// Copyright (c) 2018-2021 Martin Ankerl
+// https://github.com/martinus/robin-hood-hashing/blob/3.11.5/LICENSE
+
+--- SOURCE: src/common/types/hash.cpp ---
+// Turn negative zero into positive zero
+
+
+
+
+
+
+	// This seed slightly improves bit distribution, taken from here:
+	// https://github.com/martinus/robin-hood-hashing/blob/3.11.5/LICENSE
+	// MIT License Copyright (c) 2018-2021 Martin Ankerl
+
+--- SOURCE: src/include/duckdb/execution/merge_sort_tree.hpp ---
+//===----------------------------------------------------------------------===//
+//                         DuckDB
+//
+// duckdb/execution/merge_sort_tree.hpp
+//
+//
+//===----------------------------------------------------------------------===//
+
+
+
+
+// MIT License Text:
+//
+// Copyright 2022 salesforce.com, inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining
+// a copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to
+// permit persons to whom the Software is furnished to do so, subject to
+// the following conditions:
+//
+// The above copyright notice and this permission notice shall be
+// included in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+// NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+// BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+// ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+// CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
+// Implementation of a generic merge-sort-tree
+// Rewrite of the original, which was in C++17 and targeted for research,
+// instead of deployment.
+
+--- SOURCE: third_party/concurrentqueue/concurrentqueue.h ---
+// Provides a C++11 implementation of a multi-producer, multi-consumer lock-free queue.
+// An overview, including benchmark results, is provided here:
+//     http://moodycamel.com/blog/2014/a-fast-general-purpose-lock-free-queue-for-c++
+// The full design is also described in excruciating detail at:
+//    http://moodycamel.com/blog/2014/detailed-design-of-a-lock-free-queue
+
+// Simplified BSD license:
+// Copyright (c) 2013-2016, Cameron Desrochers.
+// All rights reserved.
+//
+// Redistribution and use in source and binary forms, with or without modification,
+// are permitted provided that the following conditions are met:
+//
+// - Redistributions of source code must retain the above copyright notice, this list of
+// conditions and the following disclaimer.
+// - Redistributions in binary form must reproduce the above copyright notice, this list of
+// conditions and the following disclaimer in the documentation and/or other materials
+// provided with the distribution.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
+// EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+// MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL
+// THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT
+// OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
+// TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+// EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+--- SOURCE: third_party/concurrentqueue/lightweightsemaphore.h ---
+// Provides an efficient implementation of a semaphore (LightweightSemaphore).
+// This is an extension of Jeff Preshing's sempahore implementation (licensed
+// under the terms of its separate zlib license) that has been adapted and
+// extended by Cameron Desrochers.
+
+
+
+// Avoid including windows.h in a header; we only need a handful of
+// items, so we'll redeclare them here (this is relatively safe since
+// the API generally has to remain stable between Windows versions).
+// I know this is an ugly hack but it still beats polluting the global
+// namespace with thousands of generic names or adding a .cpp for nothing.
+
+
+// Code in the mpmc_sema namespace below is an adaptation of Jeff Preshing's
+// portable + lightweight semaphore implementations, originally from
+// https://github.com/preshing/cpp11-on-multicore/blob/master/common/sema.h
+// LICENSE:
+// Copyright (c) 2015 Jeff Preshing
+//
+// This software is provided 'as-is', without any express or implied
+// warranty. In no event will the authors be held liable for any damages
+// arising from the use of this software.
+//
+// Permission is granted to anyone to use this software for any purpose,
+// including commercial applications, and to alter it and redistribute it
+// freely, subject to the following restrictions:
+//
+// 1. The origin of this software must not be misrepresented; you must not
+//	claim that you wrote the original software. If you use this software
+//	in a product, an acknowledgement in the product documentation would be
+//	appreciated but is not required.
+// 2. Altered source versions must be plainly marked as such, and must not be
+//	misrepresented as being the original software.
+// 3. This notice may not be removed or altered from any source distribution.
+
+--- SOURCE: third_party/fast_float/fast_float/fast_float.h ---
+// duckdb_fast_float by Daniel Lemire
+// duckdb_fast_float by João Paulo Magalhaes
+
+
+// with contributions from Eugene Golushkov
+// with contributions from Maksim Kita
+// with contributions from Marcin Wojdyr
+// with contributions from Neal Richardson
+// with contributions from Tim Paine
+// with contributions from Fabio Pellacini
+
+
+// Permission is hereby granted, free of charge, to any
+// person obtaining a copy of this software and associated
+// documentation files (the "Software"), to deal in the
+// Software without restriction, including without
+// limitation the rights to use, copy, modify, merge,
+// publish, distribute, sublicense, and/or sell copies of
+// the Software, and to permit persons to whom the Software
+// is furnished to do so, subject to the following
+// conditions:
+// 
+// The above copyright notice and this permission notice
+// shall be included in all copies or substantial portions
+// of the Software.
+// 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF
+// ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
+// TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT
+// SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+// CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR
+// IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+// DEALINGS IN THE SOFTWARE.
+
+--- SOURCE: third_party/fmt/format.cc ---
+// Formatting library for C++
+//
+// Copyright (c) 2012 - 2016, Victor Zverovich
+// All rights reserved.
+//
+// For the license information refer to format.h.
+
+--- SOURCE: third_party/fmt/include/fmt/core.h ---
+// Formatting library for C++ - the core API
+//
+// Copyright (c) 2012 - present, Victor Zverovich
+// All rights reserved.
+//
+// For the license information refer to format.h.
+
+--- SOURCE: third_party/fmt/include/fmt/format-inl.h ---
+// Formatting library for C++ - implementation
+//
+// Copyright (c) 2012 - 2016, Victor Zverovich
+// All rights reserved.
+//
+// For the license information refer to format.h.
+
+--- SOURCE: third_party/fmt/include/fmt/format.h ---
+/*
+
+--- SOURCE: third_party/fmt/include/fmt/ostream.h ---
+// Formatting library for C++ - std::ostream support
+//
+// Copyright (c) 2012 - present, Victor Zverovich
+// All rights reserved.
+//
+// For the license information refer to format.h.
+
+--- SOURCE: third_party/fmt/include/fmt/printf.h ---
+// Formatting library for C++ - legacy printf implementation
+//
+// Copyright (c) 2012 - 2016, Victor Zverovich
+// All rights reserved.
+//
+// For the license information refer to format.h.
+
+--- SOURCE: third_party/fsst/fsst.h ---
+/* 
+ * the API for FSST compression -- (c) Peter Boncz, Viktor Leis and Thomas Neumann (CWI, TU Munich), 2018-2019
+ *
+ * ===================================================================================================================================
+ * this software is distributed under the MIT License (http://www.opensource.org/licenses/MIT):
+ *
+ * Copyright 2018-2020, CWI, TU Munich, FSU Jena
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files 
+ * (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, 
+ * merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is 
+ * furnished to do so, subject to the following conditions:
+ *
+ * - The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES 
+ * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE 
+ * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR 
+ * IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ * You can contact the authors via the FSST source repository : https://github.com/cwida/fsst
+ * ===================================================================================================================================
+ *
+ * FSST: Fast Static Symbol Table compression 
+ * see the paper https://github.com/cwida/fsst/raw/master/fsstcompression.pdf
+ *
+ * FSST is a compression scheme focused on string/text data: it can compress strings from distributions with many different values (i.e.
+ * where dictionary compression will not work well). It allows *random-access* to compressed data: it is not block-based, so individual
+ * strings can be decompressed without touching the surrounding data in a compressed block. When compared to e.g. lz4 (which is 
+ * block-based), FSST achieves similar decompression speed, (2x) better compression speed and 30% better compression ratio on text.
+ *
+ * FSST encodes strings also using a symbol table -- but it works on pieces of the string, as it maps "symbols" (1-8 byte sequences) 
+ * onto "codes" (single-bytes). FSST can also represent a byte as an exception (255 followed by the original byte). Hence, compression 
+ * transforms a sequence of bytes into a (supposedly shorter) sequence of codes or escaped bytes. These shorter byte-sequences could 
+ * be seen as strings again and fit in whatever your program is that manipulates strings.
+ *
+ * useful property: FSST ensures that strings that are equal, are also equal in their compressed form.
+ * 
+ * In this API, strings are considered byte-arrays (byte = unsigned char) and a batch of strings is represented as an array of 
+ * unsigned char* pointers to their starts. A seperate length array (of unsigned int) denotes how many bytes each string consists of. 
+ *
+ * This representation as unsigned char* pointers tries to assume as little as possible on the memory management of the program
+ * that calls this API, and is also intended to allow passing strings into this API without copying (even if you use C++ strings).
+ *
+ * We optionally support C-style zero-terminated strings (zero appearing only at the end). In this case, the compressed strings are 
+ * also zero-terminated strings. In zero-terminated mode, the zero-byte at the end *is* counted in the string byte-length.
+ */
+
+--- SOURCE: third_party/fsst/libfsst.cpp ---
+// this software is distributed under the MIT License (http://www.opensource.org/licenses/MIT):
+//
+// Copyright 2018-2020, CWI, TU Munich, FSU Jena
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files
+// (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify,
+// merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// - The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+// OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+// LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR
+// IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+// You can contact the authors via the FSST source repository : https://github.com/cwida/fsst
+
+--- SOURCE: third_party/fsst/libfsst.hpp ---
+// this software is distributed under the MIT License (http://www.opensource.org/licenses/MIT):
+// 
+// Copyright 2018-2020, CWI, TU Munich, FSU Jena
+// 
+// Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files   
+// (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify,   
+// merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is   
+// furnished to do so, subject to the following conditions:
+// 
+// - The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+// 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES 
+// OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE 
+// LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR 
+// IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
+//                 
+// You can contact the authors via the FSST source repository : https://github.com/cwida/fsst
+
+--- SOURCE: third_party/httplib/httplib.hpp ---
+// taken from: https://github.com/yhirose/cpp-httplib/blob/v0.27.0/httplib.h
+// Note: some modifications are made to file (replace std::regex with RE2)
+// Patched CreateFile2 for lower Windows versions
+
+//
+//  httplib.h
+//
+//  Copyright (c) 2025 Yuji Hirose. All rights reserved.
+//  MIT License
+//
+
+--- SOURCE: third_party/hyperloglog/hyperloglog.cpp ---
+/* hyperloglog.c - Redis HyperLogLog probabilistic cardinality approximation.
+ * This file implements the algorithm and the exported Redis commands.
+ *
+ * Copyright (c) 2014, Salvatore Sanfilippo <antirez at gmail dot com>
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ *   * Redistributions of source code must retain the above copyright notice,
+ *     this list of conditions and the following disclaimer.
+ *   * Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in the
+ *     documentation and/or other materials provided with the distribution.
+ *   * Neither the name of Redis nor the names of its contributors may be used
+ *     to endorse or promote products derived from this software without
+ *     specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ */
+
+--- SOURCE: third_party/hyperloglog/sds.cpp ---
+/* SDSLib 2.0 -- A C dynamic strings library
+ *
+ * Copyright (c) 2006-2015, Salvatore Sanfilippo <antirez at gmail dot com>
+ * Copyright (c) 2015, Oran Agra
+ * Copyright (c) 2015, Redis Labs, Inc
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ *   * Redistributions of source code must retain the above copyright notice,
+ *     this list of conditions and the following disclaimer.
+ *   * Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in the
+ *     documentation and/or other materials provided with the distribution.
+ *   * Neither the name of Redis nor the names of its contributors may be used
+ *     to endorse or promote products derived from this software without
+ *     specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ */
+
+--- SOURCE: third_party/hyperloglog/sds.hpp ---
+/* SDSLib 2.0 -- A C dynamic strings library
+ *
+ * Copyright (c) 2006-2015, Salvatore Sanfilippo <antirez at gmail dot com>
+ * Copyright (c) 2015, Oran Agra
+ * Copyright (c) 2015, Redis Labs, Inc
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ *   * Redistributions of source code must retain the above copyright notice,
+ *     this list of conditions and the following disclaimer.
+ *   * Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in the
+ *     documentation and/or other materials provided with the distribution.
+ *   * Neither the name of Redis nor the names of its contributors may be used
+ *     to endorse or promote products derived from this software without
+ *     specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ */
+
+--- SOURCE: third_party/jaro_winkler/details/common.hpp ---
+/* SPDX-License-Identifier: MIT */
+/* Copyright © 2022 Max Bachmann */
+
+--- SOURCE: third_party/jaro_winkler/details/intrinsics.hpp ---
+/* SPDX-License-Identifier: MIT */
+/* Copyright © 2022 Max Bachmann */
+
+

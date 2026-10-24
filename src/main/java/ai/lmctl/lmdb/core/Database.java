@@ -84,7 +84,7 @@ public final class Database implements AutoCloseable {
             DriverManager.setLoginTimeout(DEFAULT_QUERY_TIMEOUT_SECONDS);
             connection = DriverManager.getConnection(url, p);
             long budget = memoryBudgetBytes();
-            long engineLimit = Math.max(1024L * 1024, budget / 4);
+            long engineLimit = Math.max(1024L * 1024, budget / 8);
             configureEngineMemoryLimit(connection, engineLimit);
             return new Database(connection, rows, bytes, engineLimit);
         } catch (SQLException e) {
@@ -216,6 +216,18 @@ public final class Database implements AutoCloseable {
             value = readText(reader);
         } else if (value instanceof InputStream stream) {
             value = readBytes(stream);
+        } else if (value instanceof java.sql.SQLXML xml) {
+            try {
+                Reader reader = xml.getCharacterStream();
+                value = reader == null ? xml.getString() : readText(reader);
+            } finally { try { xml.free(); } catch (SQLException ignored) { } }
+        } else if (value != null && value.getClass().getName().equals("org.postgresql.util.PGobject")) {
+            try {
+                Object text = value.getClass().getMethod("getValue").invoke(value);
+                value = text == null ? null : String.valueOf(text);
+            } catch (ReflectiveOperationException e) {
+                throw new DatabaseException("could not read PostgreSQL value", e);
+            }
         }
         Object safe = safeValue(value);
         budget.add(estimateBytes(safe));
@@ -424,7 +436,12 @@ public final class Database implements AutoCloseable {
         return upper.equals("INFORMATION_SCHEMA") || upper.equals("SYSTEM") || upper.equals("SYS") || upper.startsWith("PG_");
     }
     private static int number(List<Object> r, int i) { return r.get(i) instanceof Number n ? n.intValue() : 0; }
-    private static boolean bool(List<Object> r, int i) { return r.get(i) instanceof Boolean b ? b : Boolean.parseBoolean(text(r, i)); }
+    private static boolean bool(List<Object> r, int i) {
+        Object value = r.get(i);
+        if (value instanceof Boolean b) return b;
+        if (value instanceof Number n) return n.doubleValue() != 0.0;
+        return Boolean.parseBoolean(text(r, i));
+    }
 
     public void exportCsv(QueryResult result, Path file) {
         try (Writer writer = Files.newBufferedWriter(file, StandardCharsets.UTF_8)) { writer.write(ResultFormats.csv(result)); }

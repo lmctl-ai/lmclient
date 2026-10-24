@@ -9,8 +9,10 @@ Bundled JDBC drivers (versions are pinned in pom.xml and deps.lock):
   domain.
 * H2 2.3.232 — dual Mozilla Public License 2.0 / Eclipse Public License 1.0.
 * DuckDB JDBC 1.5.6.0 and the JNI engine built from
-  duckdb/duckdb-java commit 679d526542cf9dfb24322d9d9c75641624f24bc1 —
-  MIT, with the component licenses listed in
+  duckdb/duckdb-java commit a561d2ddadde231402411ce76112779bc34b57f0
+  (v1.5.6.0) — MIT. The pinned source's standalone license and 912
+  source-header copyright/license notices are preserved in
+  licenses/duckdb/ and indexed by
   licenses/duckdb-engine-components.txt.
 * Microsoft JDBC Driver for SQL Server 13.2.0.jre11 — MIT.
 
@@ -23,8 +25,9 @@ Bundled transitive components:
 
 The complete license texts and notices for the bundled JVM and native
 components are embedded as distinct resources under licenses/ in the
-distribution JAR. Standard license text is deduplicated by identical terms;
-the component index retains the upstream component names and source pin.
+distribution JAR. Standard license text is deduplicated only where terms
+are identical; DuckDB's pinned source-header notices retain their original
+copyright holders and source paths.
 The native image also includes the GraalVM runtime under GPLv2 with the
 Classpath Exception. Linux executables dynamically link the host glibc
 (LGPL-2.1, minimum glibc 2.35); no glibc implementation is bundled. GCC

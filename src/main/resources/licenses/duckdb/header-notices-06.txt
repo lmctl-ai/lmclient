@@ -1,0 +1,1636 @@
+DuckDB JNI source pin: a561d2ddadde231402411ce76112779bc34b57f0 (v1.5.6.0)
+This file preserves top-of-file copyright/license notices from the pinned source.
+Warning: truncated output (original token count: 26633)
+Total output lines: 2757
+
+--- SOURCE: extension/icu/third_party/icu/i18n/persncal.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+ ******************************************************************************
+ * Copyright (C) 2003-2013, International Business Machines Corporation
+ * and others. All Rights Reserved.
+ ******************************************************************************
+ *
+ * File PERSNCAL.CPP
+ *
+ * Modification History:
+ *
+ *   Date        Name        Description
+ *   9/23/2003   mehran      posted to icu-design
+ *   10/1/2012   roozbeh     Fixed algorithm and heavily refactored and rewrote
+ *                           based on the implementation of Gregorian
+ *****************************************************************************
+ */
+
+--- SOURCE: extension/icu/third_party/icu/i18n/persncal.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+ ******************************************************************************
+ * Copyright (C) 2003-2013, International Business Machines Corporation
+ * and others. All Rights Reserved.
+ ******************************************************************************
+ *
+ * File PERSNCAL.H
+ *
+ * Modification History:
+ *
+ *   Date        Name        Description
+ *   9/23/2003 mehran        posted to icu-design
+ *****************************************************************************
+ */
+
+--- SOURCE: extension/icu/third_party/icu/i18n/plurfmt.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2009-2015, International Business Machines Corporation and
+* others. All Rights Reserved.
+*******************************************************************************
+*
+* File PLURFMT.CPP
+*******************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/plurrule.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2007-2016, International Business Machines Corporation and
+* others. All Rights Reserved.
+*******************************************************************************
+*
+* File plurrule.cpp
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/plurrule_impl.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2007-2016, International Business Machines Corporation and
+* others. All Rights Reserved.
+*******************************************************************************
+*
+* File PLURRULE_IMPL.H
+*
+*******************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/quantityformatter.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+******************************************************************************
+* Copyright (C) 2014-2016, International Business Machines
+* Corporation and others.  All Rights Reserved.
+******************************************************************************
+* quantityformatter.cpp
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/quantityformatter.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+******************************************************************************
+* Copyright (C) 2014-2016, International Business Machines
+* Corporation and others.  All Rights Reserved.
+******************************************************************************
+* quantityformatter.h
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/rbnf.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 1997-2015, International Business Machines Corporation
+* and others. All Rights Reserved.
+*******************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/rbt.h ---
+// // © 2016 and later: Unicode, Inc. and others.
+// // License & terms of use: http://www.unicode.org/copyright.html
+// /*
+// **********************************************************************
+// *   Copyright (C) 1999-2007, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// **********************************************************************
+// *   Date        Name        Description
+// *   11/17/99    aliu        Creation.
+// **********************************************************************
+// */
+// #ifndef RBT_H
+// #define RBT_H
+
+// #include "unicode/utypes.h"
+
+// #if !UCONFIG_NO_TRANSLITERATION
+
+// #include "unicode/translit.h"
+// #include "unicode/utypes.h"
+// #include "unicode/parseerr.h"
+// #include "unicode/udata.h"
+
+// #define U_ICUDATA_TRANSLIT U_ICUDATA_NAME U_TREE_SEPARATOR_STRING "translit"
+
+// U_NAMESPACE_BEGIN
+
+// class TransliterationRuleData;
+
+// /**
+//  * <code>RuleBasedTransliterator</code> is a transliterator
+//  * built from a set of rules as defined for
+//  * Transliterator::createFromRules().
+//  * See the C++ class Transliterator documentation for the rule syntax.
+//  *
+//  * @author Alan Liu
+//  * @internal Use transliterator factory methods instead since this class will be removed in that release.
+//  */
+// class RuleBasedTransliterator : public Transliterator {
+// private:
+//     /**
+//      * The data object is immutable, so we can freely share it with
+//      * other instances of RBT, as long as we do NOT own this object.
+//      *  TODO:  data is no longer immutable.  See bugs #1866, 2155
+//      */
+//     TransliterationRuleData* fData;
+
+//     /**
+//      * If true, we own the data object and must delete it.
+//      */
+//     UBool isDataOwned;
+
+// public:
+
+//     /**
+//      * Constructs a new transliterator from the given rules.
+//      * @param rules rules, separated by ';'
+//      * @param direction either FORWARD or REVERSE.
+//      * @exception IllegalArgumentException if rules are malformed.
+//      * @internal Use transliterator factory methods instead since this class will be removed in that release.
+//      */
+//     RuleBasedTransliterator(const UnicodeString& id,
+//                             const UnicodeString& rules,
+//                             UTransDirection direction,
+//                             UnicodeFilter* adoptedFilter,
+//                             UParseError& parseError,
+//                             UErrorCode& status);
+
+//     /**
+//      * Constructs a new transliterator from the given rules.
+//      * @param rules rules, separated by ';'
+//      * @param direction either FORWARD or REVERSE.
+//      * @exception IllegalArgumentException if rules are malformed.
+//      * @internal Use transliterator factory methods instead since this class will be removed in that release.
+//      */
+//     /*RuleBasedTransliterator(const UnicodeString& id,
+//                             const UnicodeString& rules,
+//                             UTransDirection direction,
+//                             UnicodeFilter* adoptedFilter,
+//                             UErrorCode& status);*/
+
+//     /**
+//      * Covenience constructor with no filter.
+//      * @internal Use transliterator factory methods instead since this class will be removed in that release.
+//      */
+//     /*RuleBasedTransliterator(const UnicodeString& id,
+//                             const UnicodeString& rules,
+//                             UTransDirection direction,
+//                             UErrorCode& status);*/
+
+//     /**
+//      * Covenience constructor with no filter and FORWARD direction.
+//      * @internal Use transliterator factory methods instead since this class will be removed in that release.
+//      */
+//     /*RuleBasedTransliterator(const UnicodeString& id,
+//                             const UnicodeString& rules,
+//                             UErrorCode& status);*/
+
+//     /**
+//      * Covenience constructor with FORWARD direction.
+
+--- SOURCE: extension/icu/third_party/icu/i18n/rbt_data.h ---
+// // © 2016 and later: Unicode, Inc. and others.
+// // License & terms of use: http://www.unicode.org/copyright.html
+// /*
+// **********************************************************************
+// * Copyright (C) 1999-2007, International Business Machines Corporation
+// * and others. All Rights Reserved.
+// **********************************************************************
+// *   Date        Name        Description
+// *   11/17/99    aliu        Creation.
+// **********************************************************************
+// */
+// #ifndef RBT_DATA_H
+// #define RBT_DATA_H
+
+// #include "unicode/utypes.h"
+// #include "unicode/uclean.h"
+
+// #if !UCONFIG_NO_TRANSLITERATION
+
+// #include "unicode/uobject.h"
+// #include "rbt_set.h"
+// #include "hash.h"
+
+// U_NAMESPACE_BEGIN
+
+// class UnicodeFunctor;
+// class UnicodeMatcher;
+// class UnicodeReplacer;
+
+// /**
+//  * The rule data for a RuleBasedTransliterators.  RBT objects hold
+//  * a const pointer to a TRD object that they do not own.  TRD objects
+//  * are essentially the parsed rules in compact, usable form.  The
+//  * TRD objects themselves are held for the life of the process in
+//  * a static cache owned by Transliterator.
+//  *
+//  * This class' API is a little asymmetric.  There is a method to
+//  * define a variable, but no way to define a set.  This is because the
+//  * sets are defined by the parser in a UVector, and the vector is
+//  * copied into a fixed-size array here.  Once this is done, no new
+//  * sets may be defined.  In practice, there is no need to do so, since
+//  * generating the data and using it are discrete phases.  When there
+//  * is a need to access the set data during the parse phase, another
+//  * data structure handles this.  See the parsing code for more
+//  * details.
+//  */
+// class TransliterationRuleData : public UMemory {
+
+// public:
+
+//     // PUBLIC DATA MEMBERS
+
+//     /**
+//      * Rule table.  May be empty.
+//      */
+//     TransliterationRuleSet ruleSet;
+
+//     /**
+//      * Map variable name (String) to variable (UnicodeString).  A variable name
+//      * corresponds to zero or more characters, stored in a UnicodeString in
+//      * this hash.  One or more of these chars may also correspond to a
+//      * UnicodeMatcher, in which case the character in the UnicodeString in this hash is
+//      * a stand-in: it is an index for a secondary lookup in
+//      * data.variables.  The stand-in also represents the UnicodeMatcher in
+//      * the stored rules.
+//      */
+//     Hashtable variableNames;
+
+//     /**
+//      * Map category variable (UChar) to set (UnicodeFunctor).
+//      * Variables that correspond to a set of characters are mapped
+//      * from variable name to a stand-in character in data.variableNames.
+//      * The stand-in then serves as a key in this hash to lookup the
+//      * actual UnicodeFunctor object.  In addition, the stand-in is
+//      * stored in the rule text to represent the set of characters.
+//      * variables[i] represents character (variablesBase + i).
+//      */
+//     UnicodeFunctor** variables;
+
+//     /**
+//      * Flag that indicates whether the variables are owned (if a single
+//      * call to Transliterator::createFromRules() produces a CompoundTransliterator
+//      * with more than one RuleBasedTransliterator as children, they all share
+//      * the same variables list, so only the first one is considered to own
+//      * the variables)
+//      */
+//     UBool variablesAreOwned;
+
+//     /**
+//      * The character that represents variables[0].  Characters
+//      * variablesBase through variablesBase +
+//      * variablesLength - 1 represent UnicodeFunctor objects.
+//      */
+//     UChar variablesBase;
+
+//     /**
+//      * The length of variables.
+//      */
+//     int32_t variablesLength;
+
+--- SOURCE: extension/icu/third_party/icu/i18n/rbt_pars.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+**********************************************************************
+* Copyright (C) 1999-2011, International Business Machines Corporation
+* and others. All Rights Reserved.
+**********************************************************************
+*   Date        Name        Description
+*   11/17/99    aliu        Creation.
+**********************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/rbt_set.h ---
+// // © 2016 and later: Unicode, Inc. and others.
+// // License & terms of use: http://www.unicode.org/copyright.html
+// /*
+// **********************************************************************
+// * Copyright (C) 1999-2007, International Business Machines Corporation
+// * and others. All Rights Reserved.
+// **********************************************************************
+// *   Date        Name        Description
+// *   11/17/99    aliu        Creation.
+// **********************************************************************
+// */
+// #ifndef RBT_SET_H
+// #define RBT_SET_H
+
+// #include "unicode/utypes.h"
+
+// #if !UCONFIG_NO_TRANSLITERATION
+
+// #include "unicode/uobject.h"
+// #include "unicode/utrans.h"
+// #include "uvector.h"
+
+// U_NAMESPACE_BEGIN
+
+// class Replaceable;
+// class TransliterationRule;
+// class TransliterationRuleData;
+// class UnicodeFilter;
+// class UnicodeString;
+// class UnicodeSet;
+
+// /**
+//  * A set of rules for a <code>RuleBasedTransliterator</code>.
+//  * @author Alan Liu
+//  */
+// class TransliterationRuleSet : public UMemory {
+//     /**
+//      * Vector of rules, in the order added.  This is used while the
+//      * rule set is getting built.  After that, freeze() reorders and
+//      * indexes the rules into rules[].  Any given rule is stored once
+//      * in ruleVector, and one or more times in rules[].  ruleVector
+//      * owns and deletes the rules.
+//      */
+//     UVector* ruleVector;
+
+//     /**
+//      * Sorted and indexed table of rules.  This is created by freeze()
+//      * from the rules in ruleVector.  It contains alias pointers to
+//      * the rules in ruleVector.  It is zero before freeze() is called
+//      * and non-zero thereafter.
+//      */
+//     TransliterationRule** rules;
+
+//     /**
+//      * Index table.  For text having a first character c, compute x = c&0xFF.
+//      * Now use rules[index[x]..index[x+1]-1].  This index table is created by
+//      * freeze().  Before freeze() is called it contains garbage.
+//      */
+//     int32_t index[257];
+
+//     /**
+//      * Length of the longest preceding context
+//      */
+//     int32_t maxContextLength;
+
+// public:
+
+//     /**
+//      * Construct a new empty rule set.
+//      * @param status    Output parameter filled in with success or failure status.
+//      */
+//     TransliterationRuleSet(UErrorCode& status);
+
+//     /**
+//      * Copy constructor.
+//      */
+//     TransliterationRuleSet(const TransliterationRuleSet&);
+
+//     /**
+//      * Destructor.
+//      */
+//     virtual ~TransliterationRuleSet();
+
+//     /**
+//      * Change the data object that this rule belongs to.  Used
+//      * internally by the TransliterationRuleData copy constructor.
+//      * @param data    the new data value to be set.
+//      */
+//     void setData(const TransliterationRuleData* data);
+
+//     /**
+//      * Return the maximum context length.
+//      * @return the length of the longest preceding context.
+//      */
+//     virtual int32_t getMaximumContextLength(void) const;
+
+//     /**
+//      * Add a rule to this set.  Rules are added in order, and order is
+//      * significant.  The last call to this method must be followed by
+//      * a call to <code>freeze()</code> before the rule set is used.
+
+--- SOURCE: extension/icu/third_party/icu/i18n/rbtz.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2007-2013, International Business Machines Corporation and
+* others. All Rights Reserved.
+*******************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/region.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2014-2016, International Business Machines Corporation and
+* others. All Rights Reserved.
+*******************************************************************************
+*
+*
+* File REGION.CPP
+*
+* Modification History:*
+*   Date        Name        Description
+* 01/15/13      Emmons      Original Port from ICU4J
+********************************************************************************
+*/
+
+/**
+ * \file
+ * \brief C++ API: Region classes (territory containment)
+ */
+
+--- SOURCE: extension/icu/third_party/icu/i18n/region_impl.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2013, International Business Machines Corporation and         *
+* others. All Rights Reserved.                                                *
+*******************************************************************************
+*
+* File REGION_IMPL.H
+*
+*******************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/reldatefmt.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+******************************************************************************
+* Copyright (C) 2014-2016, International Business Machines Corporation and
+* others. All Rights Reserved.
+******************************************************************************
+*
+* File reldatefmt.cpp
+******************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/reldtfmt.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2007-2016, International Business Machines Corporation and
+* others. All Rights Reserved.
+*******************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/reldtfmt.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2007-2016, International Business Machines Corporation and    *
+* others. All Rights Reserved.                                                *
+*******************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/remtrans.h ---
+// // © 2016 and later: Unicode, Inc. and others.
+// // License & terms of use: http://www.unicode.org/copyright.html
+// /*
+// **********************************************************************
+// *   Copyright (c) 2001-2007, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// **********************************************************************
+// *   Date        Name        Description
+// *   04/02/2001  aliu        Creation.
+// **********************************************************************
+// */
+// #ifndef REMTRANS_H
+// #define REMTRANS_H
+
+// #include "unicode/utypes.h"
+
+// #if !UCONFIG_NO_TRANSLITERATION
+
+// #include "unicode/translit.h"
+
+// U_NAMESPACE_BEGIN
+
+// /**
+//  * A transliterator that removes text.
+//  * @author Alan Liu
+//  */
+// class RemoveTransliterator : public Transliterator {
+
+// public:
+
+//     /**
+//      * Constructs a transliterator.
+//      */
+//     RemoveTransliterator();
+
+//     /**
+//      * Destructor.
+//      */
+//     virtual ~RemoveTransliterator();
+
+//     /**
+//      * System registration hook.
+//      */
+//     static void registerIDs();
+
+//     /**
+//      * Transliterator API.
+//      * @return A copy of the object.
+//      */
+//     virtual RemoveTransliterator* clone() const;
+
+//     /**
+//      * Implements {@link Transliterator#handleTransliterate}.
+//      * @param text          the buffer holding transliterated and
+//      *                      untransliterated text
+//      * @param offset        the start and limit of the text, the position
+//      *                      of the cursor, and the start and limit of transliteration.
+//      * @param incremental   if true, assume more text may be coming after
+//      *                      pos.contextLimit. Otherwise, assume the text is complete.
+//      */
+//     virtual void handleTransliterate(Replaceable& text, UTransPosition& offset,
+//                                      UBool isIncremental) const;
+
+//     /**
+//      * ICU "poor man's RTTI", returns a UClassID for the actual class.
+//      */
+//     virtual UClassID getDynamicClassID() const;
+
+//     /**
+//      * ICU "poor man's RTTI", returns a UClassID for this class.
+//      */
+//     U_I18N_API static UClassID U_EXPORT2 getStaticClassID();
+
+// };
+
+// U_NAMESPACE_END
+
+// #endif /* #if !UCONFIG_NO_TRANSLITERATION */
+
+// #endif
+
+--- SOURCE: extension/icu/third_party/icu/i18n/rulebasedcollator.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 1996-2015, International Business Machines
+* Corporation and others.  All Rights Reserved.
+*******************************************************************************
+* rulebasedcollator.cpp
+*
+* (replaced the former tblcoll.cpp)
+*
+* created on: 2012feb14 with new and old collation code
+* created by: Markus W. Scherer
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/scientificnumberformatter.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+**********************************************************************
+* Copyright (c) 2014, International Business Machines
+* Corporation and others.  All Rights Reserved.
+**********************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/search.cpp ---
+// // © 2016 and later: Unicode, Inc. and others.
+// // License & terms of use: http://www.unicode.org/copyright.html
+// /*
+// **********************************************************************
+// *   Copyright (C) 2001-2008,2010 IBM and others. All rights reserved.
+// **********************************************************************
+// *   Date        Name        Description
+// *  03/22/2000   helena      Creation.
+// **********************************************************************
+// */
+
+// #include "unicode/utypes.h"
+
+// #if !UCONFIG_NO_COLLATION && !UCONFIG_NO_BREAK_ITERATION
+
+// // #include "unicode/brkiter.h"
+// #include "unicode/schriter.h"
+// #include "unicode/search.h"
+// #include "usrchimp.h"
+// #include "cmemory.h"
+
+// // public constructors and destructors -----------------------------------
+// U_NAMESPACE_BEGIN
+
+// SearchIterator::SearchIterator(const SearchIterator &other)
+//     : UObject(other)
+// {
+//     m_breakiterator_            = other.m_breakiterator_;
+//     m_text_                     = other.m_text_;
+//     m_search_                   = (USearch *)uprv_malloc(sizeof(USearch));
+//     m_search_->breakIter        = other.m_search_->breakIter;
+//     m_search_->isCanonicalMatch = other.m_search_->isCanonicalMatch;
+//     m_search_->isOverlap        = other.m_search_->isOverlap;
+//     m_search_->elementComparisonType = other.m_search_->elementComparisonType;
+//     m_search_->matchedIndex     = other.m_search_->matchedIndex;
+//     m_search_->matchedLength    = other.m_search_->matchedLength;
+//     m_search_->text             = other.m_search_->text;
+//     m_search_->textLength       = other.m_search_->textLength;
+// }
+
+// SearchIterator::~SearchIterator()
+// {
+//     if (m_search_ != NULL) {
+//         uprv_free(m_search_);
+//     }
+// }
+
+// // public get and set methods ----------------------------------------
+
+// void SearchIterator::setAttribute(USearchAttribute       attribute,
+//                                   USearchAttributeValue  value,
+//                                   UErrorCode            &status)
+// {
+//     if (U_SUCCESS(status)) {
+//         switch (attribute)
+//         {
+//         case USEARCH_OVERLAP :
+//             m_search_->isOverlap = (value == USEARCH_ON ? TRUE : FALSE);
+//             break;
+//         case USEARCH_CANONICAL_MATCH :
+//             m_search_->isCanonicalMatch = (value == USEARCH_ON ? TRUE : FALSE);
+//             break;
+//         case USEARCH_ELEMENT_COMPARISON :
+//             if (value == USEARCH_PATTERN_BASE_WEIGHT_IS_WILDCARD || value == USEARCH_ANY_BASE_WEIGHT_IS_WILDCARD) {
+//                 m_search_->elementComparisonType = (int16_t)value;
+//             } else {
+//                 m_search_->elementComparisonType = 0;
+//             }
+//             break;
+//         default:
+//             status = U_ILLEGAL_ARGUMENT_ERROR;
+//         }
+//     }
+//     if (value == USEARCH_ATTRIBUTE_VALUE_COUNT) {
+//         status = U_ILLEGAL_ARGUMENT_ERROR;
+//     }
+// }
+
+// USearchAttributeValue SearchIterator::getAttribute(
+//                                           USearchAttribute  attribute) const
+// {
+//     switch (attribute) {
+//     case USEARCH_OVERLAP :
+//         return (m_search_->isOverlap == TRUE ? USEARCH_ON : USEARCH_OFF);
+//     case USEARCH_CANONICAL_MATCH :
+//         return (m_search_->isCanonicalMatch == TRUE ? USEARCH_ON :
+//                                                                 USEARCH_OFF);
+//     case USEARCH_ELEMENT_COMPARISON :
+//         {
+//             int16_t value = m_search_->elementComparisonType;
+//             if (value == USEARCH_PATTERN_BASE_WEIGHT_IS_WILDCARD || value == USEARCH_ANY_BASE_WEIGHT_IS_WILDCARD) {
+//                 return (USearchAttributeValue)value;
+//             } else {
+//                 return USEARCH_STANDARD_ELEMENT_COMPARISON;
+//             }
+//         }
+//     default :
+//         return USEARCH_DEFAULT;
+//     }
+// }
+
+--- SOURCE: extension/icu/third_party/icu/i18n/selfmt.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/********************************************************************
+ * COPYRIGHT:
+ * Copyright (c) 1997-2012, International Business Machines Corporation and
+ * others. All Rights Reserved.
+ * Copyright (C) 2010 , Yahoo! Inc.
+ ********************************************************************
+ *
+ * File SELFMT.CPP
+ *
+ * Modification History:
+ *
+ *   Date        Name        Description
+ *   11/11/09    kirtig      Finished first cut of implementation.
+ *   11/16/09    kirtig      Improved version
+ ********************************************************************/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/selfmtimpl.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/********************************************************************
+ * COPYRIGHT:
+ * Copyright (c) 1997-2011, International Business Machines Corporation and
+ * others. All Rights Reserved.
+ * Copyright (C) 2010 , Yahoo! Inc.
+ ********************************************************************
+ * File selectfmtimpl.h
+ *
+ *   Date        Name        Description
+ *   11/11/09    kirtig      Finished first cut of implementation.
+ *********************************************************************/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/sharedbreakiterator.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+******************************************************************************
+* Copyright (C) 2014, International Business Machines
+* Corporation and others.  All Rights Reserved.
+******************************************************************************
+* sharedbreakiterator.h
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/sharedcalendar.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+******************************************************************************
+* Copyright (C) 2014, International Business Machines
+* Corporation and others.  All Rights Reserved.
+******************************************************************************
+* sharedcalendar.h
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/shareddateformatsymbols.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+******************************************************************************
+* Copyright (C) 2014, International Business Machines
+* Corporation and others.  All Rights Reserved.
+******************************************************************************
+* shareddateformatsymbols.h
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/sharednumberformat.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+******************************************************************************
+* Copyright (C) 2014, International Business Machines
+* Corporation and others.  All Rights Reserved.
+******************************************************************************
+* sharednumberformat.h
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/sharedpluralrules.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+******************************************************************************
+* Copyright (C) 2014, International Business Machines
+* Corporation and others.  All Rights Reserved.
+******************************************************************************
+* sharedpluralrules.h
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/simpletz.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+ *******************************************************************************
+ * Copyright (C) 1997-2013, International Business Machines Corporation and
+ * others. All Rights Reserved.
+ *******************************************************************************
+ *
+ * File SIMPLETZ.H
+ *
+ * Modification History:
+ *
+ *   Date        Name        Description
+ *   12/05/96    clhuang     Creation.
+ *   04/21/97    aliu        Fixed miscellaneous bugs found by inspection and
+ *                           testing.
+ *   07/29/97    aliu        Ported source bodies back from Java version with
+ *                           numerous feature enhancements and bug fixes.
+ *   08/10/98    stephen     JDK 1.2 sync.
+ *   09/17/98    stephen     Fixed getOffset() for last hour of year and DST
+ *   12/02/99    aliu        Added TimeMode and constructor and setStart/EndRule
+ *   …10633 tokens truncated…       Name        Description
+* 02/15/2001  synwee      Modified all methods to process its own function
+*                         instead of calling the equivalent c++ api (coleitr.h)
+* 2012-2014   markus      Rewritten in C++ again.
+******************************************************************************/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/udat.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+*   Copyright (C) 1996-2015, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*******************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/udateintervalformat.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*****************************************************************************************
+* Copyright (C) 2010-2011, International Business Machines
+* Corporation and others. All Rights Reserved.
+*****************************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/udatpg.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+*
+*   Copyright (C) 2009-2015, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*
+*******************************************************************************
+*   file name:  udatpg.cpp
+*   encoding:   UTF-8
+*   tab size:   8 (not used)
+*   indentation:4
+*
+*   created on: 2007jul30
+*   created by: Markus W. Scherer
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/ufieldpositer.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*****************************************************************************************
+* Copyright (C) 2015, International Business Machines
+* Corporation and others. All Rights Reserved.
+*****************************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/uitercollationiterator.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2012-2014, International Business Machines
+* Corporation and others.  All Rights Reserved.
+*******************************************************************************
+* uitercollationiterator.cpp
+*
+* created on: 2012sep23 (from utf16collationiterator.cpp)
+* created by: Markus W. Scherer
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/uitercollationiterator.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2012-2016, International Business Machines
+* Corporation and others.  All Rights Reserved.
+*******************************************************************************
+* uitercollationiterator.h
+*
+* created on: 2012sep23 (from utf16collationiterator.h)
+* created by: Markus W. Scherer
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/ulistformatter.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*****************************************************************************************
+* Copyright (C) 2015, International Business Machines
+* Corporation and others. All Rights Reserved.
+*****************************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/ulocdata.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+******************************************************************************
+*                                                                            *
+* Copyright (C) 2003-2016, International Business Machines                   *
+*                Corporation and others. All Rights Reserved.                *
+*                                                                            *
+******************************************************************************
+*   file name:  ulocdata.c
+*   encoding:   UTF-8
+*   tab size:   8 (not used)
+*   indentation:4
+*
+*   created on: 2003Oct21
+*   created by: Ram Viswanadha,John Emmons
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/umsg.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+*
+*   Copyright (C) 1999-2012, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*
+*******************************************************************************
+*   file name:  umsg.cpp
+*   encoding:   UTF-8
+*   tab size:   8 (not used)
+*   indentation:4
+*
+* This is a C wrapper to MessageFormat C++ API.
+*
+*   Change history:
+*
+*   08/5/2001  Ram         Added C wrappers for C++ API. Changed implementation of old API's
+*                          Removed pattern parser.
+* 
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/umsg_imp.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+**********************************************************************
+*   Copyright (C) 2001, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+**********************************************************************
+*   file name:  umsg_imp.h
+*   encoding:   UTF-8
+*   tab size:   8 (not used)
+*   indentation:4
+*
+*   created on: 2001jun22
+*   created by: George Rhoten
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/unesctrn.h ---
+// // © 2016 and later: Unicode, Inc. and others.
+// // License & terms of use: http://www.unicode.org/copyright.html
+// /*
+//  **********************************************************************
+//  *   Copyright (c) 2001-2007, International Business Machines
+//  *   Corporation and others.  All Rights Reserved.
+//  **********************************************************************
+//  *   Date        Name        Description
+//  *   11/20/2001  aliu        Creation.
+//  **********************************************************************
+//  */
+// #ifndef UNESCTRN_H
+// #define UNESCTRN_H
+
+// #include "unicode/utypes.h"
+
+// #if !UCONFIG_NO_TRANSLITERATION
+
+// #include "unicode/translit.h"
+
+// U_NAMESPACE_BEGIN
+
+// /**
+//  * A transliterator that converts Unicode escape forms to the
+//  * characters they represent.  Escape forms have a prefix, a suffix, a
+//  * radix, and minimum and maximum digit counts.
+//  *
+//  * <p>This class is package private.  It registers several standard
+//  * variants with the system which are then accessed via their IDs.
+//  *
+//  * @author Alan Liu
+//  */
+// class UnescapeTransliterator : public Transliterator {
+
+//  private:
+
+//     /**
+//      * The encoded pattern specification.  The pattern consists of
+//      * zero or more forms.  Each form consists of a prefix, suffix,
+//      * radix, minimum digit count, and maximum digit count.  These
+//      * values are stored as a five character header.  That is, their
+//      * numeric values are cast to 16-bit characters and stored in the
+//      * string.  Following these five characters, the prefix
+//      * characters, then suffix characters are stored.  Each form thus
+//      * takes n+5 characters, where n is the total length of the prefix
+//      * and suffix.  The end is marked by a header of length one
+//      * consisting of the character END.
+//      */
+//     UChar* spec; // owned; may not be NULL
+
+//  public:
+
+//     /**
+//      * Registers standard variants with the system.  Called by
+//      * Transliterator during initialization.
+//      */
+//     static void registerIDs();
+
+//     /**
+//      * Constructor.  Takes the encoded spec array (does not adopt it).
+//      * @param ID   the string identifier for this transliterator
+//      * @param spec the encoded spec array
+//      */
+//     UnescapeTransliterator(const UnicodeString& ID,
+//                            const UChar *spec);
+
+//     /**
+//      * Copy constructor.
+//      */
+//     UnescapeTransliterator(const UnescapeTransliterator&);
+
+//     /**
+//      * Destructor.
+//      */
+//     virtual ~UnescapeTransliterator();
+
+//     /**
+//      * Transliterator API.
+//      */
+//     virtual UnescapeTransliterator* clone() const;
+
+//     /**
+//      * ICU "poor man's RTTI", returns a UClassID for the actual class.
+//      */
+//     virtual UClassID getDynamicClassID() const;
+
+//     /**
+//      * ICU "poor man's RTTI", returns a UClassID for this class.
+//      */
+//     U_I18N_API static UClassID U_EXPORT2 getStaticClassID();
+
+//  protected:
+
+//     /**
+//      * Implements {@link Transliterator#handleTransliterate}.
+//      * @param text        the buffer holding transliterated and
+//      *                    untransliterated text
+//      * @param offset      the start and limit of the text, the position
+//      *                    of the cursor, and the start and limit of transliteration.
+//      * @param incremental if true, assume more text may be coming after
+
+--- SOURCE: extension/icu/third_party/icu/i18n/uni2name.h ---
+// // © 2016 and later: Unicode, Inc. and others.
+// // License & terms of use: http://www.unicode.org/copyright.html
+// /*
+// **********************************************************************
+// *   Copyright (C) 2001-2007, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// **********************************************************************
+// *   Date        Name        Description
+// *   06/06/01    aliu        Creation.
+// **********************************************************************
+// */
+// #ifndef UNI2NAME_H
+// #define UNI2NAME_H
+
+// #include "unicode/utypes.h"
+
+// #if !UCONFIG_NO_TRANSLITERATION
+
+// #include "unicode/translit.h"
+
+// U_NAMESPACE_BEGIN
+
+// /**
+//  * A transliterator that performs character to name mapping.
+//  * It generates the Perl syntax \N{name}.
+//  * @author Alan Liu
+//  */
+// class UnicodeNameTransliterator : public Transliterator {
+
+//  public:
+
+//     /**
+//      * Constructs a transliterator.
+//      * @param adoptedFilter the filter to be adopted.
+//      */
+//     UnicodeNameTransliterator(UnicodeFilter* adoptedFilter = 0);
+
+//     /**
+//      * Destructor.
+//      */
+//     virtual ~UnicodeNameTransliterator();
+
+//     /**
+//      * Copy constructor.
+//      */
+//     UnicodeNameTransliterator(const UnicodeNameTransliterator&);
+
+//     /**
+//      * Transliterator API.
+//      */
+//     virtual UnicodeNameTransliterator* clone() const;
+
+//     /**
+//      * ICU "poor man's RTTI", returns a UClassID for the actual class.
+//      */
+//     virtual UClassID getDynamicClassID() const;
+
+//     /**
+//      * ICU "poor man's RTTI", returns a UClassID for this class.
+//      */
+//     U_I18N_API static UClassID U_EXPORT2 getStaticClassID();
+
+//  protected:
+
+//     /**
+//      * Implements {@link Transliterator#handleTransliterate}.
+//      * @param text        the buffer holding transliterated and
+//      *                    untransliterated text
+//      * @param offset      the start and limit of the text, the position
+//      *                    of the cursor, and the start and limit of transliteration.
+//      * @param incremental if true, assume more text may be coming after
+//      *                    pos.contextLimit.  Otherwise, assume the text is complete.
+//      */
+//     virtual void handleTransliterate(Replaceable& text, UTransPosition& offset,
+//                                      UBool isIncremental) const;
+
+// private:
+//     /**
+//      * Assignment operator.
+//      */
+//     UnicodeNameTransliterator& operator=(const UnicodeNameTransliterator&);
+
+// };
+
+// U_NAMESPACE_END
+
+// #endif /* #if !UCONFIG_NO_TRANSLITERATION */
+
+// #endif
+
+--- SOURCE: extension/icu/third_party/icu/i18n/unicode/alphaindex.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+*
+*   Copyright (C) 2011-2014 International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*
+*******************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/unicode/basictz.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2007-2013, International Business Machines Corporation and
+* others. All Rights Reserved.
+*******************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/unicode/calendar.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+********************************************************************************
+*   Copyright (C) 1997-2014, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+********************************************************************************
+*
+* File CALENDAR.H
+*
+* Modification History:
+*
+*   Date        Name        Description
+*   04/22/97    aliu        Expanded and corrected comments and other header
+*                           contents.
+*   05/01/97    aliu        Made equals(), before(), after() arguments const.
+*   05/20/97    aliu        Replaced fAreFieldsSet with fAreFieldsInSync and
+*                           fAreAllFieldsSet.
+*   07/27/98    stephen     Sync up with JDK 1.2
+*   11/15/99    weiv        added YEAR_WOY and DOW_LOCAL
+*                           to EDateFields
+*    8/19/2002  srl         Removed Javaisms
+*   11/07/2003  srl         Update, clean up documentation.
+********************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/unicode/choicfmt.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+********************************************************************************
+*   Copyright (C) 1997-2013, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+********************************************************************************
+*
+* File CHOICFMT.H
+*
+* Modification History:
+*
+*   Date        Name        Description
+*   02/19/97    aliu        Converted from java.
+*   03/20/97    helena      Finished first cut of implementation and got rid
+*                           of nextDouble/previousDouble and replaced with
+*                           boolean array.
+*   4/10/97     aliu        Clean up.  Modified to work on AIX.
+*   8/6/97      nos         Removed overloaded constructor, member var 'buffer'.
+*   07/22/98    stephen     Removed operator!= (implemented in Format)
+********************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/unicode/coleitr.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+ ******************************************************************************
+ *   Copyright (C) 1997-2014, International Business Machines
+ *   Corporation and others.  All Rights Reserved.
+ ******************************************************************************
+ */
+
+/**
+ * \file
+ * \brief C++ API: Collation Element Iterator.
+ */
+
+/**
+* File coleitr.h
+*
+* Created by: Helena Shih
+*
+* Modification History:
+*
+*  Date       Name        Description
+*
+*  8/18/97    helena      Added internal API documentation.
+* 08/03/98    erm         Synched with 1.2 version CollationElementIterator.java
+* 12/10/99    aliu        Ported Thai collation support from Java.
+* 01/25/01    swquek      Modified into a C++ wrapper calling C APIs (ucoliter.h)
+* 02/19/01    swquek      Removed CollationElementsIterator() since it is
+*                         private constructor and no calls are made to it
+* 2012-2014   markus      Rewritten in C++ again.
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/unicode/coll.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+******************************************************************************
+*   Copyright (C) 1996-2016, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+******************************************************************************
+*/
+
+/**
+ * \file
+ * \brief C++ API: Collation Service.
+ */
+
+/**
+* File coll.h
+*
+* Created by: Helena Shih
+*
+* Modification History:
+*
+*  Date        Name        Description
+* 02/5/97      aliu        Modified createDefault to load collation data from
+*                          binary files when possible.  Added related methods
+*                          createCollationFromFile, chopLocale, createPathName.
+* 02/11/97     aliu        Added members addToCache, findInCache, and fgCache.
+* 02/12/97     aliu        Modified to create objects from RuleBasedCollator cache.
+*                          Moved cache out of Collation class.
+* 02/13/97     aliu        Moved several methods out of this class and into
+*                          RuleBasedCollator, with modifications.  Modified
+*                          createDefault() to call new RuleBasedCollator(Locale&)
+*                          constructor.  General clean up and documentation.
+* 02/20/97     helena      Added clone, operator==, operator!=, operator=, copy
+*                          constructor and getDynamicClassID.
+* 03/25/97     helena      Updated with platform independent data types.
+* 05/06/97     helena      Added memory allocation error detection.
+* 06/20/97     helena      Java class name change.
+* 09/03/97     helena      Added createCollationKeyValues().
+* 02/10/98     damiba      Added compare() with length as parameter.
+* 04/23/99     stephen     Removed EDecompositionMode, merged with
+*                          Normalizer::EMode.
+* 11/02/99     helena      Collator performance enhancements.  Eliminates the
+*                          UnicodeString construction and special case for NO_OP.
+* 11/23/99     srl         More performance enhancements. Inlining of
+*                          critical accessors.
+* 05/15/00     helena      Added version information API.
+* 01/29/01     synwee      Modified into a C++ wrapper which calls C apis
+*                          (ucol.h).
+* 2012-2014    markus      Rewritten in C++ again.
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/unicode/compactdecimalformat.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+********************************************************************************
+*   Copyright (C) 2012-2016, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+********************************************************************************
+*
+* File COMPACTDECIMALFORMAT.H
+********************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/unicode/curramt.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+**********************************************************************
+* Copyright (c) 2004-2006, International Business Machines
+* Corporation and others.  All Rights Reserved.
+**********************************************************************
+* Author: Alan Liu
+* Created: April 26, 2004
+* Since: ICU 3.0
+**********************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/unicode/currpinf.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+ *******************************************************************************
+ * Copyright (C) 2009-2015, International Business Machines Corporation and    *
+ * others. All Rights Reserved.                                                *
+ *******************************************************************************
+ */
+
+--- SOURCE: extension/icu/third_party/icu/i18n/unicode/currunit.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+**********************************************************************
+* Copyright (c) 2004-2014, International Business Machines
+* Corporation and others.  All Rights Reserved.
+**********************************************************************
+* Author: Alan Liu
+* Created: April 26, 2004
+* Since: ICU 3.0
+**********************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/unicode/datefmt.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+ ********************************************************************************
+ *   Copyright (C) 1997-2016, International Business Machines
+ *   Corporation and others.  All Rights Reserved.
+ ********************************************************************************
+ *
+ * File DATEFMT.H
+ *
+ * Modification History:
+ *
+ *   Date        Name        Description
+ *   02/19/97    aliu        Converted from java.
+ *   04/01/97    aliu        Added support for centuries.
+ *   07/23/98    stephen     JDK 1.2 sync
+ *   11/15/99    weiv        Added support for week of year/day of week formatting
+ ********************************************************************************
+ */
+
+--- SOURCE: extension/icu/third_party/icu/i18n/unicode/dcfmtsym.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+********************************************************************************
+*   Copyright (C) 1997-2016, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+********************************************************************************
+*
+* File DCFMTSYM.H
+*
+* Modification History:
+*
+*   Date        Name        Description
+*   02/19/97    aliu        Converted from java.
+*   03/18/97    clhuang     Updated per C++ implementation.
+*   03/27/97    helena      Updated to pass the simple test after code review.
+*   08/26/97    aliu        Added currency/intl currency symbol support.
+*   07/22/98    stephen     Changed to match C++ style
+*                            currencySymbol -> fCurrencySymbol
+*                            Constants changed from CAPS to kCaps
+*   06/24/99    helena      Integrated Alan's NF enhancements and Java2 bug fixes
+*   09/22/00    grhoten     Marked deprecation tags with a pointer to replacement
+*                            functions.
+********************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/unicode/decimfmt.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+********************************************************************************
+*   Copyright (C) 1997-2016, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+********************************************************************************
+*
+* File DECIMFMT.H
+*
+* Modification History:
+*
+*   Date        Name        Description
+*   02/19/97    aliu        Converted from java.
+*   03/20/97    clhuang     Updated per C++ implementation.
+*   04/03/97    aliu        Rewrote parsing and formatting completely, and
+*                           cleaned up and debugged.  Actually works now.
+*   04/17/97    aliu        Changed DigitCount to int per code review.
+*   07/10/97    helena      Made ParsePosition a class and get rid of the function
+*                           hiding problems.
+*   09/09/97    aliu        Ported over support for exponential formats.
+*   07/20/98    stephen     Changed documentation
+*   01/30/13    emmons      Added Scaling methods
+********************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/unicode/dtfmtsym.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+********************************************************************************
+*   Copyright (C) 1997-2016, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+********************************************************************************
+*
+* File DTFMTSYM.H
+*
+* Modification History:
+*
+*   Date        Name        Description
+*   02/19/97    aliu        Converted from java.
+*    07/21/98    stephen        Added getZoneIndex()
+*                            Changed to match C++ conventions
+********************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/unicode/dtitvfmt.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/********************************************************************************
+* Copyright (C) 2008-2016, International Business Machines Corporation and
+* others. All Rights Reserved.
+*******************************************************************************
+*
+* File DTITVFMT.H
+*
+*******************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/unicode/dtitvinf.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+ *******************************************************************************
+ * Copyright (C) 2008-2016, International Business Machines Corporation and
+ * others. All Rights Reserved.
+ *******************************************************************************
+ *
+ * File DTITVINF.H
+ *
+ *******************************************************************************
+ */
+
+--- SOURCE: extension/icu/third_party/icu/i18n/unicode/dtptngen.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2007-2016, International Business Machines Corporation and
+* others. All Rights Reserved.
+*******************************************************************************
+*
+* File DTPTNGEN.H
+*
+*******************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/unicode/dtrule.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2007-2008, International Business Machines Corporation and         *
+* others. All Rights Reserved.                                                *
+*******************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/unicode/fieldpos.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+ ********************************************************************************
+ *   Copyright (C) 1997-2006, International Business Machines
+ *   Corporation and others.  All Rights Reserved.
+ ********************************************************************************
+ *
+ * File FIELDPOS.H
+ *
+ * Modification History:
+ *
+ *   Date        Name        Description
+ *   02/25/97    aliu        Converted from java.
+ *   03/17/97    clhuang     Updated per Format implementation.
+ *    07/17/98    stephen        Added default/copy ctors, and operators =, ==, !=
+ ********************************************************************************
+ */
+
+// *****************************************************************************
+// This file was generated from the java source file FieldPosition.java
+// *****************************************************************************
+
+--- SOURCE: extension/icu/third_party/icu/i18n/unicode/fmtable.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+********************************************************************************
+*   Copyright (C) 1997-2014, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+********************************************************************************
+*
+* File FMTABLE.H
+*
+* Modification History:
+*
+*   Date        Name        Description
+*   02/29/97    aliu        Creation.
+********************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/unicode/format.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+********************************************************************************
+* Copyright (C) 1997-2011, International Business Machines Corporation and others.
+* All Rights Reserved.
+********************************************************************************
+*
+* File FORMAT.H
+*
+* Modification History:
+*
+*   Date        Name        Description
+*   02/19/97    aliu        Converted from java.
+*   03/17/97    clhuang     Updated per C++ implementation.
+*   03/27/97    helena      Updated to pass the simple test after code review.
+********************************************************************************
+*/
+// *****************************************************************************
+// This file was generated from the java source file Format.java
+// *****************************************************************************
+
+--- SOURCE: extension/icu/third_party/icu/i18n/unicode/fpositer.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+********************************************************************************
+*   Copyright (C) 2010-2012, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+********************************************************************************
+*
+* File attiter.h
+*
+* Modification History:
+*
+*   Date        Name        Description
+*   12/15/2009  dougfelt    Created
+********************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/unicode/gender.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2008-2013, International Business Machines Corporation and
+* others. All Rights Reserved.
+*******************************************************************************
+*
+*
+* File GENDER.H
+*
+* Modification History:*
+*   Date        Name        Description
+*
+********************************************************************************
+*/
+
+

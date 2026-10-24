@@ -48,7 +48,17 @@ jni_object=$(find "$BUILD/CMakeFiles/duckdb_java.dir" -type f -name 'duckdb_java
 [ -n "$jni_object" ] || { printf '%s\n' 'DuckDB JNI entry object was not produced' >&2; exit 1; }
 renamed="$STATIC_OUT/duckdb_java_entry.o"
 cp "$jni_object" "$renamed"
-objcopy --redefine-sym JNI_OnLoad=JNI_OnLoad_duckdb_java --redefine-sym JNI_OnUnload=JNI_OnUnload_duckdb_java "$renamed"
+objcopy --redefine-sym JNI_OnLoad=lmdb_duckdb_legacy_onload --redefine-sym JNI_OnUnload=JNI_OnUnload_duckdb_java "$renamed"
+cat > "$STATIC_OUT/duckdb_onload.c" <<'C'
+#include <jni.h>
+extern jint lmdb_duckdb_legacy_onload(JavaVM *, void *);
+JNIEXPORT jint JNICALL JNI_OnLoad_duckdb_java(JavaVM *vm, void *reserved) {
+    jint version = lmdb_duckdb_legacy_onload(vm, reserved);
+    /* The JNI specification requires 1.8 or newer for statically linked libraries. */
+    return version >= JNI_VERSION_1_1 ? JNI_VERSION_1_8 : version;
+}
+C
+cc -fPIC -O2 -I"$JAVA_HOME/include" -I"$JAVA_HOME/include/linux" -c "$STATIC_OUT/duckdb_onload.c" -o "$STATIC_OUT/duckdb_onload.o"
 archive="$STATIC_OUT/libduckdb_java.a"
 python3 - "$BUILD" "$lib" "$archive" "$renamed" <<'PY'
 from pathlib import Path
@@ -59,7 +69,8 @@ objects = [build / line.strip() for line in query.stdout.splitlines()
            if line.strip().endswith('.o') and 'duckdb_java.cpp.o' not in line]
 assert objects and all(path.is_file() for path in objects), 'current DuckDB object list is incomplete'
 archive.unlink(missing_ok=True)
-subprocess.run(['ar','rcs',str(archive),*[str(path) for path in objects],str(entry)],check=True,timeout=120)
-print(f'built {archive}: {len(objects)+1} objects from the current Ninja target')
+shim = archive.parent / 'duckdb_onload.o'
+subprocess.run(['ar','rcs',str(archive),*[str(path) for path in objects],str(entry),str(shim)],check=True,timeout=120)
+print(f'built {archive}: {len(objects)+2} objects from the current Ninja target and static JNI shim')
 PY
 printf '%s\n' "$fingerprint" > "$STATIC_OUT/duckdb.pin"

@@ -1,0 +1,1714 @@
+DuckDB JNI source pin: a561d2ddadde231402411ce76112779bc34b57f0 (v1.5.6.0)
+This file preserves top-of-file copyright/license notices from the pinned source.
+Warning: truncated output (original token count: 18684)
+Total output lines: 1983
+
+--- SOURCE: extension/icu/third_party/icu/common/ures_cnv.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+*
+*   Copyright (C) 1997-2006, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*
+*******************************************************************************
+*   file name:  ures_cnv.c
+*   encoding:   UTF-8
+*   tab size:   8 (not used)
+*   indentation:4
+*
+*   created on: 2004aug25
+*   created by: Markus W. Scherer
+*
+*   Character conversion functions moved here from uresbund.c
+*/
+
+--- SOURCE: extension/icu/third_party/icu/common/uresbund.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+******************************************************************************
+* Copyright (C) 1997-2016, International Business Machines Corporation and
+* others. All Rights Reserved.
+******************************************************************************
+*
+* File uresbund.cpp
+*
+* Modification History:
+*
+*   Date        Name        Description
+*   04/01/97    aliu        Creation.
+*   06/14/99    stephen     Removed functions taking a filename suffix.
+*   07/20/99    stephen     Changed for UResourceBundle typedef'd to void*
+*   11/09/99    weiv            Added ures_getLocale()
+*   March 2000  weiv        Total overhaul - using data in DLLs
+*   06/20/2000  helena      OS/400 port changes; mostly typecast.
+*   06/24/02    weiv        Added support for resource sharing
+******************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/common/uresdata.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 1999-2016, International Business Machines Corporation
+*               and others. All Rights Reserved.
+*******************************************************************************
+*   file name:  uresdata.cpp
+*   encoding:   UTF-8
+*   tab size:   8 (not used)
+*   indentation:4
+*
+*   created on: 1999dec08
+*   created by: Markus W. Scherer
+* Modification History:
+*
+*   Date        Name        Description
+*   06/20/2000  helena      OS/400 port changes; mostly typecast.
+*   06/24/02    weiv        Added support for resource sharing
+*/
+
+--- SOURCE: extension/icu/third_party/icu/common/uresdata.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+******************************************************************************
+* Copyright (C) 1999-2016, International Business Machines
+*                Corporation and others. All Rights Reserved.
+******************************************************************************
+*   file name:  uresdata.h
+*   encoding:   UTF-8
+*   tab size:   8 (not used)
+*   indentation:4
+*
+*   created on: 1999dec08
+*   created by: Markus W. Scherer
+*   06/24/02    weiv        Added support for resource sharing
+*/
+
+--- SOURCE: extension/icu/third_party/icu/common/uresimp.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+**********************************************************************
+*   Copyright (C) 2000-2016, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+**********************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/common/ureslocs.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+**********************************************************************
+*   Copyright (C) 2009-2014 International Business Machines
+*   Corporation and others.  All Rights Reserved.
+**********************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/common/usc_impl.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+**********************************************************************
+*   Copyright (C) 1999-2016, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+**********************************************************************
+*
+* File USC_IMPL.C
+*
+* Modification History:
+*
+*   Date        Name        Description
+*   07/08/2002  Eric Mader  Creation.
+******************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/common/usc_impl.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+**********************************************************************
+*   Copyright (C) 1999-2011, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+**********************************************************************
+*
+* File USC_IMPL.H
+*
+* Modification History:
+*
+*   Date        Name        Description
+*   07/08/2002  Eric Mader  Creation.
+******************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/common/uscript.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+**********************************************************************
+*   Copyright (C) 1997-2014, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+**********************************************************************
+*
+* File USCRIPT.C
+*
+* Modification History:
+*
+*   Date        Name        Description
+*   07/06/2001    Ram         Creation.
+******************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/common/uscript_props.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+*   Copyright (C) 2013-2016, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*******************************************************************************
+*   file name:  uscript_props.cpp
+*   encoding:   UTF-8
+*   tab size:   8 (not used)
+*   indentation:4
+*
+*   created on: 2013feb16
+*   created by: Markus W. Scherer
+*/
+
+--- SOURCE: extension/icu/third_party/icu/common/uset.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+*
+*   Copyright (C) 2002-2011, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*
+*******************************************************************************
+*   file name:  uset.cpp
+*   encoding:   UTF-8
+*   tab size:   8 (not used)
+*   indentation:4
+*
+*   created on: 2002mar07
+*   created by: Markus W. Scherer
+*
+*   There are functions to efficiently serialize a USet into an array of uint16_t
+*   and functions to use such a serialized form efficiently without
+*   instantiating a new USet.
+*/
+
+--- SOURCE: extension/icu/third_party/icu/common/uset_imp.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+*
+*   Copyright (C) 2004-2007, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*
+*******************************************************************************
+*   file name:  uset_imp.h
+*   encoding:   UTF-8
+*   tab size:   8 (not used)
+*   indentation:4
+*
+*   created on: 2004sep07
+*   created by: Markus W. Scherer
+*
+*   Internal USet definitions.
+*/
+
+--- SOURCE: extension/icu/third_party/icu/common/uset_props.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+*
+*   Copyright (C) 2002-2011, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*
+*******************************************************************************
+*   file name:  uset_props.cpp
+*   encoding:   UTF-8
+*   tab size:   8 (not used)
+*   indentation:4
+*
+*   created on: 2004aug30
+*   created by: Markus W. Scherer
+*
+*   C wrappers around UnicodeSet functions that are implemented in
+*   uniset_props.cpp, split off for modularization.
+*/
+
+--- SOURCE: extension/icu/third_party/icu/common/usetiter.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+**********************************************************************
+* Copyright (c) 2002-2006, International Business Machines
+* Corporation and others.  All Rights Reserved.
+**********************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/common/ushape.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+ ******************************************************************************
+ *
+ *   Copyright (C) 2000-2016, International Business Machines
+ *   Corporation and others.  All Rights Reserved.
+ *
+ ******************************************************************************
+ *   file name:  ushape.cpp
+ *   encoding:   UTF-8
+ *   tab size:   8 (not used)
+ *   indentation:4
+ *
+ *   created on: 2000jun29
+ *   created by: Markus W. Scherer
+ *
+ *   Arabic letter shaping implemented by Ayman Roshdy
+ */
+
+--- SOURCE: extension/icu/third_party/icu/common/usprep.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+ *******************************************************************************
+ *
+ *   Copyright (C) 2003-2016, International Business Machines
+ *   Corporation and others.  All Rights Reserved.
+ *
+ *******************************************************************************
+ *   file name:  usprep.cpp
+ *   encoding:   UTF-8
+ *   tab size:   8 (not used)
+ *   indentation:4
+ *
+ *   created on: 2003jul2
+ *   created by: Ram Viswanadha
+ */
+
+--- SOURCE: extension/icu/third_party/icu/common/ustack.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+**********************************************************************
+*   Copyright (C) 2003-2011, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+**********************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/common/ustr_cnv.cpp ---
+// // © 2016 and later: Unicode, Inc. and others.
+// // License & terms of use: http://www.unicode.org/copyright.html
+// /*
+// *******************************************************************************
+// *
+// *   Copyright (C) 1998-2014, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// *******************************************************************************
+// *   file name:  ustr_cnv.cpp
+// *   encoding:   UTF-8
+// *   tab size:   8 (not used)
+// *   indentation:4
+// *
+// *   created on: 2004aug24
+// *   created by: Markus W. Scherer
+// *
+// *   Character conversion functions moved here from ustring.c
+// */
+
+// #include "unicode/utypes.h"
+
+// #if !UCONFIG_NO_CONVERSION
+
+// #include "unicode/ustring.h"
+// #include "unicode/ucnv.h"
+// #include "cstring.h"
+// #include "cmemory.h"
+// #include "umutex.h"
+// #include "ustr_cnv.h"
+// #include "ucnv_bld.h"
+
+// /* mutexed access to a shared default converter ----------------------------- */
+
+// static UConverter *gDefaultConverter = NULL;
+
+// U_CAPI UConverter* U_EXPORT2
+// u_getDefaultConverter(UErrorCode *status)
+// {
+//     UConverter *converter = NULL;
+
+//     if (gDefaultConverter != NULL) {
+//         icu::umtx_lock(NULL);
+
+//         /* need to check to make sure it wasn't taken out from under us */
+//         if (gDefaultConverter != NULL) {
+//             converter = gDefaultConverter;
+//             gDefaultConverter = NULL;
+//         }
+//         icu::umtx_unlock(NULL);
+//     }
+
+//     /* if the cache was empty, create a converter */
+//     if(converter == NULL) {
+//         converter = ucnv_open(NULL, status);
+//         if(U_FAILURE(*status)) {
+//             ucnv_close(converter);
+//             converter = NULL;
+//         }
+//     }
+
+//     return converter;
+// }
+
+// U_CAPI void U_EXPORT2
+// u_releaseDefaultConverter(UConverter *converter)
+// {
+//     if(gDefaultConverter == NULL) {
+//         if (converter != NULL) {
+//             ucnv_reset(converter);
+//         }
+//         ucnv_enableCleanup();
+//         icu::umtx_lock(NULL);
+//         if(gDefaultConverter == NULL) {
+//             gDefaultConverter = converter;
+//             converter = NULL;
+//         }
+//         icu::umtx_unlock(NULL);
+//     }
+
+//     if(converter != NULL) {
+//         ucnv_close(converter);
+//     }
+// }
+
+// U_CAPI void U_EXPORT2
+// u_flushDefaultConverter()
+// {
+//     UConverter *converter = NULL;
+
+//     if (gDefaultConverter != NULL) {
+//         icu::umtx_lock(NULL);
+
+//         /* need to check to make sure it wasn't taken out from under us */
+//         if (gDefaultConverter != NULL) {
+//             converter = gDefaultConverter;
+//             gDefaultConverter = NULL;
+//         }
+//         icu::umtx_unlock(NULL);
+//     }
+
+--- SOURCE: extension/icu/third_party/icu/common/ustr_cnv.h ---
+// // © 2016 and later: Unicode, Inc. and others.
+// // License & terms of use: http://www.unicode.org/copyright.html
+// /*
+// **********************************************************************
+// *   Copyright (C) 1999-2010, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// **********************************************************************
+// *   file name:  ustr_cnv.h
+// *   encoding:   UTF-8
+// *   tab size:   8 (not used)
+// *   indentation:4
+// *
+// *   created on: 2004Aug27
+// *   created by: George Rhoten
+// */
+
+// #ifndef USTR_CNV_IMP_H
+// #define USTR_CNV_IMP_H
+
+// #include "unicode/utypes.h"
+// #include "unicode/ucnv.h"
+
+// #if !UCONFIG_NO_CONVERSION
+
+// /**
+//  * Get the default converter. This is a commonly used converter
+//  * that is used for the ustring and UnicodeString API.
+//  * Remember to use the u_releaseDefaultConverter when you are done.
+//  * @internal
+//  */
+// U_CAPI UConverter* U_EXPORT2
+// u_getDefaultConverter(UErrorCode *status);
+
+
+// /**
+//  * Release the default converter to the converter cache.
+//  * @internal
+//  */
+// U_CAPI void U_EXPORT2
+// u_releaseDefaultConverter(UConverter *converter);
+
+// /**
+//  * Flush the default converter, if cached.
+//  * @internal
+//  */
+// U_CAPI void U_EXPORT2
+// u_flushDefaultConverter(void);
+
+// #endif
+
+// #endif
+
+--- SOURCE: extension/icu/third_party/icu/common/ustr_imp.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*  
+**********************************************************************
+*   Copyright (C) 1999-2015, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+**********************************************************************
+*   file name:  ustr_imp.h
+*   encoding:   UTF-8
+*   tab size:   8 (not used)
+*   indentation:4
+*
+*   created on: 2001jan30
+*   created by: Markus W. Scherer
+*/
+
+--- SOURCE: extension/icu/third_party/icu/common/ustr_titlecase_brkiter.cpp ---
+// // © 2016 and later: Unicode, Inc. and others.
+// // License & terms of use: http://www.unicode.org/copyright.html
+// /*
+// *******************************************************************************
+// *   Copyright (C) 2011, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *******************************************************************************
+// *   file name:  ustr_titlecase_brkiter.cpp
+// *   encoding:   UTF-8
+// *   tab size:   8 (not used)
+// *   indentation:4
+// *
+// *   created on: 2011may30
+// *   created by: Markus W. Scherer
+// *
+// *   Titlecasing functions that are based on BreakIterator
+// *   were moved here to break dependency cycles among parts of the common library.
+// */
+
+// #include "unicode/utypes.h"
+
+// #if !UCONFIG_NO_BREAK_ITERATION
+
+// #include "unicode/brkiter.h"
+// #include "unicode/casemap.h"
+// #include "unicode/chariter.h"
+// #include "unicode/localpointer.h"
+// #include "unicode/ubrk.h"
+// #include "unicode/ucasemap.h"
+// #include "unicode/utext.h"
+// #include "cmemory.h"
+// #include "uassert.h"
+// #include "ucase.h"
+// #include "ucasemap_imp.h"
+
+// U_NAMESPACE_BEGIN
+
+// /**
+//  * Whole-string BreakIterator.
+//  * Titlecasing only calls setText(), first(), and next().
+//  * We implement the rest only to satisfy the abstract interface.
+//  */
+// class WholeStringBreakIterator : public BreakIterator {
+// public:
+//     WholeStringBreakIterator() : BreakIterator(), length(0) {}
+//     ~WholeStringBreakIterator() U_OVERRIDE;
+//     bool operator==(const BreakIterator&) const U_OVERRIDE;
+//     WholeStringBreakIterator *clone() const U_OVERRIDE;
+//     static UClassID U_EXPORT2 getStaticClassID();
+//     UClassID getDynamicClassID() const U_OVERRIDE;
+//     CharacterIterator &getText() const U_OVERRIDE;
+//     UText *getUText(UText *fillIn, UErrorCode &errorCode) const U_OVERRIDE;
+//     void  setText(const UnicodeString &text) U_OVERRIDE;
+//     void  setText(UText *text, UErrorCode &errorCode) U_OVERRIDE;
+//     void  adoptText(CharacterIterator* it) U_OVERRIDE;
+//     int32_t first() U_OVERRIDE;
+//     int32_t last() U_OVERRIDE;
+//     int32_t previous() U_OVERRIDE;
+//     int32_t next() U_OVERRIDE;
+//     int32_t current() const U_OVERRIDE;
+//     int32_t following(int32_t offset) U_OVERRIDE;
+//     int32_t preceding(int32_t offset) U_OVERRIDE;
+//     UBool isBoundary(int32_t offset) U_OVERRIDE;
+//     int32_t next(int32_t n) U_OVERRIDE;
+//     WholeStringBreakIterator *createBufferClone(void *stackBuffer, int32_t &BufferSize,
+//                                                 UErrorCode &errorCode) U_OVERRIDE;
+//     WholeStringBreakIterator &refreshInputText(UText *input, UErrorCode &errorCode) U_OVERRIDE;
+
+// private:
+//     int32_t length;
+// };
+
+// UOBJECT_DEFINE_RTTI_IMPLEMENTATION(WholeStringBreakIterator)
+
+// WholeStringBreakIterator::~WholeStringBreakIterator() {}
+// UBool WholeStringBreakIterator::operator==(const BreakIterator&) const { return FALSE; }
+// WholeStringBreakIterator *WholeStringBreakIterator::clone() const { return nullptr; }
+
+// CharacterIterator &WholeStringBreakIterator::getText() const {
+//     UPRV_UNREACHABLE;  // really should not be called
+// }
+// UText *WholeStringBreakIterator::getUText(UText * /*fillIn*/, UErrorCode &errorCode) const {
+//     if (U_SUCCESS(errorCode)) {
+//         errorCode = U_UNSUPPORTED_ERROR;
+//     }
+//     return nullptr;
+// }
+
+// void  WholeStringBreakIterator::setText(const UnicodeString &text) {
+//     length = text.length();
+// }
+// void  WholeStringBreakIterator::setText(UText *text, UErrorCode &errorCode) {
+//     if (U_SUCCESS(errorCode)) {
+//         int64_t length64 = utext_nativeLength(text);
+//         if (length64 <= INT32_MAX) {
+//             length = (int32_t)length64;
+//         } else {
+//             errorCode = U_INDEX_OUTOFBOUNDS_ERROR;
+//         }
+//     }
+
+--- SOURCE: extension/icu/third_party/icu/common/ustr_wcs.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+*
+*   Copyright (C) 2001-2012, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*
+*******************************************************************************
+*   file name:  ustr_wcs.cpp
+*   encoding:   UTF-8
+*   tab size:   8 (not used)
+*   indentation:4
+*
+*   created on: 2004sep07
+*   created by: Markus W. Scherer
+*
+*   u_strToWCS() and u_strFromWCS() functions
+*   moved here from ustrtrns.c for better modularization.
+*/
+
+--- SOURCE: extension/icu/third_party/icu/common/ustrcase.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+*
+*   Copyright (C) 2001-2015, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*
+*******************************************************************************
+*   file name:  ustrcase.cpp
+*   encoding:   UTF-8
+*   tab size:   8 (not used)
+*   indentation:4
+*
+*   created on: 2002feb20
+*   created by: Markus W. Scherer
+*
+*   Implementation file for string casing C API functions.
+*   Uses functions from uchar.c for basic functionality that requires access
+*   to the Unicode Character Database (uprops.dat).
+*/
+
+--- SOURCE: extension/icu/third_party/icu/common/ustrcase_locale.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+*   Copyright (C) 2011, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*******************************************************************************
+*   file name:  ustrcase_locale.cpp
+*   encoding:   UTF-8
+*   tab size:   8 (not used)
+*   indentation:4
+*
+*   created on: 2011may31
+*   created by: Markus W. Scherer
+*
+*   Locale-sensitive case mapping functions (ones that call uloc_getDefault())
+*   were moved here to break dependency cycles among parts of the common library.
+*/
+
+--- SOURCE: extension/icu/third_party/icu/common/ustrenum.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+**********************************************************************
+* Copyright (c) 2002-2014, International Business Machines
+* Corporation and others.  All Rights Reserved.
+**********************************************************************
+* Author: Alan Liu
+* Created: November 11 2002
+* Since: ICU 2.4
+**********************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/common/ustrenum.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+**********************************************************************
+* Copyright (c) 2002-2014, International Business Machines
+* Corporation and others.  All Rights Reserved.
+**********************************************************************
+* Author: Alan Liu
+* Created: November 11 2002
+* Since: ICU 2.4
+**********************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/common/ustrfmt.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+**********************************************************************
+*   Copyright (C) 2001-2006, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+**********************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/common/ustrfmt.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+**********************************************************************
+*   Copyright (C) 2001-2006, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+**********************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/common/ustring.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+******************************************************************************
+*
+*   Copyright (C) 1998-2016, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*
+******************************************************************************
+*
+* File ustring.cpp
+*
+* Modification History:
+*
+*   Date        Name        Description
+*   12/07/98    bertrand    Creation.
+******************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/common/ustrtrns.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+******************************************************************************
+*
+*   Copyright (C) 2001-2016, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*
+******************************************************************************
+*
+* File ustrtrns.cpp
+*
+* Modification History:
+*
+*   Date        Name        Description
+*   9/10/2001    Ram    Creation.
+******************************************************************************
+*/
+
+/*******************************************************************************
+ *
+ * u_strTo* and u_strFrom* APIs
+ * WCS functions moved to ustr_wcs.c for better modularization
+ *
+ *******************************************************************************
+ */
+
+--- SOURCE: extension/icu/third_party/icu/common/utext.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+*
+*   Copyright (C) 2005-2016, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*
+*******************************************************************************
+*   file name:  utext.cpp
+*   encoding:   UTF-8
+*   tab size:   8 (not used)
+*   indentation:4
+*
+*   created on: 2005apr12
+*   created by: Markus W. Scherer
+*/
+
+--- SOURCE: extension/icu/third_party/icu/common/utf_impl.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+******************************************************************************
+*
+*   Copyright (C) 1999-2012, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*
+******************************************************************************
+*   file name:  utf_impl.cpp
+*   encoding:   UTF-8
+*   tab size:   8 (not used)
+*   indentation:4
+*
+*   created on: 1999sep13
+*   created by: Markus W. Scherer
+*
+*   This file provides implementation functions for macros in the utfXX.h
+*   that would otherwise be too long as macros.
+*/
+
+/* set import/export definitions */
+
+--- SOURCE: extension/icu/third_party/icu/common/util.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+**********************************************************************
+*   Copyright (c) 2001-2011, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+**********************************************************************
+*   Date        Name        Description
+*   11/19/2001  aliu        Creation.
+**********************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/common/util.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+ **********************************************************************
+ *   Copyright (c) 2001-2011, International Business Machines
+ *   Corporation and others.  All Rights Reserved.
+ **********************************************************************
+ *   Date        Name        Description
+ *   11/19/2001  aliu        Creation.
+ **********************************************************************
+ */
+
+--- SOURCE: extension/icu/third_party/icu/common/util_props.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+**********************************************************************
+*   Copyright (c) 2001-2016, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+**********************************************************************
+*   Date        Name        Description
+*   11/19/2001  aliu        Creation.
+**********************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/common/utrace.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+*   Copyright (C) 2003-2014, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*******************************************************************************
+*   file name:  utrace.c
+*   encoding:   UTF-8
+*   tab size:   8 (not used)
+*   indentation:4
+*/
+
+--- SOURCE: extension/icu/third_party/icu/common/utracimp.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+*
+*   Copyright (C) 2003-2009, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*
+*******************************************************************************
+*   file name:  utracimp.h
+*   encoding:   UTF-8
+*   tab size:   8 (not used)
+*   indentation:4
+*
+*   created on: 2003aug06
+*   created by: Markus W. Scherer
+*
+*   Internal header for ICU tracing/logging.
+*
+*
+*   Various notes:
+*   - using a trace level variable to only call trace functions
+*     when the level is sufficient
+*   - using the same variable for tracing on/off to never make a function
+*     call when off
+*   - the function number is put into a local variable by the entry macro
+*     and used implicitly to avoid copy&paste/typing mistakes by the developer
+*   - the application must call utrace_setFunctions() and pass in
+*     implementations for the trace functions
+*   - ICU trace macros call ICU functions that route through the function
+*     pointers if they have been set;
+*     this avoids an indirection at the call site
+*     (which would cost more code for another check and for the indirection)
+*
+*   ### TODO Issues:
+*   - Verify that va_list is portable among compilers for the same platform.
+*     va_list should be portable because printf() would fail otherwise!
+*   - Should enum values like UTraceLevel be passed into int32_t-type arguments,
+*     or should enum types be used?
+*/
+
+--- SOURCE: extension/icu/third_party/icu/common/utrie.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+******************************************************************************
+*
+*   Copyright (C) 2001-2012, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*
+******************************************************************************
+*   file name:  utrie.cpp
+*   encoding:   UTF-8
+*   tab size:   8 (not used)
+*   indentation:4
+*
+*   created on: 2001oct20
+*   created by: Markus W. Scherer
+*
+*   This is a common implementation of a "folded" trie.
+*   It is a kind of compressed, serializable table of 16- or 32-bit values associated with
+*   Unicode code points (0..0x10ffff).
+*/
+
+--- S…2684 tokens truncated…2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2009-2014, International Business Machines Corporation and
+* others. All Rights Reserved.
+*******************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/anytrans.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+***********************************************************************
+* Copyright (c) 2002-2007, International Business Machines Corporation
+* and others.  All Rights Reserved.
+***********************************************************************
+* Date        Name        Description
+* 06/06/2002  aliu        Creation.
+***********************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/astro.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/************************************************************************
+ * Copyright (C) 1996-2012, International Business Machines Corporation
+ * and others. All Rights Reserved.
+ ************************************************************************
+ *  2003-nov-07   srl       Port from Java
+ */
+
+--- SOURCE: extension/icu/third_party/icu/i18n/astro.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/************************************************************************
+ * Copyright (C) 1996-2008, International Business Machines Corporation *
+ * and others. All Rights Reserved.                                     *
+ ************************************************************************
+ *  2003-nov-07   srl       Port from Java
+ */
+
+--- SOURCE: extension/icu/third_party/icu/i18n/basictz.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2007-2013, International Business Machines Corporation and
+* others. All Rights Reserved.
+*******************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/bocsu.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+*   Copyright (C) 2001-2014, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*******************************************************************************
+*   file name:  bocsu.cpp
+*   encoding:   UTF-8
+*   tab size:   8 (not used)
+*   indentation:4
+*
+*   Author: Markus W. Scherer
+*
+*   Modification history:
+*   05/18/2001  weiv    Made into separate module
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/bocsu.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+*   Copyright (C) 2001-2014, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*******************************************************************************
+*   file name:  bocsu.h
+*   encoding:   UTF-8
+*   tab size:   8 (not used)
+*   indentation:4
+*
+*   Author: Markus W. Scherer
+*
+*   Modification history:
+*   05/18/2001  weiv    Made into separate module
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/brktrans.h ---
+// // © 2016 and later: Unicode, Inc. and others.
+// // License & terms of use: http://www.unicode.org/copyright.html
+// /*
+// **********************************************************************
+// *   Copyright (C) 2008-2015, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// **********************************************************************
+// *   Date        Name        Description
+// *   05/11/2008  Andy Heninger  Ported from Java
+// **********************************************************************
+// */
+// #ifndef BRKTRANS_H
+// #define BRKTRANS_H
+
+// #include "unicode/utypes.h"
+
+// #if !UCONFIG_NO_TRANSLITERATION && !UCONFIG_NO_BREAK_ITERATION
+
+// #include "unicode/translit.h"
+
+// #include "unicode/localpointer.h"
+
+
+// U_NAMESPACE_BEGIN
+
+// class UVector32;
+
+// /**
+//  * A transliterator that pInserts the specified characters at word breaks.
+//  * To restrict it to particular characters, use a filter.
+//  * TODO: this is an internal class, and only temporary.
+//  * Remove it once we have \b notation in Transliterator.
+//  */
+// class BreakTransliterator : public Transliterator {
+// public:
+
+//     /**
+//      * Constructs a transliterator.
+//      * @param adoptedFilter    the filter for this transliterator.
+//      */
+//     BreakTransliterator(UnicodeFilter* adoptedFilter = 0);
+
+//     /**
+//      * Destructor.
+//      */
+//     virtual ~BreakTransliterator();
+
+//     /**
+//      * Copy constructor.
+//      */
+//     BreakTransliterator(const BreakTransliterator&);
+
+//     /**
+//      * Transliterator API.
+//      * @return    A copy of the object.
+//      */
+//     virtual BreakTransliterator* clone() const;
+
+//     virtual const UnicodeString &getInsertion() const;
+
+//     virtual void setInsertion(const UnicodeString &insertion);
+
+//     /**
+//      * ICU "poor man's RTTI", returns a UClassID for the actual class.
+//      */
+//     virtual UClassID getDynamicClassID() const;
+
+//     /**
+//      * ICU "poor man's RTTI", returns a UClassID for this class.
+//      */
+//     U_I18N_API static UClassID U_EXPORT2 getStaticClassID();
+
+//  protected:
+
+//     /**
+//      * Implements {@link Transliterator#handleTransliterate}.
+//      * @param text          the buffer holding transliterated and
+//      *                      untransliterated text
+//      * @param offset        the start and limit of the text, the position
+//      *                      of the cursor, and the start and limit of transliteration.
+//      * @param incremental   if true, assume more text may be coming after
+//      *                      pos.contextLimit. Otherwise, assume the text is complete.
+//      */
+//     virtual void handleTransliterate(Replaceable& text, UTransPosition& offset,
+//                                      UBool isIncremental) const;
+
+//  private:
+//      LocalPointer<BreakIterator> cachedBI;
+//      LocalPointer<UVector32>     cachedBoundaries;
+//      UnicodeString               fInsertion;
+
+//      static UnicodeString replaceableAsString(Replaceable &r);
+
+//     /**
+//      * Assignment operator.
+//      */
+//     BreakTransliterator& operator=(const BreakTransliterator&);
+// };
+
+// U_NAMESPACE_END
+
+--- SOURCE: extension/icu/third_party/icu/i18n/buddhcal.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2003-2013, International Business Machines Corporation and    *
+* others. All Rights Reserved.                                                *
+*******************************************************************************
+*
+* File BUDDHCAL.CPP
+*
+* Modification History:
+*  05/13/2003    srl     copied from gregocal.cpp
+*
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/buddhcal.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+ ********************************************************************************
+ * Copyright (C) 2003-2013, International Business Machines Corporation
+ * and others. All Rights Reserved.
+ ********************************************************************************
+ *
+ * File BUDDHCAL.H
+ *
+ * Modification History:
+ *
+ *   Date        Name        Description
+ *   05/13/2003  srl          copied from gregocal.h
+ ********************************************************************************
+ */
+
+--- SOURCE: extension/icu/third_party/icu/i18n/calendar.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 1997-2016, International Business Machines Corporation and    *
+* others. All Rights Reserved.                                                *
+*******************************************************************************
+*
+* File CALENDAR.CPP
+*
+* Modification History:
+*
+*   Date        Name        Description
+*   02/03/97    clhuang     Creation.
+*   04/22/97    aliu        Cleaned up, fixed memory leak, made
+*                           setWeekCountData() more robust.
+*                           Moved platform code to TPlatformUtilities.
+*   05/01/97    aliu        Made equals(), before(), after() arguments const.
+*   05/20/97    aliu        Changed logic of when to compute fields and time
+*                           to fix bugs.
+*   08/12/97    aliu        Added equivalentTo.  Misc other fixes.
+*   07/28/98    stephen     Sync up with JDK 1.2
+*   09/02/98    stephen     Sync with JDK 1.2 8/31 build (getActualMin/Max)
+*   03/17/99    stephen     Changed adoptTimeZone() - now fAreFieldsSet is
+*                           set to FALSE to force update of time.
+*******************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/casetrn.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+*
+*   Copyright (C) 2001-2008, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*
+*******************************************************************************
+*   file name:  casetrn.h
+*   encoding:   UTF-8
+*   tab size:   8 (not used)
+*   indentation:4
+*
+*   created on: 2004sep03
+*   created by: Markus W. Scherer
+*
+*   Implementation class for lower-/upper-/title-casing transliterators.
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/cecal.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2003 - 2009, International Business Machines Corporation and  *
+* others. All Rights Reserved.                                                *
+*******************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/cecal.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2003 - 2008, International Business Machines Corporation and  *
+* others. All Rights Reserved.                                                *
+*******************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/chnsecal.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+ ******************************************************************************
+ * Copyright (C) 2007-2014, International Business Machines Corporation
+ * and others. All Rights Reserved.
+ ******************************************************************************
+ *
+ * File CHNSECAL.CPP
+ *
+ * Modification History:
+ *
+ *   Date        Name        Description
+ *   9/18/2007  ajmacher         ported from java ChineseCalendar
+ *****************************************************************************
+ */
+
+--- SOURCE: extension/icu/third_party/icu/i18n/chnsecal.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+ *****************************************************************************
+ * Copyright (C) 2007-2013, International Business Machines Corporation
+ * and others. All Rights Reserved.
+ *****************************************************************************
+ *
+ * File CHNSECAL.H
+ *
+ * Modification History:
+ *
+ *   Date        Name        Description
+ *   9/18/2007  ajmacher         ported from java ChineseCalendar
+ *****************************************************************************
+ */
+
+--- SOURCE: extension/icu/third_party/icu/i18n/choicfmt.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 1997-2013, International Business Machines Corporation and    *
+* others. All Rights Reserved.                                                *
+*******************************************************************************
+*
+* File CHOICFMT.CPP
+*
+* Modification History:
+*
+*   Date        Name        Description
+*   02/19/97    aliu        Converted from java.
+*   03/20/97    helena      Finished first cut of implementation and got rid
+*                           of nextDouble/previousDouble and replaced with
+*                           boolean array.
+*   4/10/97     aliu        Clean up.  Modified to work on AIX.
+*   06/04/97    helena      Fixed applyPattern(), toPattern() and not to include
+*                           wchar.h.
+*   07/09/97    helena      Made ParsePosition into a class.
+*   08/06/97    nos         removed overloaded constructor, fixed 'format(array)'
+*   07/22/98    stephen     JDK 1.2 Sync - removed UBool array (doubleFlags)
+*   02/22/99    stephen     Removed character literals for EBCDIC safety
+********************************************************************************
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/coleitr.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 1996-2014, International Business Machines Corporation and
+* others. All Rights Reserved.
+*******************************************************************************
+*/
+
+/*
+* File coleitr.cpp
+*
+* Created by: Helena Shih
+*
+* Modification History:
+*
+*  Date      Name        Description
+*
+*  6/23/97   helena      Adding comments to make code more readable.
+* 08/03/98   erm         Synched with 1.2 version of CollationElementIterator.java
+* 12/10/99   aliu        Ported Thai collation support from Java.
+* 01/25/01   swquek      Modified to a C++ wrapper calling C APIs (ucoliter.h)
+* 02/19/01   swquek      Removed CollationElementIterator() since it is
+*                        private constructor and no calls are made to it
+* 2012-2014  markus      Rewritten in C++ again.
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/coll.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+ ******************************************************************************
+ * Copyright (C) 1996-2014, International Business Machines Corporation and
+ * others. All Rights Reserved.
+ ******************************************************************************
+ */
+
+/**
+ * File coll.cpp
+ *
+ * Created by: Helena Shih
+ *
+ * Modification History:
+ *
+ *  Date        Name        Description
+ *  2/5/97      aliu        Modified createDefault to load collation data from
+ *                          binary files when possible.  Added related methods
+ *                          createCollationFromFile, chopLocale, createPathName.
+ *  2/11/97     aliu        Added methods addToCache, findInCache, which implement
+ *                          a Collation cache.  Modified createDefault to look in
+ *                          cache first, and also to store newly created Collation
+ *                          objects in the cache.  Modified to not use gLocPath.
+ *  2/12/97     aliu        Modified to create objects from RuleBasedCollator cache.
+ *                          Moved cache out of Collation class.
+ *  2/13/97     aliu        Moved several methods out of this class and into
+ *                          RuleBasedCollator, with modifications.  Modified
+ *                          createDefault() to call new RuleBasedCollator(Locale&)
+ *                          constructor.  General clean up and documentation.
+ *  2/20/97     helena      Added clone, operator==, operator!=, operator=, and copy
+ *                          constructor.
+ * 05/06/97     helena      Added memory allocation error detection.
+ * 05/08/97     helena      Added createInstance().
+ *  6/20/97     helena      Java class name change.
+ * 04/23/99     stephen     Removed EDecompositionMode, merged with
+ *                          Normalizer::EMode
+ * 11/23/9      srl         Inlining of some critical functions
+ * 01/29/01     synwee      Modified into a C++ wrapper calling C APIs (ucol.h)
+ * 2012-2014    markus      Rewritten in C++ again.
+ */
+
+--- SOURCE: extension/icu/third_party/icu/i18n/collation.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2010-2014, International Business Machines
+* Corporation and others.  All Rights Reserved.
+*******************************************************************************
+* collation.cpp
+*
+* created on: 2010oct27
+* created by: Markus W. Scherer
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/collation.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2010-2015, International Business Machines
+* Corporation and others.  All Rights Reserved.
+*******************************************************************************
+* collation.h
+*
+* created on: 2010oct27
+* created by: Markus W. Scherer
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/collationbuilder.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2013-2014, International Business Machines
+* Corporation and others.  All Rights Reserved.
+*******************************************************************************
+* collationbuilder.cpp
+*
+* (replaced the former ucol_bld.cpp)
+*
+* created on: 2013may06
+* created by: Markus W. Scherer
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/collationbuilder.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2013-2014, International Business Machines
+* Corporation and others.  All Rights Reserved.
+*******************************************************************************
+* collationbuilder.h
+*
+* created on: 2013may06
+* created by: Markus W. Scherer
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/collationcompare.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 1996-2015, International Business Machines
+* Corporation and others.  All Rights Reserved.
+*******************************************************************************
+* collationcompare.cpp
+*
+* created on: 2012feb14 with new and old collation code
+* created by: Markus W. Scherer
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/collationcompare.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 1996-2014, International Business Machines
+* Corporation and others.  All Rights Reserved.
+*******************************************************************************
+* collationcompare.h
+*
+* created on: 2012feb14 with new and old collation code
+* created by: Markus W. Scherer
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/collationdata.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2012-2015, International Business Machines
+* Corporation and others.  All Rights Reserved.
+*******************************************************************************
+* collationdata.cpp
+*
+* created on: 2012jul28
+* created by: Markus W. Scherer
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/collationdata.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2010-2015, International Business Machines
+* Corporation and others.  All Rights Reserved.
+*******************************************************************************
+* collationdata.h
+*
+* created on: 2010oct27
+* created by: Markus W. Scherer
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/collationdatabuilder.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2012-2015, International Business Machines
+* Corporation and others.  All Rights Reserved.
+*******************************************************************************
+* collationdatabuilder.cpp
+*
+* (replaced the former ucol_elm.cpp)
+*
+* created on: 2012apr01
+* created by: Markus W. Scherer
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/collationdatabuilder.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2012-2014, International Business Machines
+* Corporation and others.  All Rights Reserved.
+*******************************************************************************
+* collationdatabuilder.h
+*
+* created on: 2012apr01
+* created by: Markus W. Scherer
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/collationdatareader.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2013-2015, International Business Machines
+* Corporation and others.  All Rights Reserved.
+*******************************************************************************
+* collationdatareader.cpp
+*
+* created on: 2013feb07
+* created by: Markus W. Scherer
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/collationdatareader.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2013-2015, International Business Machines
+* Corporation and others.  All Rights Reserved.
+*******************************************************************************
+* collationdatareader.h
+*
+* created on: 2013feb07
+* created by: Markus W. Scherer
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/collationdatawriter.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2013-2015, International Business Machines
+* Corporation and others.  All Rights Reserved.
+*******************************************************************************
+* collationdatawriter.cpp
+*
+* created on: 2013aug06
+* created by: Markus W. Scherer
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/collationdatawriter.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2013-2014, International Business Machines
+* Corporation and others.  All Rights Reserved.
+*******************************************************************************
+* collationdatawriter.h
+*
+* created on: 2013aug06
+* created by: Markus W. Scherer
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/collationfastlatin.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2013-2015, International Business Machines
+* Corporation and others.  All Rights Reserved.
+*******************************************************************************
+* collationfastlatin.cpp
+*
+* created on: 2013aug18
+* created by: Markus W. Scherer
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/collationfastlatin.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2013-2015, International Business Machines
+* Corporation and others.  All Rights Reserved.
+*******************************************************************************
+* collationfastlatin.h
+*
+* created on: 2013aug09
+* created by: Markus W. Scherer
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/collationfastlatinbuilder.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2013-2015, International Business Machines
+* Corporation and others.  All Rights Reserved.
+*******************************************************************************
+* collationfastlatinbuilder.cpp
+*
+* created on: 2013aug09
+* created by: Markus W. Scherer
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/collationfastlatinbuilder.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2013-2016, International Business Machines
+* Corporation and others.  All Rights Reserved.
+*******************************************************************************
+* collationfastlatinbuilder.h
+*
+* created on: 2013aug09
+* created by: Markus W. Scherer
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/collationfcd.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+//
+// Copyright (C) 1999-2016, International Business Machines
+// Corporation and others.  All Rights Reserved.
+//
+// file name: collationfcd.cpp
+//
+// machine-generated by: icu/tools/unicode/c/genuca/genuca.cpp
+
+--- SOURCE: extension/icu/third_party/icu/i18n/collationfcd.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2012-2014, International Business Machines
+* Corporation and others.  All Rights Reserved.
+*******************************************************************************
+* collationfcd.h
+*
+* created on: 2012aug18
+* created by: Markus W. Scherer
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/collationiterator.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2010-2014, International Business Machines
+* Corporation and others.  All Rights Reserved.
+*******************************************************************************
+* collationiterator.cpp
+*
+* created on: 2010oct27
+* created by: Markus W. Scherer
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/collationiterator.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2010-2014, International Business Machines
+* Corporation and others.  All Rights Reserved.
+*******************************************************************************
+* collationiterator.h
+*
+* created on: 2010oct27
+* created by: Markus W. Scherer
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/collationkeys.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2012-2015, International Business Machines
+* Corporation and others.  All Rights Reserved.
+*******************************************************************************
+* collationkeys.cpp
+*
+* created on: 2012sep02
+* created by: Markus W. Scherer
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/collationkeys.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2012-2014, International Business Machines
+* Corporation and others.  All Rights Reserved.
+*******************************************************************************
+* collationkeys.h
+*
+* created on: 2012sep02
+* created by: Markus W. Scherer
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/collationroot.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2012-2014, International Business Machines
+* Corporation and others.  All Rights Reserved.
+*******************************************************************************
+* collationroot.cpp
+*
+* created on: 2012dec17
+* created by: Markus W. Scherer
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/collationroot.h ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2012-2014, International Business Machines
+* Corporation and others.  All Rights Reserved.
+*******************************************************************************
+* collationroot.h
+*
+* created on: 2012dec17
+* created by: Markus W. Scherer
+*/
+
+--- SOURCE: extension/icu/third_party/icu/i18n/collationrootelements.cpp ---
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+/*
+*******************************************************************************
+* Copyright (C) 2013-2014, International Business Machines
+* Corporation and others.  All Rights Reserved.
+*******************************************************************************
+* collationrootelements.cpp
+*
+* created on: 2013mar05
+* created by: Markus W. Scherer
+*/
+
+

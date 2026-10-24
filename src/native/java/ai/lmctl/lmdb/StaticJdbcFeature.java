@@ -18,10 +18,7 @@ public final class StaticJdbcFeature implements Feature {
         register("sqlitejdbc", "org_sqlite_core_NativeDB");
         register("duckdb_java", "org_duckdb");
         libraries.addStaticJniLibrary("sqlitejdbc");
-        libraries.addStaticJniLibrary("duckdb_java", "stdc++");
-        libraries.addStaticNonJniLibrary("stdc++", "gcc_eh");
-        libraries.addStaticNonJniLibrary("gcc_eh");
-        libraries.addDynamicNonJniLibrary("m");
+        libraries.addStaticJniLibrary("duckdb_java");
     }
     private static void register(String library,String prefix) {
         NativeLibrarySupport.singleton().preregisterUninitializedBuiltinLibrary(library);

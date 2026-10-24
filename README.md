@@ -49,11 +49,13 @@ The native distribution bundles PostgreSQL, SQLite-JDBC, H2, DuckDB and Microsof
 Optional drivers are a JVM feature because native-image executables cannot load arbitrary classes after compilation:
 
 ```sh
-lmdb --driver-jar /path/to/driver.jar --driver-class com.example.Driver \
+java -jar target/lmdb-0.1.0-all.jar --driver-jar /path/to/driver.jar --driver-class com.example.Driver \
   --url jdbc:example:... --sql 'SELECT 1'
 ```
 
-Every invocation is bounded by `LMDB_MAX_MEMORY_MB` (default 4096 MiB; minimum 16 MiB). At startup lmdb reserves 75% for the Java heap and 25% for embedded JDBC engine memory and fixed native overhead. If the current process was not started with the requested heap, it restarts itself once with the corresponding `-Xmx` value before opening a driver or reading a query. Invalid or non-positive values fail with usage status 2, and a runtime budget breach fails with status 3. Query results are capped at 10,000 rows by default; use `--max-rows` to choose a positive limit up to 1,000,000.
+`LMDB_MAX_MEMORY_MB` sets the allocation budget (default 4096 MiB; minimum 16 MiB). The Java heap uses at most 75%; each SQLite/DuckDB engine has a one-eighth memory-manager limit. Scripts may keep two native-engine connections and 64 total connections open; closing a connection releases its slot. Stacks, code mappings and native allocations outside the engines' memory managers are additional overhead. The host restarts itself with a startup heap cap when needed. Invalid or non-positive values fail with usage status 2; a runtime budget breach fails with status 3. Results default to 10,000 rows; `--max-rows` accepts up to 1,000,000 and exceeding the limit fails explicitly.
+
+For the JVM distribution on Windows, put non-ASCII SQL in a UTF-8 file and use `--file`; the upstream Java launcher may convert command-line characters through the Windows ANSI code page. Native Windows releases embed a UTF-8 application manifest.
 
 ## CLI workflows
 

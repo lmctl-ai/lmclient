@@ -6,11 +6,15 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.IdentityHashMap;
 import java.util.List;
+import java.util.Set;
 
 /** Explicit JDBC callbacks: no runtime reflection or dynamic host class loading. */
 public final class DslHost implements AutoCloseable {
     private final List<Database> connections = new ArrayList<>();
+    private final Set<Database> nativeConnections = Collections.newSetFromMap(new IdentityHashMap<>());
     private final Registry registry = new Registry();
     private final Context context = new Context();
 
@@ -32,12 +36,16 @@ public final class DslHost implements AutoCloseable {
     private Value call(HostApi.Binding binding,Context ctx,Value self,Value[] args) throws Exception {
         String name = binding.name();
         if (binding.type() == null) {
-            if (connections.size() >= 64) throw VmException.host("connection limit exceeded (64)");
             String url = string(args[0]);
             Credentials.validateUrl(url);
+            boolean nativeEngine = isNativeEngine(url);
+            if (connections.size() >= 64) throw VmException.host("connection limit exceeded (64)");
+            if (nativeEngine && nativeConnections.size() >= 2)
+                throw VmException.host("embedded native connection limit exceeded (2)");
             Database database = Database.connect(url, Credentials.read(args.length == 2 ? string(args[1]) : System.getenv("LMDB_CREDENTIALS_FILE")));
+            try { ctx.charge(4096); } catch (RuntimeException error) { database.close(); throw error; }
             connections.add(database);
-            ctx.charge(4096);
+            if (nativeEngine) nativeConnections.add(database);
             return Value.object("Connection",database);
         }
         if (binding.type().equals("Connection")) {
@@ -49,7 +57,7 @@ public final class DslHost implements AutoCloseable {
                 case "begin": database.connection().setAutoCommit(false); return Value.none();
                 case "commit": database.connection().commit(); return Value.none();
                 case "rollback": database.connection().rollback(); return Value.none();
-                case "close": database.close(); connections.remove(database); return Value.none();
+                case "close": database.close(); connections.remove(database); nativeConnections.remove(database); return Value.none();
                 default: break;
             }
             Database.QueryResult result = switch(name) {
@@ -105,6 +113,7 @@ public final class DslHost implements AutoCloseable {
         return (int) index;
     }
     private static String string(Value value) { return value.asString().toString(); }
+    private static boolean isNativeEngine(String url) { String lower = url.toLowerCase(java.util.Locale.ROOT); return lower.startsWith("jdbc:sqlite:") || lower.startsWith("jdbc:duckdb:"); }
 
     public int run(Path bytecode,boolean dryRun) throws Exception {
         close();
@@ -128,5 +137,6 @@ public final class DslHost implements AutoCloseable {
     @Override public void close() {
         for (Database database : connections) { try { database.close(); } catch (RuntimeException ignored) { /* Close remaining handles. */ } }
         connections.clear();
+        nativeConnections.clear();
     }
 }

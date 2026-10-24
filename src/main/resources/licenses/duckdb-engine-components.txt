@@ -1,40 +1,63 @@
-DuckDB engine source and bundled third-party components
-=======================================================
+DuckDB engine provenance and license inventory
+==============================================
 
-The native DuckDB JNI library is built from duckdb/duckdb-java at commit
-679d526542cf9dfb24322d9d9c75641624f24bc1 (the source pin is recorded in
-deps.lock). The engine is MIT licensed; see duckdb-mit.txt.
+Source pin
+----------
 
-The pinned engine source includes these third-party components. Their complete
-license texts are included once in this directory under the named file:
+The bundled native DuckDB JNI engine is built from:
 
-  brotli             MIT                 mit-license.txt
-  concurrentqueue    BSD-2-Clause       bsd-2-clause.txt
-  fast_float         MIT                 mit-license.txt
-  fastpforlib        Apache-2.0         apache-2.0.txt
-  fmt                MIT                 mit-license.txt
-  fsst               MIT                 mit-license.txt
-  httplib             MIT                 mit-license.txt
-  hyperloglog        MIT                 mit-license.txt
-  jaro_winkler       MIT                 mit-license.txt
-  lz4                BSD-2-Clause       bsd-2-clause.txt
-  mbedtls            Apache-2.0         apache-2.0.txt
-  miniz              MIT                 mit-license.txt
-  parquet            Apache-2.0         apache-2.0.txt
-  pcg                Apache-2.0         apache-2.0.txt
-  pdqsort             custom permissive  pdqsort-custom-license.txt
-  re2                BSD-3-Clause       bsd-3-clause.txt
-  ska_sort            MIT                 mit-license.txt
-  skiplist             MIT                 mit-license.txt
-  snappy              BSD-3-Clause       bsd-3-clause.txt
-  tdigest              Apache-2.0         apache-2.0.txt
-  thrift               Apache-2.0         apache-2.0.txt
-  utf8proc             MIT                 mit-license.txt
-  vergesort            MIT                 mit-license.txt
-  yyjson               MIT                 mit-license.txt
-  zstd                 BSD-3-Clause       bsd-3-clause.txt
+  repository: https://github.com/duckdb/duckdb-java
+  commit:    a561d2ddadde231402411ce76112779bc34b57f0
+  release:   v1.5.6.0
 
-The aliases above reuse identical standard license text where the license
-terms are the same. Copyright notices and source paths remain identified by
-the pinned upstream tree; this file is a component notice index, not a claim
-that unrelated source notices have been collapsed into one license.
+That exact checkout is recorded in deps.lock and scripts/build-duckdb.sh.
+The complete upstream DuckDB MIT license is preserved in duckdb/LICENSE.
+
+Standalone upstream license files
+---------------------------------
+
+The pinned tree contains one standalone license file:
+
+  third_party/duckdb-java/LICENSE -> duckdb/LICENSE
+
+The source tree has no separate top-level LICENSE/COPYING/NOTICE files for
+the bundled subcomponents. Their source headers are therefore preserved
+below as text notices instead of being replaced by a generic license label.
+
+Header notice preservation
+--------------------------
+
+The ten duckdb/header-notices-*.txt resources preserve the first license and
+copyright comment from each of 912 source/header files in the pinned
+src/duckdb tree. Every entry records its original relative source path.
+The inventory covers these source roots:
+
+  extension/icu
+  src/common
+  src/include
+  third_party/concurrentqueue
+  third_party/fast_float
+  third_party/fmt
+  third_party/fsst
+  third_party/httplib
+  third_party/hyperloglog
+  third_party/jaro_winkler
+  third_party/jemalloc
+  third_party/libpg_query
+  third_party/lz4
+  third_party/mbedtls
+  third_party/miniz
+  third_party/pcg
+  third_party/pdqsort
+  third_party/re2
+  third_party/skiplist
+  third_party/snappy
+  third_party/utf8proc
+  third_party/vergesort
+  third_party/yyjson
+  third_party/zstd
+
+This preserves copyright holders and the exact header terms supplied by the
+pinned upstream source, including ICU's Unicode license and notices, zstd's
+BSD terms, Mbed TLS's Apache/GPL alternatives, libpg_query notices, and the
+individual permissive component headers. It does not copy source code.

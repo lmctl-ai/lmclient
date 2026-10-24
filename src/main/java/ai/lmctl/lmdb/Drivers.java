@@ -74,6 +74,10 @@ public final class Drivers {
                 result.put(bundled.name(), "ok");
             } catch (SQLException | RuntimeException e) {
                 result.put(bundled.name(), "error");
+            } catch (LinkageError e) {
+                // These fixed no-credential fixtures expose only native linkage
+                // diagnostics; user SQL/connection failures remain sanitized.
+                result.put(bundled.name(), "error: " + e.getClass().getSimpleName() + ": " + e.getMessage());
             }
         }
         return result;
