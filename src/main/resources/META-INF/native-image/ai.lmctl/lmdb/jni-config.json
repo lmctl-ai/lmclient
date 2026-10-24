@@ -1,0 +1,4 @@
+[
+  {"name":"org.sqlite.NativeDB"},
+  {"name":"org.duckdb.DuckDBNative"}
+]

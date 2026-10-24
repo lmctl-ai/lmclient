@@ -1,0 +1,45 @@
+# JDBC metadata becomes a readable schema map, rendered by lmdraw.
+mkdir("images"); mkdir("data"); mkdir("build");
+let db = _dsl_ cli="lmdb" install="github:lmctl-ai/lmdb@latest";
+let c = db.connect("jdbc:h2:mem:schema");
+c.exec("CREATE TABLE customers(id INT PRIMARY KEY, name VARCHAR(40)); CREATE TABLE orders(id INT PRIMARY KEY, customer_id INT, total DECIMAL(10,2), FOREIGN KEY(customer_id) REFERENCES customers(id));");
+let tables = c.tables(); let columns = c.columns("CUSTOMERS"); let order_columns = c.columns("ORDERS"); let keys = c.keys("CUSTOMERS");
+assert(columns.rows() == 2); assert(order_columns.rows() == 3); assert(keys.rows() >= 1);
+tables.csv("data/schema_tables.csv"); columns.csv("data/schema_customers.csv"); order_columns.csv("data/schema_orders.csv"); keys.csv("data/schema_keys.csv");
+end _dsl_
+let customer_rows = csv_parse(read_file("data/schema_customers.csv"));
+let order_rows = csv_parse(read_file("data/schema_orders.csv"));
+let customer_id_name = customer_rows[1][2];
+let customer_name_name = customer_rows[2][2];
+let order_id_name = order_rows[1][2];
+let order_customer_name = order_rows[2][2];
+let order_total_name = order_rows[3][2];
+let customer_id_label = customer_id_name + "  INTEGER  PK";
+let customer_name_label = customer_name_name + "  VARCHAR(40)";
+let order_id_label = order_id_name + "  INTEGER  PK";
+let order_customer_label = order_customer_name + "  INTEGER  FK";
+let order_total_label = order_total_name + "  DECIMAL";
+let draw = _dsl_ cli="lmdraw" install="github:lmctl-ai/lmdraw@latest";
+scene.canvas(900, 560, "#0f1720");
+scene.text(36.0, 48.0, 28.0, "JDBC schema map", "#f4f7fb");
+scene.text(36.0, 78.0, 15.0, "Metadata queried by lmdb, rendered by lmdraw", "#9fb3c8");
+scene.rect(70.0, 140.0, 300.0, 230.0, "#17324d");
+scene.text(94.0, 180.0, 22.0, "CUSTOMERS", "#f4f7fb");
+scene.text(94.0, 222.0, 18.0, ${customer_id_label}, "#d9e2ec");
+scene.text(94.0, 258.0, 18.0, ${customer_name_label}, "#d9e2ec");
+scene.rect(530.0, 140.0, 300.0, 230.0, "#17324d");
+scene.text(554.0, 180.0, 22.0, "ORDERS", "#f4f7fb");
+scene.text(554.0, 222.0, 18.0, ${order_id_label}, "#d9e2ec");
+scene.text(554.0, 258.0, 18.0, ${order_customer_label}, "#d9e2ec");
+scene.text(554.0, 294.0, 18.0, ${order_total_label}, "#d9e2ec");
+scene.arrow(370.0, 250.0, 530.0, 250.0, "#f2c94c", 3.0);
+scene.text(400.0, 238.0, 16.0, "1 : N", "#f2c94c");
+scene.text(70.0, 470.0, 16.0, "tables.csv + columns.csv + keys.csv are produced beside this image", "#9fb3c8");
+scene.render_png("images/lmdb_schema_map.png", 900, 560, 1);
+end _dsl_
+savedsl(db, "build/schema_map.dslb");
+r = system ${dsl_cli(db)} --dsl build/schema_map.dslb;
+assert(r.code == 0);
+savedsl(draw, "build/schema_map_draw.dslb");
+r = system ${dsl_cli(draw)} --dsl build/schema_map_draw.dslb;
+assert(r.code == 0);

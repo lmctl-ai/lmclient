@@ -1,0 +1,162 @@
+package ai.lmctl.lmdb;
+
+import ai.lmctl.lmdb.core.Database;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+/** Stateless JDBC command line. Database exceptions never echo queries or credentials. */
+public final class Main {
+    public static final String VERSION = "0.1.0";
+    private Main() {}
+
+    public static void main(String[] args) {
+        int code;
+        try { code = run(args); }
+        catch (IllegalArgumentException e) { System.err.println("lmdb: " + e.getMessage()); code = 2; }
+        catch (Exception e) {
+            System.err.println("lmdb: database or file operation failed (" + e.getClass().getSimpleName() + ")");
+            code = 3;
+        }
+        catch (OutOfMemoryError e) { System.err.println("lmdb: LMDB_MAX_MEMORY_MB memory budget exceeded"); code = 3; }
+        if (code != 0) System.exit(code);
+    }
+
+    public static long memoryBudget() {
+        String raw = System.getenv("LMDB_MAX_MEMORY_MB");
+        if (raw == null) return 4096L * 1024 * 1024;
+        try {
+            if (!raw.matches("[1-9][0-9]*")) throw new NumberFormatException();
+            long megabytes = Long.parseLong(raw);
+            return Math.multiplyExact(megabytes, 1024L * 1024);
+        } catch (ArithmeticException | NumberFormatException e) {
+            throw new IllegalArgumentException("LMDB_MAX_MEMORY_MB must be a positive whole number of MiB");
+        }
+    }
+
+    static int run(String[] args) throws Exception {
+        memoryBudget();
+        if (args.length == 0 || args[0].equals("--help")) { usage(); return args.length == 0 ? 2 : 0; }
+        switch (args[0]) {
+            case "--version": System.out.println("lmdb " + VERSION); return 0;
+            case "--dsl-schema": System.out.print(HostApi.schema()); return 0;
+            case "--dsl-signatures": System.out.print(HostApi.signatures()); return 0;
+            case "--notices":
+                try (var stream = Main.class.getResourceAsStream("/THIRD_PARTY_NOTICES")) {
+                    if (stream == null) throw new IllegalStateException("missing embedded notices");
+                    System.out.write(stream.readAllBytes());
+                } return 0;
+            case "--driver-test":
+                var results = Drivers.selfTest();
+                results.forEach((name, result) -> System.out.println(name + ": " + result));
+                return results.values().stream().allMatch("ok"::equals) ? 0 : 3;
+            default: break;
+        }
+        Map<String, String> options = new LinkedHashMap<>();
+        for (int i = 0; i < args.length; i++) {
+            if (!java.util.Set.of("--url", "--sql", "--file", "--format", "--output", "--metadata", "--table", "--credentials-file", "--max-rows", "--driver-jar", "--driver-class", "--explain", "--diff-url").contains(args[i]))
+                throw new IllegalArgumentException("unknown option; run lmdb --help");
+            if (i + 1 == args.length) throw new IllegalArgumentException("option requires a value");
+            if (options.put(args[i], args[++i]) != null) throw new IllegalArgumentException("duplicate option");
+        }
+        String url = options.getOrDefault("--url", System.getenv("LMDB_URL"));
+        Credentials.validateUrl(url);
+        Drivers.register();
+        if (options.containsKey("--driver-jar"))
+            loadExternalDriver(options.get("--driver-jar"), options.get("--driver-class"));
+        String format = options.getOrDefault("--format", "table");
+        if (!java.util.Set.of("table", "csv", "json").contains(format))
+            throw new IllegalArgumentException("format must be table, csv or json");
+        int maxRows;
+        try { maxRows = Integer.parseInt(options.getOrDefault("--max-rows", "10000")); }
+        catch (NumberFormatException e) { throw new IllegalArgumentException("max-rows must be positive"); }
+        if (maxRows <= 0 || maxRows > 1_000_000) throw new IllegalArgumentException("max-rows must be between 1 and 1000000");
+        try (var database = Database.connect(url, Credentials.read(options.get("--credentials-file")))) {
+            String sql = options.get("--sql");
+            if (options.containsKey("--file")) {
+                if (sql != null) throw new IllegalArgumentException("choose --sql or --file");
+                Path file = Path.of(options.get("--file"));
+                if (Files.size(file) > memoryBudget() / 4) throw new IllegalArgumentException("SQL file exceeds LMDB_MAX_MEMORY_MB budget");
+                sql = Files.readString(file, StandardCharsets.UTF_8);
+            }
+            String output = execute(database, options, sql, maxRows, format);
+            if (options.containsKey("--output")) Files.writeString(Path.of(options.get("--output")), output, StandardCharsets.UTF_8);
+            else System.out.print(output);
+        }
+        return 0;
+    }
+
+    private static String execute(Database database, Map<String,String> options, String sql, int maxRows, String format) throws Exception {
+        Database.QueryResult result;
+        if (options.containsKey("--metadata")) {
+            String table = options.get("--table");
+            result = switch(options.get("--metadata")) {
+                case "schemas" -> database.schemas();
+                case "tables" -> database.tables();
+                case "views" -> database.views();
+                case "columns" -> database.columns(null, table == null ? "%" : table);
+                case "keys" -> database.keys(null, requiredTable(table));
+                case "indexes" -> database.indexes(null, requiredTable(table));
+                default -> throw new IllegalArgumentException("unknown metadata kind");
+            };
+        } else if (options.containsKey("--explain")) result = database.explain(options.get("--explain"));
+        else if (options.containsKey("--diff-url")) {
+            String otherUrl = options.get("--diff-url");
+            Credentials.validateUrl(otherUrl);
+            try (var other = Database.connect(otherUrl, Credentials.read(options.get("--credentials-file")))) {
+                result = Database.diff(database.snapshot(),other.snapshot());
+            }
+        }
+        else {
+            if (sql == null) throw new IllegalArgumentException("provide --sql, --file or --metadata");
+            var statements = ai.lmctl.lmdb.core.SqlScript.split(sql);
+            if (statements.isEmpty()) throw new IllegalArgumentException("SQL must not be empty");
+            result = null;
+            for (String statement : statements) result = database.query(statement, maxRows);
+        }
+        return switch (format) { case "csv" -> Database.csv(result); case "json" -> Database.json(result); default -> Database.table(result); };
+    }
+
+    private static String requiredTable(String table) {
+        if (table == null) throw new IllegalArgumentException("this metadata kind requires --table NAME");
+        return table;
+    }
+
+    private static void loadExternalDriver(String jar, String className) throws Exception {
+        if (System.getProperty("org.graalvm.nativeimage.imagecode") != null)
+            throw new IllegalArgumentException("optional JDBC jars require the JVM distribution or a custom native build");
+        if (className == null) throw new IllegalArgumentException("--driver-jar requires --driver-class");
+        var loader = new java.net.URLClassLoader(new java.net.URL[]{Path.of(jar).toUri().toURL()}, Main.class.getClassLoader());
+        var driver = (java.sql.Driver) Class.forName(className, true, loader).getConstructor().newInstance();
+        java.sql.DriverManager.registerDriver(new DriverDelegate(driver));
+    }
+
+    private record DriverDelegate(java.sql.Driver driver) implements java.sql.Driver {
+        public java.sql.Connection connect(String url, java.util.Properties properties) throws java.sql.SQLException { return driver.connect(url, properties); }
+        public boolean acceptsURL(String url) throws java.sql.SQLException { return driver.acceptsURL(url); }
+        public java.sql.DriverPropertyInfo[] getPropertyInfo(String url,java.util.Properties properties) throws java.sql.SQLException { return driver.getPropertyInfo(url, properties); }
+        public int getMajorVersion() { return driver.getMajorVersion(); }
+        public int getMinorVersion() { return driver.getMinorVersion(); }
+        public boolean jdbcCompliant() { return driver.jdbcCompliant(); }
+        public java.util.logging.Logger getParentLogger() throws java.sql.SQLFeatureNotSupportedException { return driver.getParentLogger(); }
+    }
+
+    private static void usage() {
+        System.out.println("""
+            lmdb: portable scriptable JDBC client
+            lmdb --url JDBC_URL --sql SQL [--format table|csv|json] [--output FILE]
+            lmdb --url JDBC_URL --file SQL_FILE [--max-rows N]
+            lmdb --url JDBC_URL --metadata schemas|tables|views|columns|keys|indexes [--table NAME]
+            lmdb --url JDBC_URL --explain SQL
+            lmdb --url JDBC_URL --diff-url OTHER_JDBC_URL
+            lmdb --dsl BYTECODE [--dry-run] | --dsl-schema | --dsl-signatures
+            lmdb --driver-test | --version | --notices
+            Credentials: LMDB_USER, LMDB_PASSWORD, or --credentials-file UTF8_PROPERTIES.
+            URL fallback: LMDB_URL. Optional drivers: --driver-jar JAR --driver-class CLASS (JVM only).
+            LMDB_MAX_MEMORY_MB: positive whole MiB; default 4096. Results default to 10000 rows.
+            Linux binaries require glibc 2.35 or newer.
+            """);
+    }
+}

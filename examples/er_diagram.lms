@@ -1,0 +1,33 @@
+# A small relational model is queried through JDBC and rendered as an ER diagram.
+mkdir("images"); mkdir("data"); mkdir("build");
+let db = _dsl_ cli="lmdb" install="github:lmctl-ai/lmdb@latest";
+let c = db.connect("jdbc:sqlite::memory:");
+c.exec("CREATE TABLE customers(id INTEGER PRIMARY KEY, name TEXT); CREATE TABLE orders(id INTEGER PRIMARY KEY, customer_id INTEGER, total REAL, FOREIGN KEY(customer_id) REFERENCES customers(id)); INSERT INTO customers VALUES (1,'Ada'),(2,'Lin'); INSERT INTO orders VALUES (10,1,42.5),(11,1,18.0),(12,2,77.0);");
+let tables = c.tables(); let customer_columns = c.columns("customers"); let order_columns = c.columns("orders"); let keys = c.keys("orders");
+assert(customer_columns.rows() == 2); assert(order_columns.rows() == 3); assert(keys.rows() >= 1);
+tables.csv("data/er_tables.csv"); customer_columns.csv("data/er_customer_columns.csv"); order_columns.csv("data/er_order_columns.csv"); keys.csv("data/er_keys.csv");
+end _dsl_
+let draw = _dsl_ cli="lmdraw" install="github:lmctl-ai/lmdraw@latest";
+scene.canvas(900, 560, "#0f1720");
+scene.text(36.0, 48.0, 28.0, "lmdb entity relationship diagram", "#f4f7fb");
+scene.text(36.0, 78.0, 15.0, "Primary and foreign keys discovered through JDBC metadata", "#9fb3c8");
+scene.rect(70.0, 140.0, 300.0, 230.0, "#17324d");
+scene.text(94.0, 180.0, 22.0, "customers", "#f4f7fb");
+scene.text(94.0, 222.0, 18.0, "id  INTEGER  PK", "#d9e2ec");
+scene.text(94.0, 258.0, 18.0, "name  TEXT", "#d9e2ec");
+scene.rect(530.0, 140.0, 300.0, 230.0, "#17324d");
+scene.text(554.0, 180.0, 22.0, "orders", "#f4f7fb");
+scene.text(554.0, 222.0, 18.0, "id  INTEGER  PK", "#d9e2ec");
+scene.text(554.0, 258.0, 18.0, "customer_id  INTEGER  FK", "#d9e2ec");
+scene.text(554.0, 294.0, 18.0, "total  REAL", "#d9e2ec");
+scene.arrow(370.0, 250.0, 530.0, 250.0, "#f2c94c", 3.0);
+scene.text(402.0, 238.0, 16.0, "1 : N", "#f2c94c");
+scene.text(70.0, 470.0, 16.0, "JDBC metadata exports: er_tables.csv, er_*_columns.csv, er_keys.csv", "#9fb3c8");
+scene.render_png("images/er_diagram.png", 900, 560, 1);
+end _dsl_
+savedsl(db, "build/er_diagram.dslb");
+r = system ${dsl_cli(db)} --dsl build/er_diagram.dslb;
+assert(r.code == 0);
+savedsl(draw, "build/er_diagram_draw.dslb");
+r = system ${dsl_cli(draw)} --dsl build/er_diagram_draw.dslb;
+assert(r.code == 0);

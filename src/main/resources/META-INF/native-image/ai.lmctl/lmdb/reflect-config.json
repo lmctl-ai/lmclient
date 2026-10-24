@@ -1,0 +1,7 @@
+[
+  {"name":"org.postgresql.Driver","allDeclaredConstructors":true},
+  {"name":"org.sqlite.JDBC","allDeclaredConstructors":true},
+  {"name":"org.h2.Driver","allDeclaredConstructors":true},
+  {"name":"org.duckdb.DuckDBDriver","allDeclaredConstructors":true},
+  {"name":"com.microsoft.sqlserver.jdbc.SQLServerDriver","allDeclaredConstructors":true}
+]

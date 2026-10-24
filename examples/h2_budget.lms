@@ -1,0 +1,20 @@
+# Department budgets from H2, grouped for an executive view.
+mkdir("images"); mkdir("data"); mkdir("build");
+let db = _dsl_ cli="lmdb" install="github:lmctl-ai/lmdb@latest";
+let c = db.connect("jdbc:h2:mem:budget");
+c.exec("CREATE TABLE spend(department VARCHAR(20), planned DECIMAL(10,2), actual DECIMAL(10,2)); INSERT INTO spend VALUES ('Research',90000,87000),('Sales',120000,131000),('Support',70000,65000),('Operations',110000,104000);");
+let q = c.query("SELECT department, planned, actual FROM spend ORDER BY department");
+q.csv("data/h2_budget.csv");
+assert(q.rows() == 4);
+assert(q.number(0, 1) == 90000.0);
+end _dsl_
+plot = _dsl_ cli="lmplot" install="github:lmctl-ai/lmplot@latest";
+let p = plot;
+p.png("images/h2_budget.png", 900, 560); p.cmd("set title 'Planned versus actual spend'; set ylabel 'USD'; set style data histograms; set style histogram clustered gap 1; set style fill solid 0.8; set datafile separator ','; plot 'data/h2_budget.csv' every ::1 using 2:xtic(1) title 'planned', '' every ::1 using 3 title 'actual'"); p.close();
+end _dsl_
+savedsl(db, "build/h2_budget.dslb");
+r = system ${dsl_cli(db)} --dsl build/h2_budget.dslb;
+assert(r.code == 0);
+savedsl(plot, "build/h2_budget_plot.dslb");
+r = system ${dsl_cli(plot)} --dsl build/h2_budget_plot.dslb;
+assert(r.code == 0);

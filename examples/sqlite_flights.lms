@@ -1,0 +1,20 @@
+# Route performance: join flights to airports and rank average delay.
+mkdir("images"); mkdir("data"); mkdir("build");
+let db = _dsl_ cli="lmdb" install="github:lmctl-ai/lmdb@latest";
+let c = db.connect("jdbc:sqlite::memory:");
+c.exec("CREATE TABLE airports(code TEXT PRIMARY KEY, city TEXT); CREATE TABLE flights(origin TEXT, destination TEXT, delay REAL); INSERT INTO airports VALUES ('ORD','Chicago'),('SEA','Seattle'),('BOS','Boston'); INSERT INTO flights VALUES ('ORD','SEA',42),('ORD','BOS',18),('SEA','ORD',11),('BOS','ORD',27),('ORD','SEA',25);");
+let q = c.query("SELECT a.city || ' to ' || b.city AS route, AVG(f.delay) AS avg_delay FROM flights f JOIN airports a ON a.code=f.origin JOIN airports b ON b.code=f.destination GROUP BY route ORDER BY avg_delay DESC");
+q.csv("data/sqlite_flights.csv");
+assert(q.rows() == 3);
+assert(q.number(0, 1) == 33.5);
+end _dsl_
+plot = _dsl_ cli="lmplot" install="github:lmctl-ai/lmplot@latest";
+let p = plot;
+p.png("images/sqlite_flights.png", 900, 560); p.cmd("set title 'Average delay by route'; set ylabel 'Minutes'; set style data histograms; set style fill solid 0.8; set datafile separator ','; plot 'data/sqlite_flights.csv' every ::1 using 2:xtic(1) title 'average delay'"); p.close();
+end _dsl_
+savedsl(db, "build/sqlite_flights.dslb");
+r = system ${dsl_cli(db)} --dsl build/sqlite_flights.dslb;
+assert(r.code == 0);
+savedsl(plot, "build/sqlite_flights_plot.dslb");
+r = system ${dsl_cli(plot)} --dsl build/sqlite_flights_plot.dslb;
+assert(r.code == 0);

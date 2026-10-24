@@ -1,0 +1,29 @@
+lmdb 0.1.0 — third-party notices
+
+lmdb and the lmcode-java SDK: MIT License, lmctl-ai contributors.
+
+Bundled JDBC drivers (versions pinned in pom.xml and deps.lock):
+PostgreSQL JDBC: BSD-2-Clause, https://jdbc.postgresql.org/about/license/
+SQLite JDBC: Apache-2.0, https://github.com/xerial/sqlite-jdbc/blob/master/LICENSE
+SQLite engine: public domain, https://sqlite.org/copyright.html
+H2: dual MPL-2.0 / EPL-1.0, https://h2database.com/html/license.html
+DuckDB JDBC and engine: MIT, https://github.com/duckdb/duckdb-java/blob/main/LICENSE
+Microsoft JDBC Driver for SQL Server: MIT,
+https://github.com/microsoft/mssql-jdbc/blob/main/LICENSE
+SLF4J API (SQLite transitive dependency): MIT, https://www.slf4j.org/license.html
+Checker Framework annotations (PostgreSQL transitive dependency): MIT,
+https://github.com/typetools/checker-framework/blob/master/LICENSE.txt
+
+The JVM source distribution requires Java 21 or newer. Native release executables
+include GraalVM Community/OpenJDK runtime components under GPLv2 with the
+Classpath Exception, https://openjdk.org/legal/gplv2+ce.html . The Classpath
+Exception permits linking this runtime with this MIT-licensed application.
+
+Linux native executables are dynamically linked to the system glibc (LGPL-2.1),
+requiring glibc 2.35 or newer. No glibc implementation is bundled. GCC runtime
+components, when linked, use GPLv3 with the GCC Runtime Library Exception.
+
+MySQL Connector/J (GPL) and MariaDB Connector/J (LGPL) are NOT bundled.
+Users supplying optional JDBC jars are responsible for those drivers' licenses.
+Dependency license texts and upstream copyright notices are retained as Maven
+dependency resources; see the upstream source links above for full terms.

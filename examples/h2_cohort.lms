@@ -1,0 +1,20 @@
+# Cohort retention matrix flattened into a heatmap-ready CSV.
+mkdir("images"); mkdir("data"); mkdir("build");
+let db = _dsl_ cli="lmdb" install="github:lmctl-ai/lmdb@latest";
+let c = db.connect("jdbc:h2:mem:cohort");
+c.exec("CREATE TABLE retention(cohort INT, week INT, retained INT); INSERT INTO retention VALUES (1,1,100),(1,2,72),(1,3,55),(1,4,41),(2,1,100),(2,2,68),(2,3,49),(2,4,35),(3,1,100),(3,2,76),(3,3,61),(3,4,46);");
+let q = c.query("SELECT cohort, week, retained FROM retention ORDER BY cohort, week");
+q.csv("data/h2_cohort.csv");
+assert(q.rows() == 12);
+assert(q.number(0, 2) == 100.0);
+end _dsl_
+plot = _dsl_ cli="lmplot" install="github:lmctl-ai/lmplot@latest";
+let p = plot;
+p.png("images/h2_cohort.png", 900, 560); p.cmd("set title 'Cohort retention'; set xlabel 'Cohort'; set ylabel 'Week'; set cblabel 'Retained'; set view map; set palette defined (0 '#102a43',1 '#2f80ed',2 '#f2c94c'); set datafile separator ','; plot 'data/h2_cohort.csv' every ::1 using 1:2:3 with image notitle"); p.close();
+end _dsl_
+savedsl(db, "build/h2_cohort.dslb");
+r = system ${dsl_cli(db)} --dsl build/h2_cohort.dslb;
+assert(r.code == 0);
+savedsl(plot, "build/h2_cohort_plot.dslb");
+r = system ${dsl_cli(plot)} --dsl build/h2_cohort_plot.dslb;
+assert(r.code == 0);

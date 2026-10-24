@@ -1,0 +1,130 @@
+name: ci
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+    paths-ignore: ['durable-memory/**', '**.md']
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ !startsWith(github.ref, 'refs/tags/') }}
+jobs:
+  native:
+    name: ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - {os: ubuntu-22.04, name: linux-x64}
+          - {os: ubuntu-22.04-arm, name: linux-arm64}
+          - {os: macos-15, name: macos-arm64}
+          - {os: macos-15-intel, name: macos-x64}
+          - {os: windows-2022, name: windows-x64}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: graalvm/setup-graalvm@27b360dbb857524eaf0b4c4cef364d38e5b4f173
+        with:
+          java-version: '25'
+          distribution: graalvm-community
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          cache: maven
+      - name: Linux build prerequisites
+        if: runner.os == 'Linux'
+        run: timeout 180 sudo apt-get update -qq && timeout 180 sudo apt-get install -y -qq build-essential zlib1g-dev
+      - name: macOS timeout utility
+        if: runner.os == 'macOS'
+        run: brew install coreutils
+      - name: JVM tests
+        timeout-minutes: 8
+        run: bash test.sh
+      - name: Build native executable
+        timeout-minutes: 40
+        run: bash scripts/build-native.sh
+      - name: Test native executable
+        timeout-minutes: 8
+        run: |
+          exe=target/lmdb
+          if [[ "$RUNNER_OS" == Windows ]]; then exe=target/lmdb.exe; fi
+          python3 scripts/test-cli.py "$exe"
+          if [[ "$RUNNER_OS" == Linux ]]; then python3 scripts/check-linux-linkage.py "$exe"; fi
+          mkdir -p dist
+          suffix=''
+          if [[ "$RUNNER_OS" == Windows ]]; then suffix=.exe; fi
+          cp "$exe" "dist/lmdb-${{ matrix.name }}$suffix"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: lmdb-${{ matrix.name }}
+          path: dist/*
+          if-no-files-found: error
+  network:
+    name: PostgreSQL and SQL Server native integration
+    needs: native
+    runs-on: ubuntu-22.04
+    timeout-minutes: 15
+    services:
+      postgres:
+        image: postgres:17.6
+        env:
+          POSTGRES_DB: lmdb
+          POSTGRES_USER: lmdb
+          POSTGRES_PASSWORD: lmdb-ci-postgres
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s --health-timeout 5s --health-retries 20
+      sqlserver:
+        image: mcr.microsoft.com/mssql/server:2022-CU20-ubuntu-22.04
+        env:
+          ACCEPT_EULA: 'Y'
+          MSSQL_PID: Developer
+          MSSQL_SA_PASSWORD: Lmdb-CI-only-2026!
+        ports: ['1433:1433']
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: lmdb-linux-x64
+          path: native
+      - name: Query both server engines with the native executable
+        env:
+          LMDB_POSTGRES_URL: jdbc:postgresql://127.0.0.1:5432/lmdb
+          LMDB_POSTGRES_USER: lmdb
+          LMDB_POSTGRES_PASSWORD: lmdb-ci-postgres
+          LMDB_MSSQL_URL: jdbc:sqlserver://127.0.0.1:1433;databaseName=master;encrypt=true;trustServerCertificate=true
+          LMDB_MSSQL_USER: sa
+          LMDB_MSSQL_PASSWORD: Lmdb-CI-only-2026!
+        run: |
+          chmod +x native/lmdb-linux-x64
+          timeout 600 python3 scripts/test-network.py native/lmdb-linux-x64
+  release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: [native, network]
+    runs-on: ubuntu-22.04
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          path: dist
+          merge-multiple: true
+      - name: Publish the five tested binaries
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cd dist
+          test "$(find . -maxdepth 1 -type f -name 'lmdb-*' | wc -l)" -eq 5
+          sha256sum lmdb-* > SHA256SUMS
+          timeout 180 gh release create "$GITHUB_REF_NAME" lmdb-* SHA256SUMS --repo "$GITHUB_REPOSITORY" --title "$GITHUB_REF_NAME" --notes 'One native executable per platform; Java is not required. Linux requires glibc 2.35 or newer. Includes PostgreSQL, SQLite, H2, DuckDB and SQL Server JDBC drivers.'

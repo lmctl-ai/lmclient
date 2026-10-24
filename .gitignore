@@ -1,0 +1,11 @@
+target/
+build/
+third_party/
+__pycache__/
+*.pyc
+.omx/
+*.dslb
+images/
+*.db
+*.duckdb
+*.mv.db

@@ -1,0 +1,22 @@
+# Monthly sales trend from an in-memory SQLite database.
+mkdir("images"); mkdir("data"); mkdir("build");
+let db = _dsl_ cli="lmdb" install="github:lmctl-ai/lmdb@latest";
+let c = db.connect("jdbc:sqlite::memory:");
+c.exec("CREATE TABLE sales(month TEXT, revenue REAL); INSERT INTO sales VALUES ('Jan',12000),('Feb',14500),('Mar',13800),('Apr',17100),('May',19600),('Jun',21400);");
+let q = c.query("SELECT row_number() OVER () AS n, month, revenue FROM sales ORDER BY n");
+q.csv("data/sqlite_sales_trend.csv");
+assert(q.rows() == 6);
+assert(q.number(0, 2) == 12000.0);
+end _dsl_
+plot = _dsl_ cli="lmplot" install="github:lmctl-ai/lmplot@latest";
+let p = plot;
+p.png("images/sqlite_sales_trend.png", 900, 560);
+p.cmd("set title 'SQLite sales trend'; set xlabel 'Month'; set ylabel 'Revenue'; set grid; set datafile separator ','; plot 'data/sqlite_sales_trend.csv' every ::1 using 1:3:xtic(2) with linespoints lw 3 pt 7 title 'revenue'");
+p.close();
+end _dsl_
+savedsl(db, "build/sqlite_sales_trend.dslb");
+r = system ${dsl_cli(db)} --dsl build/sqlite_sales_trend.dslb;
+assert(r.code == 0);
+savedsl(plot, "build/sqlite_sales_trend_plot.dslb");
+r = system ${dsl_cli(plot)} --dsl build/sqlite_sales_trend_plot.dslb;
+assert(r.code == 0);

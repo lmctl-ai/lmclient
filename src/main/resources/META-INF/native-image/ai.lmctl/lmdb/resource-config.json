@@ -1,0 +1,17 @@
+{
+  "resources": {
+    "includes": [
+      {"pattern":"THIRD_PARTY_NOTICES"},
+      {"pattern":"META-INF/services/java.sql.Driver"},
+      {"pattern":"org/h2/res/.*"},
+      {"pattern":"org/h2/util/.*"},
+      {"pattern":"org/sqlite/native/.*"},
+      {"pattern":"org/duckdb/.*"},
+      {"pattern":"libduckdb_java\\.so_linux_.*"},
+      {"pattern":"libduckdb_java\\.so_osx_.*"},
+      {"pattern":"libduckdb_java\\.so_windows_.*"},
+      {"pattern":"com/microsoft/sqlserver/jdbc/.*"},
+      {"pattern":"org/postgresql/.*"}
+    ]
+  }
+}
