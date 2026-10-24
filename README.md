@@ -46,6 +46,14 @@ Inside an lmscript program, bind the host with `_dsl_ cli="lmdb" install="github
 
 The native distribution bundles PostgreSQL, SQLite-JDBC, H2, DuckDB and Microsoft SQL Server JDBC drivers. MySQL and MariaDB drivers are not bundled; on the JVM, pass a user supplied driver jar through the CLI build workflow. The release includes driver notices and the GraalVM runtime notice.
 
+Optional drivers are a JVM feature because native-image executables cannot load arbitrary classes after compilation:
+
+```sh
+lmdb --driver-jar /path/to/driver.jar --driver-class com.example.Driver +  --url jdbc:example:... --sql 'SELECT 1'
+```
+
+Every invocation is bounded by `LMDB_MAX_MEMORY_MB` (default 4096 MiB); invalid or non-positive values fail with usage status 2, and a runtime budget breach fails with status 3. Query results are capped at 10,000 rows by default; use `--max-rows` to choose a positive limit up to 1,000,000.
+
 ## Build
 
 ```sh

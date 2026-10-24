@@ -7,8 +7,8 @@ let tables = c.tables(); let columns = c.columns("CUSTOMERS"); let order_columns
 assert(columns.rows() == 2); assert(order_columns.rows() == 3); assert(keys.rows() >= 1);
 tables.csv("data/schema_tables.csv"); columns.csv("data/schema_customers.csv"); order_columns.csv("data/schema_orders.csv"); keys.csv("data/schema_keys.csv");
 end _dsl_
-let customer_rows = csv_parse(read_file("data/schema_customers.csv"));
-let order_rows = csv_parse(read_file("data/schema_orders.csv"));
+let customer_rows = csv_parse(read_file("data/schema_customers.csv"), false);
+let order_rows = csv_parse(read_file("data/schema_orders.csv"), false);
 let customer_id_name = customer_rows[1][2];
 let customer_name_name = customer_rows[2][2];
 let order_id_name = order_rows[1][2];
