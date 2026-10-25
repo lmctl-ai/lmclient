@@ -41,7 +41,8 @@ def exclusion_pattern(target):
     patterns = []
     for prefix in ("libduckdb_java.so_", "org/sqlite/native/"):
         keep = [name[len(prefix):] for name in TARGET_RESOURCES[target] if name.startswith(prefix)]
-        suffix = "(?!(" + "|".join(re.escape(name).replace(r"\.", "[.]") for name in keep) + ")$)" if keep else ""
+        # GraalVM 25 also matches file names with an appended slash.
+        suffix = "(?!(" + "|".join(re.escape(name).replace(r"\.", "[.]") for name in keep) + ")/?$)" if keep else ""
         patterns.append(re.escape(prefix).replace(r"\.", "[.]") + suffix + ".*")
     # Graal interprets a colon as the module:pattern separator, so avoid (?:...).
     return "|".join(patterns)

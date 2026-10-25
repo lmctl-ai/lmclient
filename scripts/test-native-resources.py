@@ -22,7 +22,8 @@ expected = {
 for target, names in expected.items():
     pattern = exclusion_pattern(target)
     assert ":" not in pattern, "Graal treats a colon as a module selector"
-    kept = {name for name in resources if not re.fullmatch(pattern, name)}
+    # GraalVM 25 tests both the resource name and its trailing-slash variant.
+    kept = {name for name in resources if not (re.fullmatch(pattern, name) or re.fullmatch(pattern, name + "/"))}
     assert kept == names, (target, kept, names)
     removed = sum(size for name, size in resources.items() if name not in kept)
     print(f"native resource filter: {target}: keep {sum(resources[n] for n in kept):,} bytes; exclude {removed:,} bytes")

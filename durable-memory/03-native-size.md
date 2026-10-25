@@ -26,6 +26,10 @@ checks enforce that restriction in addition to testing retained resource names.
 The filter is generated into classpath native-image.properties before packaging.
 Do not replace it with an @argument-file build argument: Maven already wraps
 Windows arguments in a file, and native-image does not expand nested files.
+GraalVM 25 tests exclusions against both a resource name and that name plus a
+trailing slash. The retention lookahead must protect both variants; the
+JAR-based regression checks simulate this behavior. Otherwise the target's
+DuckDB resource is removed even though its normal filename matches the keep list.
 
 DuckDB currently ships one universal macOS resource, which its loader expects
 as libduckdb_java.so_osx_universal. SQLite ships separate Mac/aarch64 and
