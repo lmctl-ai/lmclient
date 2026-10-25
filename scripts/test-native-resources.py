@@ -20,7 +20,9 @@ expected = {
     "windows-x64": {"libduckdb_java.so_windows_amd64", "org/sqlite/native/Windows/x86_64/sqlitejdbc.dll"},
 }
 for target, names in expected.items():
-    kept = {name for name in resources if not re.fullmatch(exclusion_pattern(target), name)}
+    pattern = exclusion_pattern(target)
+    assert ":" not in pattern, "Graal treats a colon as a module selector"
+    kept = {name for name in resources if not re.fullmatch(pattern, name)}
     assert kept == names, (target, kept, names)
     removed = sum(size for name, size in resources.items() if name not in kept)
     print(f"native resource filter: {target}: keep {sum(resources[n] for n in kept):,} bytes; exclude {removed:,} bytes")
