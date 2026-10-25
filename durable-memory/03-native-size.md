@@ -13,9 +13,13 @@ macOS x64, and 246,665,424 bytes on Windows x64. The JVM JAR remains portable.
 `scripts/native_resources.py` creates the native-image exclusion argument for
 the actual build platform. `scripts/test-native-resources.py` checks every
 target against the actual shaded JAR. Native CI also inspects GraalVM's
-embedded-resources.json: Linux must contain no extracted JDBC native resources,
+embedded-resources.json: no foreign-platform JNI resource may be retained,
 and macOS/Windows must contain exactly their DuckDB and SQLite libraries.
 This catches accidental reintroduction through third-party reachability metadata.
+Xerial's feature explicitly adds its host SQLite library through
+RuntimeResourceAccess, bypassing regex exclusions. Linux therefore retains that
+small unused host resource, as v0.1.0 already did; JdbcSubstitutions initializes
+the statically linked engine and never extracts or loads the shared copy.
 Graal interprets a colon in an exclusion as a module:pattern selector, so these
 regexes must avoid noncapturing groups such as `(?:...)`. The filter regression
 checks enforce that restriction in addition to testing retained resource names.

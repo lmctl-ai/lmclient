@@ -26,6 +26,15 @@ TARGET_RESOURCES = {
     "windows-x64": ("libduckdb_java.so_windows_amd64", "org/sqlite/native/Windows/x86_64/sqlitejdbc.dll"),
 }
 
+# Xerial's native-image feature adds its host library directly through
+# RuntimeResourceAccess, bypassing regex exclusions. Linux does not load this
+# copy: JdbcSubstitutions initializes the statically linked implementation.
+EMBEDDED_RESOURCES = {
+    **TARGET_RESOURCES,
+    "linux-x64": ("org/sqlite/native/Linux/x86_64/libsqlitejdbc.so",),
+    "linux-arm64": ("org/sqlite/native/Linux/aarch64/libsqlitejdbc.so",),
+}
+
 
 def exclusion_pattern(target):
     # Character classes avoid backslash processing in native-image properties.
@@ -48,7 +57,7 @@ def check_inventory(path, target):
         if resource.get("is_directory") or resource.get("is_missing"):
             continue
         actual[name] = sum(entry["size"] for entry in resource["entries"])
-    expected = set(TARGET_RESOURCES[target])
+    expected = set(EMBEDDED_RESOURCES[target])
     if set(actual) != expected or any(size <= 0 for size in actual.values()):
         raise SystemExit(f"wrong embedded JNI resources for {target}: expected {sorted(expected)}, got {actual}")
     print(f"embedded JNI resources: {target}: {len(actual)} libraries, {sum(actual.values()):,} bytes")
