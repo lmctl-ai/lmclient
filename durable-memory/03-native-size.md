@@ -37,4 +37,37 @@ Mac/x86_64 resources. Windows uses DuckDB's windows_amd64 resource and SQLite's
 Windows/x86_64/sqlitejdbc.dll. Do not remove these retained resources or change
 their paths without testing the upstream loaders.
 
-Release sizes and validation are recorded after the five-platform build.
+[Main CI run 40149496805](https://github.com/lmctl-ai/lmdb/actions/runs/40149496805)
+passed all five native targets, including embedded-resource inventories, five
+driver probes, CLI/DSL checks and all 14 examples. PostgreSQL and SQL Server
+integration also passed. The implementation is commit 10283c15906a73de9cae9c563bc8548cb6c0d523.
+
+The measured CI executables qualified the release; published v0.1.1 macOS and
+Windows asset sizes match those candidates exactly:
+
+| Platform | v0.1.0 bytes | v0.1.1 bytes | Reduction |
+| --- | ---: | ---: | ---: |
+| macos-arm64 | 357,248,264 | 181,560,584 | 49.18% |
+| macos-x64 | 356,381,264 | 182,252,112 | 48.86% |
+| windows-x64 | 358,084,608 | 110,948,352 | 69.02% |
+
+The standalone local Linux image remained exactly 129,633,136 bytes with the
+same Oracle GraalVM toolchain as the prior local build. It passed 40 CLI checks,
+22 DSL checks under a 6 GiB address-space limit, all 14 examples and ELF linkage
+inspection. Published Linux images use the CI Community toolchain instead.
+
+[Release CI run 40150052050](https://github.com/lmctl-ai/lmdb/actions/runs/40150052050)
+passed all five native targets, PostgreSQL/SQL Server integration and
+[v0.1.1 publication](https://github.com/lmctl-ai/lmdb/releases/tag/v0.1.1).
+All five executable SHA-256 digests match SHA256SUMS. Both downloaded Linux
+executables pass the glibc-only linkage audit; the x64 download passed all 40 CLI
+checks. Published Linux x64 stays at 128,715,632 bytes; ARM64 changes from
+122,292,936 to 122,227,400 bytes.
+
+Fresh-cache verification used lmctl 0.2.417, an isolated LMCTL_HOME and an empty
+LMSCRIPT_TOOL_CACHE, with no lmdb executable on PATH. The first README autorun
+installed v0.1.1 via @latest; its executable reports `lmdb 0.1.1` and matches the
+published checksum. All 14 README raw-URL autoruns passed in separate empty
+directories and wrote the expected 900 by 560 PNG images, each below 300 KB.
+No driver was removed, compiler optimization settings are unchanged, and no
+known release blocker remains. macOS still retains DuckDB's universal library.
