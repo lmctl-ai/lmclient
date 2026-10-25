@@ -62,7 +62,6 @@
           <imageName>lmdb</imageName><mainClass>${main.class}</mainClass>
           <buildArgs>
             <buildArg>--no-fallback</buildArg>
-            <buildArg>@target/native-resources.args</buildArg>
             <buildArg>-H:+GenerateEmbeddedResourcesFile</buildArg>
             <buildArg>--exclude-config</buildArg>
             <buildArg>.*h2-2[.]3[.]232[.]jar</buildArg>

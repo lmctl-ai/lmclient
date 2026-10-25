@@ -16,6 +16,12 @@ target against the actual shaded JAR. Native CI also inspects GraalVM's
 embedded-resources.json: Linux must contain no extracted JDBC native resources,
 and macOS/Windows must contain exactly their DuckDB and SQLite libraries.
 This catches accidental reintroduction through third-party reachability metadata.
+Graal interprets a colon in an exclusion as a module:pattern selector, so these
+regexes must avoid noncapturing groups such as `(?:...)`. The filter regression
+checks enforce that restriction in addition to testing retained resource names.
+The filter is generated into classpath native-image.properties before packaging.
+Do not replace it with an @argument-file build argument: Maven already wraps
+Windows arguments in a file, and native-image does not expand nested files.
 
 DuckDB currently ships one universal macOS resource, which its loader expects
 as libduckdb_java.so_osx_universal. SQLite ships separate Mac/aarch64 and

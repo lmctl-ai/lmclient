@@ -28,7 +28,7 @@ TARGET_RESOURCES = {
 
 
 def exclusion_pattern(target):
-    # Character classes avoid backslash processing in native-image @argument files.
+    # Character classes avoid backslash processing in native-image properties.
     patterns = []
     for prefix in ("libduckdb_java.so_", "org/sqlite/native/"):
         keep = [name[len(prefix):] for name in TARGET_RESOURCES[target] if name.startswith(prefix)]
@@ -58,18 +58,18 @@ def check_inventory(path, target):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--write-args", type=Path)
+    parser.add_argument("--write-config", type=Path)
     parser.add_argument("--check", type=Path)
     args = parser.parse_args()
     target = target_name()
-    if args.write_args:
-        args.write_args.parent.mkdir(parents=True, exist_ok=True)
-        args.write_args.write_text("-H:ExcludeResources=" + exclusion_pattern(target) + "\n", encoding="utf-8")
+    if args.write_config:
+        args.write_config.parent.mkdir(parents=True, exist_ok=True)
+        args.write_config.write_text("Args = -H:ExcludeResources=" + exclusion_pattern(target) + "\n", encoding="utf-8")
         print(f"native resource target: {target}")
     if args.check:
         check_inventory(args.check, target)
-    if not args.write_args and not args.check:
-        parser.error("choose --write-args or --check")
+    if not args.write_config and not args.check:
+        parser.error("choose --write-config or --check")
 
 
 if __name__ == "__main__":
