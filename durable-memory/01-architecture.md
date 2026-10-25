@@ -37,4 +37,4 @@ rejects java.awt.Toolkit so the executable does not require AWT sidecar librarie
 Examples create embedded databases from inline SQL, export CSV, then render with
 lmplot or lmdraw. They save and run their own bytecode so `lmctl autorun RAW_URL`
 in an empty directory produces the picture. Release and fresh-install evidence
-will be recorded after those gates pass.
+is recorded in 02-validation.md.
