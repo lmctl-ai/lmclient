@@ -79,9 +79,14 @@ jobs:
         run: |
           exe=target/lmdb
           if [[ "$RUNNER_OS" == Windows ]]; then exe=target/lmdb.exe; fi
+          suffix=''
+          if [[ "$RUNNER_OS" == Windows ]]; then suffix=.exe; fi
+          mkdir -p target/standalone
+          cp "$exe" "target/standalone/lmdb$suffix"
+          exe="target/standalone/lmdb$suffix"
           python3 scripts/test-cli.py "$exe"
           if [[ "$RUNNER_OS" == Linux ]]; then python3 scripts/check-linux-linkage.py "$exe"; fi
-          export PATH="$PWD/target:$PATH"
+          export PATH="$PWD/target/standalone:$PATH"
           if [[ "$RUNNER_OS" == Linux ]]; then
             LMDB_TEST_ADDRESS_SPACE_LIMIT=1 LMDB_TEST_DEFAULT_BUDGET=1 python3 scripts/test-dsl.py "$exe"
           else
@@ -89,8 +94,6 @@ jobs:
           fi
           python3 scripts/test-examples.py
           mkdir -p dist
-          suffix=''
-          if [[ "$RUNNER_OS" == Windows ]]; then suffix=.exe; fi
           cp "$exe" "dist/lmdb-${{ matrix.name }}$suffix"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

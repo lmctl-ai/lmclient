@@ -24,7 +24,9 @@ fi
 mvn -q -Pnative -DskipTests package
 case "$(uname -s)" in
   MINGW*|MSYS*|CYGWIN*)
-    mt.exe -nologo '-inputresource:target/lmdb.exe;#1' -manifest scripts/windows-utf8.manifest -out:target/lmdb-merged.manifest
+    if ! mt.exe -nologo '-inputresource:target/lmdb.exe;#1' -manifest scripts/windows-utf8.manifest -out:target/lmdb-merged.manifest; then
+      cp scripts/windows-utf8.manifest target/lmdb-merged.manifest
+    fi
     mt.exe -nologo -manifest target/lmdb-merged.manifest '-outputresource:target/lmdb.exe;#1'
     ;;
 esac
