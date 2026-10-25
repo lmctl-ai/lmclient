@@ -84,6 +84,7 @@ jobs:
           mkdir -p target/standalone
           cp "$exe" "target/standalone/lmdb$suffix"
           exe="target/standalone/lmdb$suffix"
+          python3 scripts/native_resources.py --check target/embedded-resources.json
           python3 scripts/test-cli.py "$exe"
           if [[ "$RUNNER_OS" == Linux ]]; then python3 scripts/check-linux-linkage.py "$exe"; fi
           export PATH="$PWD/target/standalone:$PATH"

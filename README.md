@@ -49,7 +49,7 @@ The native distribution bundles PostgreSQL, SQLite-JDBC, H2, DuckDB and Microsof
 Optional drivers are a JVM feature because native-image executables cannot load arbitrary classes after compilation:
 
 ```sh
-java -jar target/lmdb-0.1.0-all.jar --driver-jar /path/to/driver.jar --driver-class com.example.Driver \
+java -jar target/lmdb-0.1.1-all.jar --driver-jar /path/to/driver.jar --driver-class com.example.Driver \
   --url jdbc:example:... --sql 'SELECT 1'
 ```
 
@@ -85,3 +85,5 @@ scripts/build-native.sh
 ```
 
 Native release names are `lmdb-<os>-<arch>` with one executable per platform. The test suite exercises every bundled driver, schema metadata, CSV/JSON export, credential redaction and the five native platform binaries.
+
+Native builds embed only the target's SQLite and DuckDB libraries. Linux links those engines statically; macOS retains DuckDB's universal library and the matching SQLite architecture; Windows retains the x64 libraries. CI inspects GraalVM's embedded-resource inventory as well as running all five drivers and all 14 examples.

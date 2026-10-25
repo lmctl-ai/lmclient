@@ -10,8 +10,9 @@ import sys
 import tempfile
 
 ROOT = Path(__file__).resolve().parents[1]
+VERSION = (ROOT / "VERSION").read_text().strip()
 COMMAND = ([str(Path(sys.argv[1]).resolve())] if len(sys.argv) > 1 else
-           ["java", "-jar", str(ROOT / "target/lmdb-0.1.0-all.jar")])
+           ["java", "-jar", str(ROOT / f"target/lmdb-{VERSION}-all.jar")])
 checks = 0
 
 def run(*args, code=0, env=None):

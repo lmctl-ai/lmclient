@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 cd "$(dirname "$0")/.."
+python3 scripts/native_resources.py --write-args target/native-resources.args
 : "${JAVA_HOME:?GraalVM JAVA_HOME is required}"
 mkdir -p target/classes
 separator=:

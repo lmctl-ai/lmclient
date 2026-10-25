@@ -6,6 +6,7 @@ elif command -v gtimeout >/dev/null 2>&1; then deadline=gtimeout
 else echo 'GNU timeout/coreutils is required' >&2; exit 2; fi
 "$deadline" 300 mvn -B -q verify
 "$deadline" 30 python3 scripts/check-version.py
+"$deadline" 30 python3 scripts/test-native-resources.py
 "$deadline" 300 python3 scripts/test-cli.py
 if [[ -n "${LMDB_NATIVE_BINARY:-}" ]]; then
   "$deadline" 300 python3 scripts/test-cli.py "$LMDB_NATIVE_BINARY"

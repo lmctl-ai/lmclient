@@ -5,7 +5,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>ai.lmctl</groupId>
   <artifactId>lmdb</artifactId>
-  <version>0.1.0</version>
+  <version>0.1.1</version>
   <name>lmdb</name>
   <description>Scriptable JDBC database client</description>
 
@@ -62,6 +62,8 @@
           <imageName>lmdb</imageName><mainClass>${main.class}</mainClass>
           <buildArgs>
             <buildArg>--no-fallback</buildArg>
+            <buildArg>@target/native-resources.args</buildArg>
+            <buildArg>-H:+GenerateEmbeddedResourcesFile</buildArg>
             <buildArg>--exclude-config</buildArg>
             <buildArg>.*h2-2[.]3[.]232[.]jar</buildArg>
             <buildArg>META-INF/native-image/reflect-config[.]json</buildArg>
@@ -121,7 +123,6 @@
       <buildArg>-H:NativeLinkerOption=${env.LMDB_STATIC_LIBDIR}/libstdc++.a</buildArg>
       <buildArg>-H:NativeLinkerOption=${env.LMDB_STATIC_LIBDIR}/libgcc_eh.a</buildArg>
       <buildArg>-H:NativeLinkerOption=-lm</buildArg>
-      <buildArg>-H:ExcludeResources=libduckdb_java[.]so_.*|org/sqlite/native/.*</buildArg>
     </buildArgs></configuration>
   </plugin></plugins></build></profile></profiles>
 </project>
