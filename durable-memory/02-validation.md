@@ -47,7 +47,7 @@ glibc-only linkage; the downloaded x64 executable passed all 40 CLI checks.
 
 Post-release verification used lmctl 0.2.417 with an empty LMSCRIPT_TOOL_CACHE
 and an isolated LMCTL_HOME. No lmdb executable was on PATH. Running
-`lmctl autorun https://raw.githubusercontent.com/lmctl-ai/lmdb/main/examples/sqlite_sales_trend.lms`
+`lmctl https://raw.githubusercontent.com/lmctl-ai/lmdb/main/examples/sqlite_sales_trend.lms`
 installed the latest release: the install record reports v0.1.0 and the
 executable reports `lmdb 0.1.0`. Its SHA-256 is
 `7e0624153bb5447a4780ea2d68156fcb69136fd15b117ca5b68bee769eb2f05f`.
