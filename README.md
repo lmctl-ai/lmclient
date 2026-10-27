@@ -13,8 +13,8 @@ Everything in this repository runs through [lmctl](https://lmctl.com), the core 
 
 ```bash
 npm install -g @lmctl-ai/lmctl
-lmctl autorun path/to/example.lms
-lmctl autorun https://raw.githubusercontent.com/lmctl-ai/lmdb/main/examples/example.lms
+lmctl autorun examples/duckdb_energy.lms
+lmctl autorun https://raw.githubusercontent.com/lmctl-ai/lmdb/main/examples/duckdb_energy.lms
 ```
 
 ## Quick start
