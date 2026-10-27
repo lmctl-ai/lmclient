@@ -7,6 +7,16 @@
 | <img src="docs/images/sqlite_sales_trend.png" width="290" alt="SQLite monthly sales trend"> | <img src="docs/images/er_diagram.png" width="290" alt="JDBC entity relationship diagram"> | <img src="docs/images/lmdb_schema_map.png" width="290" alt="Database schema map"> |
 | Monthly revenue grouped by SQL, then plotted with lmplot<br>`lmctl https://raw.githubusercontent.com/lmctl-ai/lmdb/main/examples/sqlite_sales_trend.lms` | Primary and foreign keys discovered through JDBC metadata<br>`lmctl https://raw.githubusercontent.com/lmctl-ai/lmdb/main/examples/er_diagram.lms` | Tables and columns queried from JDBC metadata<br>`lmctl https://raw.githubusercontent.com/lmctl-ai/lmdb/main/examples/schema_map.lms` |
 
+## Install lmctl
+
+Everything in this repository runs through [lmctl](https://lmctl.com), the core tool of the lmctl family. Install it once, then run any `.lms` file or raw URL:
+
+```bash
+npm install -g @lmctl-ai/lmctl
+lmctl autorun path/to/example.lms
+lmctl autorun https://raw.githubusercontent.com/lmctl-ai/lmdb/main/examples/example.lms
+```
+
 ## Quick start
 
 Install the release for your platform, then run a complete example from any empty directory:
