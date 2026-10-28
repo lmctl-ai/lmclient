@@ -65,7 +65,7 @@ jobs:
         with:
           node-version: 24
       - name: Pinned example compiler
-        run: npm install -g @lmctl-ai/lmctl@0.2.369
+        run: npm install -g @lmctl-ai/lmctl@0.2.420
       - name: Build native executable
         timeout-minutes: 40
         run: bash scripts/build-native.sh
