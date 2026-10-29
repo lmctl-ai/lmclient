@@ -12,13 +12,14 @@ import shutil
 import sqlite3
 import subprocess
 import sys
+from jvm_noise import java_command, strip_jvm_noise
 import tempfile
 import threading
 import time
 
 ROOT = Path(__file__).resolve().parents[1]
 artifact = Path(sys.argv[1] if len(sys.argv) > 1 else ROOT / 'target/lmclient-0.2.0-all.jar').resolve()
-COMMAND = [shutil.which('java') or 'java', '-jar', str(artifact)] if artifact.suffix == '.jar' else [str(artifact)]
+COMMAND = java_command(artifact)
 state = {'mode': 'ok', 'requests': []}
 class Handler(http.server.BaseHTTPRequestHandler):
     def log_message(self, *args): pass

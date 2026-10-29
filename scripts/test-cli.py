@@ -7,12 +7,12 @@ import os
 from pathlib import Path
 import subprocess
 import sys
+from jvm_noise import java_command, strip_jvm_noise
 import tempfile
 
 ROOT = Path(__file__).resolve().parents[1]
 VERSION = (ROOT / "VERSION").read_text().strip()
-COMMAND = ([str(Path(sys.argv[1]).resolve())] if len(sys.argv) > 1 else
-           ["java", "-jar", str(ROOT / f"target/lmclient-{VERSION}-all.jar")])
+COMMAND = java_command(sys.argv[1] if len(sys.argv) > 1 else ROOT / f"target/lmclient-{VERSION}-all.jar")
 checks = 0
 
 def run(*args, code=0, env=None):
@@ -84,4 +84,4 @@ for name in ("LMCLIENT_POSTGRES_URL", "LMCLIENT_MSSQL_URL"):
         continue
     result = run("--url", url, "--sql", "SELECT 1", "--format", "json")
     assert "1" in result.stdout, (name, result.stdout)
-print(f"lmclient CLI checks: {checks} passed ({'native' if len(sys.argv) > 1 else 'JVM'})")
+print(f"lmclient CLI checks: {checks} passed ({'JVM' if COMMAND[-2:-1] == ['-jar'] else 'native'})")

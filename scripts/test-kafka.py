@@ -6,12 +6,13 @@ from pathlib import Path
 import shutil
 import subprocess
 import sys
+from jvm_noise import java_command, strip_jvm_noise
 import time
 import uuid
 
 ROOT = Path(__file__).resolve().parents[1]
 artifact = Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / 'target/lmclient-0.2.0-all.jar'
-COMMAND = ['java', '-jar', str(artifact.resolve())] if artifact.suffix == '.jar' else [str(artifact.resolve())]
+COMMAND = java_command(artifact)
 ENV = {k: v for k, v in os.environ.items() if k != 'LMCLIENT_KAFKA_URL'}
 SECRET = 'dummy-secret-never-print'
 checks = 0

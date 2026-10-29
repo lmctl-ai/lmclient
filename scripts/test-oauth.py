@@ -11,6 +11,7 @@ import socket
 import sqlite3
 import subprocess
 import sys
+from jvm_noise import java_command, strip_jvm_noise
 import tempfile
 import threading
 import time
@@ -20,7 +21,7 @@ import urllib.request
 
 ROOT = Path(__file__).resolve().parents[1]
 artifact = Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / 'target/lmclient-0.2.0-all.jar'
-COMMAND = ['java', '-jar', str(artifact.resolve())] if artifact.suffix == '.jar' else [str(artifact.resolve())]
+COMMAND = java_command(artifact)
 # The strict mock IdP is vendored in-repo (canonical copy: lmconn scripts/mock-idp.js); LMCONN_MOCK_IDP overrides it.
 MOCK = Path(os.environ.get('LMCONN_MOCK_IDP', str(ROOT / 'scripts/mock-idp.js')))
 SECRET = 'dummy-oauth-client-secret'

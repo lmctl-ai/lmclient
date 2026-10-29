@@ -13,12 +13,13 @@ import sqlite3
 import stat
 import subprocess
 import sys
+from jvm_noise import java_command, strip_jvm_noise
 import tempfile
 import threading
 
 ROOT = Path(__file__).resolve().parents[1]
 artifact = Path(sys.argv[1] if len(sys.argv) > 1 else ROOT / 'target/lmclient-0.2.0-all.jar').resolve()
-COMMAND = ['java', '-jar', str(artifact)] if artifact.suffix == '.jar' else [str(artifact)]
+COMMAND = java_command(artifact)
 SECRETS = ['store-token-private', 'env-token-private', 'gh-token-private']
 state = {'requests': []}
 checks = 0
@@ -123,7 +124,7 @@ r = envelope['result']
 assert r['org'] == 'acme' and r['count'] == 2 and r['names'] == ['a', 'b'], r
 assert r['repos'] == [{'name': 'a', 'description': 'first', 'stars': 5}, {'name': 'b', 'description': None, 'stars': 0}], r
 assert r['auth'] == 'anonymous' and r['tokenSource'] == 'anonymous', r
-assert process.stderr.strip() == '', process.stderr
+assert strip_jvm_noise(process.stderr).strip() == '', process.stderr
 last = state['requests'][-1]
 assert last['authorized'] is False and last['accept'] == 'application/vnd.github+json' and last['agent'] == 'lmclient', last
 

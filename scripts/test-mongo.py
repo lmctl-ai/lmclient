@@ -13,13 +13,14 @@ from pathlib import Path
 import shutil
 import subprocess
 import sys
+from jvm_noise import java_command, strip_jvm_noise
 import time
 import uuid
 
 ROOT = Path(__file__).resolve().parents[1]
 VERSION = (ROOT / "VERSION").read_text().strip()
 TARGET = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else ROOT / f"target/lmclient-{VERSION}-all.jar"
-COMMAND = ["java", "-jar", str(TARGET)] if TARGET.suffix == ".jar" else [str(TARGET)]  # jar or native binary
+COMMAND = java_command(TARGET)  # jar (with --enable-native-access) or native binary
 NATIVE = TARGET.suffix != ".jar"
 checks = 0
 
@@ -144,7 +145,7 @@ def live(url):
     env = BASE_ENV
     envelope, process = run("ping", "--url", url, env=env)
     assert envelope["result"] == {"pong": True}, envelope
-    assert process.stderr.strip() == "", ("stderr must stay silent", process.stderr)
+    assert strip_jvm_noise(process.stderr).strip() == "", ("stderr must stay silent", process.stderr)
     envelope, _ = run("insert", *base, "--doc", '{"name":"tea","qty":3,"tags":["hot","green"]}', env=env)
     oid = envelope["result"]["insertedId"]
     assert isinstance(oid, str) and len(oid) == 24, envelope

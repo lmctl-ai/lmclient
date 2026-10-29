@@ -12,6 +12,7 @@ import shutil
 import socket
 import subprocess
 import sys
+from jvm_noise import java_command, strip_jvm_noise
 import tempfile
 import threading
 import time
@@ -19,7 +20,7 @@ import uuid
 
 ROOT = Path(__file__).resolve().parents[1]
 artifact = Path(sys.argv[1] if len(sys.argv) > 1 else ROOT / 'target/lmclient-0.2.0-all.jar').resolve()
-COMMAND = ['java', '-jar', str(artifact)] if artifact.suffix == '.jar' else [str(artifact)]
+COMMAND = java_command(artifact)
 ENV = {k: v for k, v in os.environ.items() if not k.startswith('LMCLIENT_MAIL_')}
 checks = 0
 

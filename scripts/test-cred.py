@@ -8,12 +8,13 @@ from pathlib import Path
 import shutil
 import subprocess
 import sys
+from jvm_noise import java_command, strip_jvm_noise
 import tempfile
 
 ROOT = Path(__file__).resolve().parents[1]
 VERSION = (ROOT / 'VERSION').read_text().strip()
 TARGET = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else ROOT / f'target/lmclient-{VERSION}-all.jar'
-COMMAND = ['java', '-jar', str(TARGET)] if TARGET.suffix == '.jar' else [str(TARGET)]
+COMMAND = java_command(TARGET)
 BASE_ENV = {k: v for k, v in os.environ.items() if not k.startswith(('LMCLIENT_', 'LMDB_', 'LMCONN_'))}
 SECRET = 'dummy-credential-DO-NOT-LOG'
 SECRETS = [SECRET, 'dummy-java-to-node', 'dummy-node-to-java', 'dummy-path-secret']

@@ -15,6 +15,7 @@ import socket
 import sqlite3
 import subprocess
 import sys
+from jvm_noise import java_command, strip_jvm_noise
 import tempfile
 import threading
 import time
@@ -22,7 +23,7 @@ import urllib.parse
 
 ROOT = Path(__file__).resolve().parents[1]
 artifact = Path(sys.argv[1] if len(sys.argv) > 1 else ROOT / 'target/lmclient-0.2.0-all.jar').resolve()
-COMMAND = ['java', '-jar', str(artifact)] if artifact.suffix == '.jar' else [str(artifact)]
+COMMAND = java_command(artifact)
 state = {'requests': [], 'tokens': [], 'reply': {}, 'token_status': 200}
 SECRETS = ['stored-private', 'environment-private', 'old-access-private', 'fresh-access-private',
            'refresh-private', 'rotated-private', 'client-private', 'custom-private']
