@@ -91,3 +91,13 @@ filter; do not put arbitrary secrets in extra query parameters.
 Real-provider browser consent, native-image behavior, and the separate HTTP
 area's auto-refresh integration require their own verification. No client
 registration, client-credentials grant, device flow, or OAuth 1.0a is added.
+
+## verification
+
+`mvn -q -B package -DskipTests` passed on JDK 21 in the isolated OAuth
+worktree. `python3 scripts/test-oauth.py target/lmclient-0.2.0-all.jar`
+passed 35 checks against the shared Node mock. The mock verified S256 and
+state, header/body client authentication, JSON/form token responses, token
+rotation and retention, malformed responses, denied grants, and timeouts.
+Java-issued tokens successfully accessed the mock's protected userinfo API.
+The bundled presets match lmconn's source JSON byte for byte.

@@ -31,8 +31,8 @@ NODE = r'''
 import { pathToFileURL } from 'node:url';
 import { createServer } from 'node:http';
 import { createInterface } from 'node:readline';
-const { createMockIdP } = await import(pathToFileURL(process.argv[1]).href);
-const settings = JSON.parse(process.argv[2]);
+const { createMockIdP } = await import(pathToFileURL(process.argv[2]).href);
+const settings = JSON.parse(process.argv[3]);
 const idp = await createMockIdP({port:0, requirePkce:!settings.noPkce,
   misbehave:settings.mode, formEncodedTokenResponse:settings.form, rotateRefreshTokens:settings.rotate});
 idp.registerClient({clientId:'mock-client', clientSecret:'dummy-oauth-client-secret',
@@ -123,7 +123,9 @@ with tempfile.TemporaryDirectory(prefix='lmclient-oauth-') as directory:
             reserved.bind(('127.0.0.1', 0))
             port = reserved.getsockname()[1]
         settings['redirect'] = f'http://127.0.0.1:{port}/callback'
-        child = subprocess.Popen(['node', '--input-type=module', '-e', NODE, str(MOCK), json.dumps(settings)],
+        wrapper = Path(directory) / 'oracle.mjs'
+        wrapper.write_text(NODE)
+        child = subprocess.Popen(['node', str(wrapper), str(MOCK), json.dumps(settings)],
                                  stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
         lines = queue.Queue()
         def pump():

@@ -76,7 +76,7 @@ public final class OauthArea {
         }
         if (cfg.get("auth-style").isEmpty()) cfg.put("auth-style", "header");
         for (String name : authorize ? List.of("client-id", "token-url", "auth-url") : List.of("client-id", "token-url")) {
-            if (cfg.get(name).isEmpty()) throw error("MISSING_CONFIG", "Missing " + field(name) + "; use cred set SERVICE " + field(name) + " --stdin, or configure a service from oauth-presets.json");
+            if (cfg.get(name).isEmpty()) throw error("MISSING_CONFIG", "Missing " + field(name) + "; use cred set " + service + " " + field(name) + " --stdin, or configure a service from oauth-presets.json");
         }
         if (!Set.of("header", "body").contains(cfg.get("auth-style"))) throw error("USAGE", "auth-style must be header or body");
         validateEndpoint(cfg.get("token-url"), "oauth_token_url");
@@ -121,6 +121,7 @@ public final class OauthArea {
         long until = deadline(timeout);
         CompletableFuture<String> code = new CompletableFuture<>();
         AtomicReference<Socket> browser = new AtomicReference<>();
+        AtomicReference<Socket> incoming = new AtomicReference<>();
         AtomicReference<HttpURLConnection> following = new AtomicReference<>();
         try (ServerSocket server = new ServerSocket()) {
             server.bind(new InetSocketAddress(InetAddress.getByName("127.0.0.1"), port));
@@ -136,7 +137,7 @@ public final class OauthArea {
             }
             String rawEndpoint = cfg.get("auth-url").split("\\?", 2)[0];
             String authorizeUrl = rawEndpoint + "?" + encode(query);
-            daemon(() -> listen(server, redirect, state, until, browser, code));
+            daemon(() -> listen(server, redirect, state, until, browser, incoming, code));
             if (options.containsKey("manual")) daemon(() -> {
                 try {
                     String line = readLine(System.in, 16384);
@@ -179,16 +180,18 @@ public final class OauthArea {
                 throw error("TIMEOUT", "OAuth authorization timed out");
             } finally {
                 respond(browser.get(), 400, "Authorization finished. Return to the CLI.");
+                Socket socket = incoming.get(); if (socket != null) try { socket.close(); } catch (IOException ignored) { }
                 HttpURLConnection conn = following.get(); if (conn != null) conn.disconnect();
             }
         }
     }
     private static void daemon(Runnable task) { Thread thread = new Thread(task, "lmclient-oauth"); thread.setDaemon(true); thread.start(); }
-    private static void listen(ServerSocket server, String redirect, String state, long until, AtomicReference<Socket> browser, CompletableFuture<String> code) {
+    private static void listen(ServerSocket server, String redirect, String state, long until, AtomicReference<Socket> browser, AtomicReference<Socket> incoming, CompletableFuture<String> code) {
         try {
             while (!code.isDone()) {
                 server.setSoTimeout(remaining(until));
                 Socket socket = server.accept();
+                incoming.set(socket);
                 socket.setSoTimeout(remaining(until));
                 try {
                     InputStream in = socket.getInputStream();
