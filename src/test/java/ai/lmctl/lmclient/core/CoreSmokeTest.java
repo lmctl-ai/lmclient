@@ -1,4 +1,4 @@
-package ai.lmctl.lmdb.core;
+package ai.lmctl.lmclient.core;
 
 import java.util.List;
 import java.util.Arrays;
@@ -27,7 +27,7 @@ public final class CoreSmokeTest {
         check(duplicate, "duplicate JSON labels");
         String safeError = DatabaseException.from(new SQLException("jdbc:postgresql://user:secret@example/db password=secret", "08001")).getMessage();
         check(!safeError.contains("postgresql") && !safeError.contains("secret"), "SQL error redaction");
-        System.out.println("lmdb core smoke tests: PASS");
+        System.out.println("lmclient core smoke tests: PASS");
     }
     private static void check(boolean condition, String message) { if (!condition) throw new AssertionError(message); }
 }

@@ -11,6 +11,6 @@ else printf '%s\n' 'GNU coreutils timeout is required' >&2; exit 2; fi
 mkdir -p docs/images
 for example in examples/*.lms; do
   echo "rendering $example"
-  "$deadline" 300 "${LMDB_LMSCRIPT:-lmscript}" "$example"
+  "$deadline" 300 "${LMCLIENT_LMSCRIPT:-lmscript}" "$example"
 done
 cp images/*.png docs/images/

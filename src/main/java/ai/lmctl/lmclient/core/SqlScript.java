@@ -1,4 +1,4 @@
-package ai.lmctl.lmdb.core;
+package ai.lmctl.lmclient.core;
 
 import java.util.ArrayList;
 import java.util.List;

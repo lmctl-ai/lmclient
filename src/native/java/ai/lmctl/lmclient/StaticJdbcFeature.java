@@ -1,4 +1,4 @@
-package ai.lmctl.lmdb;
+package ai.lmctl.lmclient;
 
 import com.oracle.svm.core.jdk.NativeLibrarySupport;
 import com.oracle.svm.core.jdk.PlatformNativeLibrarySupport;
@@ -13,7 +13,7 @@ public final class StaticJdbcFeature implements Feature {
         if (!Platform.includedIn(Platform.LINUX.class)) return;
         var libraries = NativeLibraries.singleton();
         libraries.getLibraryPaths().add(Path.of("target/static-jni").toAbsolutePath().toString());
-        String standardLibraryDirectory = System.getenv("LMDB_STATIC_LIBDIR");
+        String standardLibraryDirectory = System.getenv("LMCLIENT_STATIC_LIBDIR");
         if (standardLibraryDirectory != null) libraries.getLibraryPaths().add(standardLibraryDirectory);
         register("sqlitejdbc", "org_sqlite_core_NativeDB");
         register("duckdb_java", "org_duckdb");

@@ -56,7 +56,7 @@ for name in ("java/sql/SQLException", "java/sql/SQLTimeoutException", "java/lang
 assert {field["name"] for field in entry("org/duckdb/ProfilerPrintFormat")["fields"]} == {
     "QUERY_TREE", "JSON", "QUERY_TREE_OPTIMIZER", "NO_OUTPUT", "HTML", "GRAPHVIZ"
 }, "incomplete JNI enum metadata for pinned DuckDB release"
-output = root / "src/main/resources/META-INF/native-image/ai.lmctl/lmdb-duckdb/jni-config.json"
+output = root / "src/main/resources/META-INF/native-image/ai.lmctl/lmclient-duckdb/jni-config.json"
 output.parent.mkdir(parents=True,exist_ok=True)
 output.write_text(json.dumps(sorted(entries.values(),key=lambda item:item["name"]),indent=2) + "\n",encoding="utf-8")
 print(f"DuckDB JNI callbacks: {len(entries)} classes, {sum(len(x.get('methods',[])) for x in entries.values())} methods")

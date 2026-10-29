@@ -1,6 +1,6 @@
 # A small relational model is queried through JDBC and rendered as an ER diagram.
 mkdir("images"); mkdir("data"); mkdir("build");
-dbhost = _dsl_ cli="lmdb" install="github:lmctl-ai/lmdb@latest";
+dbhost = _dsl_ cli="lmclient" install="github:lmctl-ai/lmclient@latest";
 let c = connect("jdbc:sqlite::memory:");
 c.exec("CREATE TABLE customers(id INTEGER PRIMARY KEY, name TEXT); CREATE TABLE orders(id INTEGER PRIMARY KEY, customer_id INTEGER, total REAL, FOREIGN KEY(customer_id) REFERENCES customers(id)); INSERT INTO customers VALUES (1,'Ada'),(2,'Lin'); INSERT INTO orders VALUES (10,1,42.5),(11,1,18.0),(12,2,77.0);");
 let tables = c.tables(); let customer_columns = c.columns("customers"); let order_columns = c.columns("orders"); let keys = c.keys("orders");
@@ -17,7 +17,7 @@ assert(order_check.len() == 4);
 assert(key_check.len() >= 2);
 let draw = _dsl_ cli="lmdraw" install="github:lmctl-ai/lmdraw@latest";
 scene.canvas(900, 560, "#0f1720");
-scene.text(36.0, 48.0, 28.0, "lmdb entity relationship diagram", "#f4f7fb");
+scene.text(36.0, 48.0, 28.0, "lmclient entity relationship diagram", "#f4f7fb");
 scene.text(36.0, 78.0, 15.0, "Primary and foreign keys discovered through JDBC metadata", "#9fb3c8");
 scene.rect(70.0, 140.0, 300.0, 230.0, "#17324d");
 scene.text(94.0, 180.0, 22.0, "customers", "#f4f7fb");

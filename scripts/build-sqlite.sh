@@ -6,14 +6,14 @@ set -euo pipefail
 # pinned; no generated or third-party source is committed to this repository.
 ROOT=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
 cd "$ROOT"
-run() { timeout "${LMDB_BUILD_TIMEOUT_SECONDS:-300}" "$@"; }
+run() { timeout "${LMCLIENT_BUILD_TIMEOUT_SECONDS:-300}" "$@"; }
 
 SQLITE_JDBC_TAG=3.50.3.0
 SQLITE_JDBC_COMMIT=4781e381921a348fa2e533d0c43767525374b26d
 SQLITE_AMALG_VERSION=3500300
 SQLITE_AMALG_SHA256=9ad6d16cbc1df7cd55c8b55127c82a9bca5e9f287818de6dc87e04e73599d754
-SOURCE=${LMDB_SQLITE_SOURCE:-third_party/sqlite-jdbc}
-BUILD=${LMDB_SQLITE_BUILD:-target/sqlite-static-jni}
+SOURCE=${LMCLIENT_SQLITE_SOURCE:-third_party/sqlite-jdbc}
+BUILD=${LMCLIENT_SQLITE_BUILD:-target/sqlite-static-jni}
 OUT=target/static-jni/libsqlitejdbc.a
 fingerprint="$SQLITE_JDBC_COMMIT:$SQLITE_AMALG_SHA256:$(sha256sum "$ROOT/scripts/build-sqlite.sh" | cut -d ' ' -f 1)"
 if [[ -s "$OUT" && -f target/static-jni/sqlite.pin && "$(cat target/static-jni/sqlite.pin)" == "$fingerprint" ]]; then
@@ -54,7 +54,7 @@ esac
 CLASSES="$BUILD/classes"
 HEADERS="$BUILD/headers"
 mkdir -p "$CLASSES" "$HEADERS" "$BUILD/work"
-SQLITE_JAR=${LMDB_SQLITE_JAR:-$HOME/.m2/repository/org/xerial/sqlite-jdbc/$SQLITE_JDBC_TAG/sqlite-jdbc-$SQLITE_JDBC_TAG.jar}
+SQLITE_JAR=${LMCLIENT_SQLITE_JAR:-$HOME/.m2/repository/org/xerial/sqlite-jdbc/$SQLITE_JDBC_TAG/sqlite-jdbc-$SQLITE_JDBC_TAG.jar}
 [[ -f "$SQLITE_JAR" ]] || { echo "sqlite-jdbc jar is required for JNI header generation: $SQLITE_JAR" >&2; exit 2; }
 run "$JAVAC" -h "$HEADERS" -d "$CLASSES" -cp "$SQLITE_JAR" "$SOURCE/src/main/java/org/sqlite/core/NativeDB.java"
 cp "$HEADERS/org_sqlite_core_NativeDB.h" "$HEADERS/NativeDB.h"

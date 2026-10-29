@@ -1,4 +1,4 @@
-package ai.lmctl.lmdb;
+package ai.lmctl.lmclient;
 
 import com.oracle.svm.core.annotate.Alias;
 import com.oracle.svm.core.annotate.Substitute;

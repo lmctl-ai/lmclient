@@ -1,4 +1,4 @@
-package ai.lmctl.lmdb;
+package ai.lmctl.lmclient;
 
 import java.sql.Connection;
 import java.sql.Driver;
@@ -10,14 +10,14 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-/** Registration and no-server smoke tests for the drivers bundled in lmdb. */
+/** Registration and no-server smoke tests for the drivers bundled in lmclient. */
 public final class Drivers {
     private record Bundled(String name, String className, String testUrl, boolean embedded) {}
 
     private static final List<Bundled> BUNDLED = List.of(
-            new Bundled("postgresql", "org.postgresql.Driver", "jdbc:postgresql://127.0.0.1:1/lmdb", false),
+            new Bundled("postgresql", "org.postgresql.Driver", "jdbc:postgresql://127.0.0.1:1/lmclient", false),
             new Bundled("sqlite", "org.sqlite.JDBC", "jdbc:sqlite::memory:", true),
-            new Bundled("h2", "org.h2.Driver", "jdbc:h2:mem:lmdb_driver_test;DB_CLOSE_DELAY=-1", true),
+            new Bundled("h2", "org.h2.Driver", "jdbc:h2:mem:lmclient_driver_test;DB_CLOSE_DELAY=-1", true),
             new Bundled("duckdb", "org.duckdb.DuckDBDriver", "jdbc:duckdb:", true),
             new Bundled("sqlserver", "com.microsoft.sqlserver.jdbc.SQLServerDriver", "jdbc:sqlserver://127.0.0.1:1;databaseName=master", false));
 

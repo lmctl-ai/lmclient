@@ -18,15 +18,15 @@ cd "$ROOT"
 if [ "$(uname -s)" = Linux ]; then
   timeout 900 scripts/build-sqlite.sh
   timeout 1800 scripts/build-duckdb.sh
-  LMDB_STATIC_LIBDIR=$(dirname "$(c++ -print-file-name=libstdc++.a)")
-  export LMDB_STATIC_LIBDIR
+  LMCLIENT_STATIC_LIBDIR=$(dirname "$(c++ -print-file-name=libstdc++.a)")
+  export LMCLIENT_STATIC_LIBDIR
 fi
 mvn -q -Pnative -DskipTests package
 case "$(uname -s)" in
   MINGW*|MSYS*|CYGWIN*)
-    if ! mt.exe -nologo '-inputresource:target/lmdb.exe;#1' -manifest scripts/windows-utf8.manifest -out:target/lmdb-merged.manifest; then
-      cp scripts/windows-utf8.manifest target/lmdb-merged.manifest
+    if ! mt.exe -nologo '-inputresource:target/lmclient.exe;#1' -manifest scripts/windows-utf8.manifest -out:target/lmclient-merged.manifest; then
+      cp scripts/windows-utf8.manifest target/lmclient-merged.manifest
     fi
-    mt.exe -nologo -manifest target/lmdb-merged.manifest '-outputresource:target/lmdb.exe;#1'
+    mt.exe -nologo -manifest target/lmclient-merged.manifest '-outputresource:target/lmclient.exe;#1'
     ;;
 esac

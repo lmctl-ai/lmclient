@@ -10,12 +10,12 @@ import sys
 import tempfile
 
 root = Path(__file__).resolve().parents[1]
-compiler = os.environ.get("LMDB_LMSCRIPT") or shutil.which("lmscript")
+compiler = os.environ.get("LMCLIENT_LMSCRIPT") or shutil.which("lmscript")
 if not compiler:
     raise SystemExit("lmscript compiler required; install @lmctl-ai/lmctl@0.2.369")
 compiler = str(Path(compiler).resolve())
 for example in sorted((root / "examples").glob("*.lms")):
-    with tempfile.TemporaryDirectory(prefix="lmdb-example-") as directory:
+    with tempfile.TemporaryDirectory(prefix="lmclient-example-") as directory:
         subprocess.run([compiler,str(example)],cwd=directory,check=True,timeout=180)
         images = list((Path(directory)/"images").glob("*.png"))
         assert images, "example produced no images: " + example.name

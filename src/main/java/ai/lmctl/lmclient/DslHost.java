@@ -1,6 +1,7 @@
-package ai.lmctl.lmdb;
+package ai.lmctl.lmclient;
 
-import ai.lmctl.lmdb.core.Database;
+import ai.lmctl.lmclient.core.Env;
+import ai.lmctl.lmclient.core.Database;
 import io.lmctl.lmcode.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -24,7 +25,7 @@ public final class DslHost implements AutoCloseable {
             Registry.Callback callback = (ctx,self,args) -> {
                 try { return call(binding,ctx,self,args); }
                 catch (VmException error) { throw error; }
-                catch (ai.lmctl.lmdb.core.DatabaseException error) { throw VmException.host(error.getMessage()); }
+                catch (ai.lmctl.lmclient.core.DatabaseException error) { throw VmException.host(error.getMessage()); }
                 catch (Exception error) { throw VmException.host("database or file operation failed (" + error.getClass().getSimpleName() + ")"); }
             };
             if (binding.type() == null) registry.function(binding.name(),binding.parameters(),binding.returns(),callback);
@@ -42,7 +43,7 @@ public final class DslHost implements AutoCloseable {
             if (connections.size() >= 64) throw VmException.host("connection limit exceeded (64)");
             if (nativeEngine && nativeConnections.size() >= 2)
                 throw VmException.host("embedded native connection limit exceeded (2)");
-            Database database = Database.connect(url, Credentials.read(args.length == 2 ? string(args[1]) : System.getenv("LMDB_CREDENTIALS_FILE")));
+            Database database = Database.connect(url, Credentials.read(args.length == 2 ? string(args[1]) : Env.get("LMCLIENT_CREDENTIALS_FILE")));
             try { ctx.charge(4096); } catch (RuntimeException error) { database.close(); throw error; }
             connections.add(database);
             if (nativeEngine) nativeConnections.add(database);
@@ -52,7 +53,7 @@ public final class DslHost implements AutoCloseable {
             Database database = (Database) self.asObject();
             switch (name) {
                 case "exec":
-                    for (String sql : ai.lmctl.lmdb.core.SqlScript.split(string(args[0]))) database.query(sql);
+                    for (String sql : ai.lmctl.lmclient.core.SqlScript.split(string(args[0]))) database.query(sql);
                     return Value.none();
                 case "begin": database.connection().setAutoCommit(false); return Value.none();
                 case "commit": database.connection().commit(); return Value.none();
@@ -120,7 +121,7 @@ public final class DslHost implements AutoCloseable {
         context.resetBudget();
         Program program;
         try {
-            if (Files.size(bytecode) > context.memoryLimitBytes / 4) throw VmException.badBytecode("bytecode exceeds LMDB_MAX_MEMORY_MB budget");
+            if (Files.size(bytecode) > context.memoryLimitBytes / 4) throw VmException.badBytecode("bytecode exceeds LMCLIENT_MAX_MEMORY_MB budget");
             program = Program.load(Files.readAllBytes(bytecode),HostApi.schemaBytes(),registry);
         }
         catch (VmException error) { return Reports.error("load",error); }
@@ -129,7 +130,7 @@ public final class DslHost implements AutoCloseable {
         try { program.run(context,registry); return Reports.ok("null"); }
         catch (VmException error) {
             if (error.getMessage().toLowerCase(java.util.Locale.ROOT).contains("memory"))
-                System.err.println("lmdb: LMDB_MAX_MEMORY_MB memory budget exceeded");
+                System.err.println("lmclient: LMCLIENT_MAX_MEMORY_MB memory budget exceeded");
             return Reports.error("run",error);
         }
     }

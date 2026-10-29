@@ -1,6 +1,6 @@
-lmdb 0.1.1 — third-party notices
+lmclient 0.2.0 — third-party notices
 
-lmdb and the lmcode-java SDK are MIT licensed.
+lmclient and the lmcode-java SDK are MIT licensed.
 
 Bundled JDBC drivers (versions are pinned in pom.xml and deps.lock):
 

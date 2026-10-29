@@ -4,15 +4,15 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>ai.lmctl</groupId>
-  <artifactId>lmdb</artifactId>
-  <version>0.1.1</version>
-  <name>lmdb</name>
+  <artifactId>lmclient</artifactId>
+  <version>0.2.0</version>
+  <name>lmclient</name>
   <description>Scriptable JDBC database client</description>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.release>21</maven.compiler.release>
-    <main.class>ai.lmctl.lmdb.Main</main.class>
+    <main.class>ai.lmctl.lmclient.Main</main.class>
     <graalvm.native.maven.version>0.10.6</graalvm.native.maven.version>
   </properties>
 
@@ -59,14 +59,14 @@
         <groupId>org.graalvm.buildtools</groupId><artifactId>native-maven-plugin</artifactId><version>${graalvm.native.maven.version}</version>
         <extensions>true</extensions>
         <configuration>
-          <imageName>lmdb</imageName><mainClass>${main.class}</mainClass>
+          <imageName>lmclient</imageName><mainClass>${main.class}</mainClass>
           <buildArgs>
             <buildArg>--no-fallback</buildArg>
             <buildArg>-H:+GenerateEmbeddedResourcesFile</buildArg>
             <buildArg>--exclude-config</buildArg>
             <buildArg>.*h2-2[.]3[.]232[.]jar</buildArg>
             <buildArg>META-INF/native-image/reflect-config[.]json</buildArg>
-            <buildArg>--features=ai.lmctl.lmdb.StaticJdbcFeature</buildArg>
+            <buildArg>--features=ai.lmctl.lmclient.StaticJdbcFeature</buildArg>
             <buildArg>--enable-native-access=ALL-UNNAMED</buildArg>
             <buildArg>-march=compatibility</buildArg>
             <buildArg>-R:MaxHeapSize=3072m</buildArg>
@@ -91,13 +91,13 @@
             <executable>python3</executable><arguments><argument>scripts/sync-sdk.py</argument><argument>--ensure</argument></arguments>
           </configuration></execution>
           <execution><id>core-smoke</id><phase>verify</phase><goals><goal>java</goal></goals><configuration>
-            <mainClass>ai.lmctl.lmdb.core.CoreSmokeTest</mainClass><classpathScope>test</classpathScope>
+            <mainClass>ai.lmctl.lmclient.core.CoreSmokeTest</mainClass><classpathScope>test</classpathScope>
           </configuration></execution>
           <execution><id>h2-core-smoke</id><phase>verify</phase><goals><goal>java</goal></goals><configuration>
-            <mainClass>ai.lmctl.lmdb.core.H2CoreSmokeTest</mainClass><classpathScope>test</classpathScope>
+            <mainClass>ai.lmctl.lmclient.core.H2CoreSmokeTest</mainClass><classpathScope>test</classpathScope>
           </configuration></execution>
           <execution><id>sqlite-duckdb-core-smoke</id><phase>verify</phase><goals><goal>java</goal></goals><configuration>
-            <mainClass>ai.lmctl.lmdb.core.MultiDriverCoreSmokeTest</mainClass><classpathScope>test</classpathScope>
+            <mainClass>ai.lmctl.lmclient.core.MultiDriverCoreSmokeTest</mainClass><classpathScope>test</classpathScope>
           </configuration></execution>
         </executions>
       </plugin>
@@ -119,8 +119,8 @@
       <buildArg>-H:+StaticExecutableWithDynamicLibC</buildArg>
       <buildArg>-H:NativeLinkerOption=-static-libstdc++</buildArg>
       <buildArg>-H:NativeLinkerOption=-static-libgcc</buildArg>
-      <buildArg>-H:NativeLinkerOption=${env.LMDB_STATIC_LIBDIR}/libstdc++.a</buildArg>
-      <buildArg>-H:NativeLinkerOption=${env.LMDB_STATIC_LIBDIR}/libgcc_eh.a</buildArg>
+      <buildArg>-H:NativeLinkerOption=${env.LMCLIENT_STATIC_LIBDIR}/libstdc++.a</buildArg>
+      <buildArg>-H:NativeLinkerOption=${env.LMCLIENT_STATIC_LIBDIR}/libgcc_eh.a</buildArg>
       <buildArg>-H:NativeLinkerOption=-lm</buildArg>
     </buildArgs></configuration>
   </plugin></plugins></build></profile></profiles>

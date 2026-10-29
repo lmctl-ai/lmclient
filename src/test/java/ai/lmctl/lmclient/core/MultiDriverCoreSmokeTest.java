@@ -1,4 +1,4 @@
-package ai.lmctl.lmdb.core;
+package ai.lmctl.lmclient.core;
 
 import java.util.List;
 import java.util.Properties;
@@ -7,10 +7,10 @@ import java.util.Properties;
 public final class MultiDriverCoreSmokeTest {
     private MultiDriverCoreSmokeTest() {}
     public static void main(String[] args) throws Exception {
-        ai.lmctl.lmdb.Drivers.register();
+        ai.lmctl.lmclient.Drivers.register();
         check("sqlite", "jdbc:sqlite::memory:");
         check("duckdb", "jdbc:duckdb:");
-        System.out.println("lmdb SQLite/DuckDB core smoke tests: PASS");
+        System.out.println("lmclient SQLite/DuckDB core smoke tests: PASS");
     }
     private static void check(String name, String url) {
         try (Database db = Database.connect(url, new Properties())) {

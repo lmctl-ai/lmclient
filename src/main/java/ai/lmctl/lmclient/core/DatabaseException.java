@@ -1,4 +1,4 @@
-package ai.lmctl.lmdb.core;
+package ai.lmctl.lmclient.core;
 
 import java.sql.SQLException;
 
@@ -11,7 +11,7 @@ public final class DatabaseException extends RuntimeException {
         if (detail != null) {
             String lower = detail.toLowerCase(java.util.Locale.ROOT);
             if (lower.contains("out of memory") || lower.contains("outofmemory") || lower.contains("memory limit") || lower.contains("failed to allocate"))
-                return new DatabaseException("database memory budget exceeded (LMDB_MAX_MEMORY_MB)", error);
+                return new DatabaseException("database memory budget exceeded (LMCLIENT_MAX_MEMORY_MB)", error);
         }
         String state = error.getSQLState();
         String suffix = state == null || !state.matches("[A-Za-z0-9]{5}") ? "" : " (SQLState " + state + ")";

@@ -8,10 +8,10 @@ else echo 'GNU timeout/coreutils is required' >&2; exit 2; fi
 "$deadline" 30 python3 scripts/check-version.py
 "$deadline" 30 python3 scripts/test-native-resources.py
 "$deadline" 300 python3 scripts/test-cli.py
-if [[ -n "${LMDB_NATIVE_BINARY:-}" ]]; then
-  "$deadline" 300 python3 scripts/test-cli.py "$LMDB_NATIVE_BINARY"
+if [[ -n "${LMCLIENT_NATIVE_BINARY:-}" ]]; then
+  "$deadline" 300 python3 scripts/test-cli.py "$LMCLIENT_NATIVE_BINARY"
   if [[ "$(uname -s)" == Linux ]]; then
-    "$deadline" 30 python3 scripts/check-linux-linkage.py "$LMDB_NATIVE_BINARY"
+    "$deadline" 30 python3 scripts/check-linux-linkage.py "$LMCLIENT_NATIVE_BINARY"
   fi
 fi
 
@@ -48,8 +48,8 @@ for raw in sorted(set(re.findall(r'(?:raw[^ ]*/)?examples/([A-Za-z0-9_.-]+\.lms)
         raise SystemExit(f"README example missing: examples/{raw}")
 PY
 
-if [[ -n "${LMDB_LMSCRIPT:-}" ]]; then
-  "$deadline" 900 python3 - "$LMDB_LMSCRIPT" <<'PY'
+if [[ -n "${LMCLIENT_LMSCRIPT:-}" ]]; then
+  "$deadline" 900 python3 - "$LMCLIENT_LMSCRIPT" <<'PY'
 from pathlib import Path
 import subprocess, sys
 compiler = sys.argv[1]
@@ -61,5 +61,5 @@ for example in examples:
 print(f"DSL examples OK: {len(examples)}")
 PY
 else
-  echo "DSL examples SKIP (set LMDB_LMSCRIPT when sibling compiler and build launcher are available)"
+  echo "DSL examples SKIP (set LMCLIENT_LMSCRIPT when sibling compiler and build launcher are available)"
 fi

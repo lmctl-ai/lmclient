@@ -1,6 +1,6 @@
 # Order funnel: H2 joins events into conversion rates.
 mkdir("images"); mkdir("data"); mkdir("build");
-dbhost = _dsl_ cli="lmdb" install="github:lmctl-ai/lmdb@latest";
+dbhost = _dsl_ cli="lmclient" install="github:lmctl-ai/lmclient@latest";
 let c = connect("jdbc:h2:mem:orders");
 c.exec("CREATE TABLE funnel(stage VARCHAR(20), visitors INT, converted INT); INSERT INTO funnel VALUES ('Landing',1000,1000),('Browse',1000,640),('Cart',1000,260),('Checkout',1000,190),('Paid',1000,154);");
 let q = c.query("SELECT stage, 100.0*converted/visitors AS rate FROM funnel ORDER BY rate DESC");

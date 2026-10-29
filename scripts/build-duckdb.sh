@@ -29,7 +29,7 @@ cmake -S "$SRC" -B "$BUILD" -G Ninja -DCMAKE_BUILD_TYPE=Release \
   -DCMAKE_SHARED_LINKER_FLAGS='-Wl,--as-needed -static-libstdc++ -static-libgcc -Wl,-Bstatic -lstdc++ -lgcc -lgcc_eh -Wl,-Bdynamic' \
   -DCMAKE_MODULE_LINKER_FLAGS='-Wl,--as-needed -static-libstdc++ -static-libgcc -Wl,-Bstatic -lstdc++ -lgcc -lgcc_eh -Wl,-Bdynamic' \
   -DCMAKE_CXX_STANDARD_LIBRARIES='-ldl -Wl,-Bstatic -lstdc++ -lgcc -lgcc_eh -Wl,-Bdynamic'
-cmake --build "$BUILD" --target duckdb_java --parallel "${LMDB_DUCKDB_JOBS:-2}"
+cmake --build "$BUILD" --target duckdb_java --parallel "${LMCLIENT_DUCKDB_JOBS:-2}"
 
 arch=$(uname -m)
 case "$arch" in
@@ -48,12 +48,12 @@ jni_object=$(find "$BUILD/CMakeFiles/duckdb_java.dir" -type f -name 'duckdb_java
 [ -n "$jni_object" ] || { printf '%s\n' 'DuckDB JNI entry object was not produced' >&2; exit 1; }
 renamed="$STATIC_OUT/duckdb_java_entry.o"
 cp "$jni_object" "$renamed"
-objcopy --redefine-sym JNI_OnLoad=lmdb_duckdb_legacy_onload --redefine-sym JNI_OnUnload=JNI_OnUnload_duckdb_java "$renamed"
+objcopy --redefine-sym JNI_OnLoad=lmclient_duckdb_legacy_onload --redefine-sym JNI_OnUnload=JNI_OnUnload_duckdb_java "$renamed"
 cat > "$STATIC_OUT/duckdb_onload.c" <<'C'
 #include <jni.h>
-extern jint lmdb_duckdb_legacy_onload(JavaVM *, void *);
+extern jint lmclient_duckdb_legacy_onload(JavaVM *, void *);
 JNIEXPORT jint JNICALL JNI_OnLoad_duckdb_java(JavaVM *vm, void *reserved) {
-    jint version = lmdb_duckdb_legacy_onload(vm, reserved);
+    jint version = lmclient_duckdb_legacy_onload(vm, reserved);
     /* The JNI specification requires 1.8 or newer for statically linked libraries. */
     return version >= JNI_VERSION_1_1 ? JNI_VERSION_1_8 : version;
 }

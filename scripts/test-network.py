@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Exercise configured server drivers through an isolated lmdb executable.
+"""Exercise configured server drivers through an isolated lmclient executable.
 
 URLs and credentials are supplied by CI. Child output is intentionally discarded:
 database errors can echo connection details and must never become CI log content.
@@ -13,17 +13,17 @@ import uuid
 import time
 
 if len(sys.argv) != 2:
-    raise SystemExit("usage: test-network.py PATH_TO_LMDB")
+    raise SystemExit("usage: test-network.py PATH_TO_LMCLIENT")
 binary = str(Path(sys.argv[1]).resolve())
 timeout_seconds = 60
 
 def run(driver, url, user, password, *args):
     env = os.environ.copy()
     if user:
-        env["LMDB_USER"] = user
+        env["LMCLIENT_USER"] = user
     if password:
-        env["LMDB_PASSWORD"] = password
-    env.pop("LMDB_URL", None)
+        env["LMCLIENT_PASSWORD"] = password
+    env.pop("LMCLIENT_URL", None)
     try:
         process = subprocess.run([binary, "--url", url, *args], env=env,
                                  stdout=subprocess.PIPE, stderr=subprocess.DEVNULL,
@@ -35,7 +35,7 @@ def run(driver, url, user, password, *args):
     return process.stdout
 
 def exercise(driver, url, user, password):
-    table = "lmdb_network_" + uuid.uuid4().hex[:16]
+    table = "lmclient_network_" + uuid.uuid4().hex[:16]
     quoted = '"' + table + '"' if driver == "postgres" else "[" + table + "]"
     try:
         ready = False
@@ -75,14 +75,14 @@ def exercise(driver, url, user, password):
             pass
 
 configured = 0
-for driver, prefix in (("postgres", "LMDB_POSTGRES"), ("sqlserver", "LMDB_MSSQL")):
+for driver, prefix in (("postgres", "LMCLIENT_POSTGRES"), ("sqlserver", "LMCLIENT_MSSQL")):
     url = os.environ.get(prefix + "_URL")
     if not url:
         print(f"{driver}: SKIP (URL not configured)")
         continue
     configured += 1
-    exercise(driver, url, os.environ.get(prefix + "_USER") or os.environ.get("LMDB_USER"),
-             os.environ.get(prefix + "_PASSWORD") or os.environ.get("LMDB_PASSWORD"))
+    exercise(driver, url, os.environ.get(prefix + "_USER") or os.environ.get("LMCLIENT_USER"),
+             os.environ.get(prefix + "_PASSWORD") or os.environ.get("LMCLIENT_PASSWORD"))
     print(f"{driver}: PASS")
 if not configured:
     print("network checks: SKIP (no server URLs configured)")

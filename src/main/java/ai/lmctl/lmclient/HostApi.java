@@ -1,4 +1,4 @@
-package ai.lmctl.lmdb;
+package ai.lmctl.lmclient;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -53,7 +53,7 @@ public final class HostApi {
             if (binding.type() == null) functions.add(binding);
             else types.computeIfAbsent(binding.type(), key -> new ArrayList<>()).add(binding);
         }
-        StringBuilder out = new StringBuilder("{\"dsl.schema\":2,\"name\":\"lmdb\",\"types\":{");
+        StringBuilder out = new StringBuilder("{\"dsl.schema\":2,\"name\":\"lmclient\",\"types\":{");
         boolean first = true;
         for (var type : types.entrySet()) {
             if (!first) out.append(','); first = false;

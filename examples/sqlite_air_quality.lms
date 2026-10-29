@@ -1,6 +1,6 @@
 # Daily particulate matter, with a 24-hour rolling average.
 mkdir("images"); mkdir("data"); mkdir("build");
-dbhost = _dsl_ cli="lmdb" install="github:lmctl-ai/lmdb@latest";
+dbhost = _dsl_ cli="lmclient" install="github:lmctl-ai/lmclient@latest";
 let c = connect("jdbc:sqlite::memory:");
 c.exec("CREATE TABLE air(day INTEGER, pm25 REAL); INSERT INTO air VALUES (1,18.0),(2,21.5),(3,26.0),(4,24.0),(5,31.0),(6,28.5),(7,20.0),(8,17.0),(9,22.0),(10,19.0);");
 let q = c.query("SELECT day, pm25, AVG(pm25) OVER (ORDER BY day ROWS BETWEEN 2 PRECEDING AND CURRENT ROW) AS rolling FROM air");

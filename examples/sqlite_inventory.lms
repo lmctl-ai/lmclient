@@ -1,6 +1,6 @@
 # Inventory value by warehouse: a query feeds a ranked bar chart.
 mkdir("images"); mkdir("data"); mkdir("build");
-dbhost = _dsl_ cli="lmdb" install="github:lmctl-ai/lmdb@latest";
+dbhost = _dsl_ cli="lmclient" install="github:lmctl-ai/lmclient@latest";
 let c = connect("jdbc:sqlite::memory:");
 c.exec("CREATE TABLE stock(warehouse TEXT, units INTEGER, unit_price REAL); INSERT INTO stock VALUES ('North',420,18.5),('South',310,22.0),('East',525,15.75),('West',275,31.0);");
 let q = c.query("SELECT warehouse, units * unit_price AS value FROM stock ORDER BY value DESC");

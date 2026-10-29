@@ -8,7 +8,7 @@ from native_resources import exclusion_pattern
 
 root = Path(__file__).resolve().parents[1]
 version = (root / "VERSION").read_text().strip()
-with zipfile.ZipFile(root / f"target/lmdb-{version}-all.jar") as jar:
+with zipfile.ZipFile(root / f"target/lmclient-{version}-all.jar") as jar:
     resources = {entry.filename: entry.file_size for entry in jar.infolist()
                  if entry.file_size and entry.filename.startswith(("libduckdb_java.so_", "org/sqlite/native/"))}
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check lmdb Linux dynamic dependencies and glibc ABI policy."""
+"""Check lmclient Linux dynamic dependencies and glibc ABI policy."""
 from __future__ import annotations
 import os, re, shutil, subprocess, sys
 from pathlib import Path

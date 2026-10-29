@@ -1,4 +1,4 @@
-package ai.lmctl.lmdb.core;
+package ai.lmctl.lmclient.core;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -76,9 +76,9 @@ public final class Database implements AutoCloseable {
         Objects.requireNonNull(url, "url");
         Properties p = new Properties();
         if (properties != null) p.putAll(properties);
-        int rows = positiveInt(p, "lmdb.maxRows", DEFAULT_MAX_ROWS);
-        int bytes = positiveInt(p, "lmdb.maxCellBytes", DEFAULT_MAX_CELL_BYTES);
-        p.remove("lmdb.maxRows"); p.remove("lmdb.maxCellBytes");
+        int rows = positiveInt(p, "lmclient.maxRows", DEFAULT_MAX_ROWS);
+        int bytes = positiveInt(p, "lmclient.maxCellBytes", DEFAULT_MAX_CELL_BYTES);
+        p.remove("lmclient.maxRows"); p.remove("lmclient.maxCellBytes");
         Connection connection = null;
         try {
             DriverManager.setLoginTimeout(DEFAULT_QUERY_TIMEOUT_SECONDS);
@@ -103,7 +103,7 @@ public final class Database implements AutoCloseable {
     /**
      * Applies driver-managed caps where the embedded engine supports them. The
      * cap covers engine allocations; JVM/native runtime, stacks, and JDBC
-     * objects remain governed by the outer lmdb process budget.
+     * objects remain governed by the outer lmclient process budget.
      */
     private static void configureEngineMemoryLimit(Connection connection, long bytes) throws SQLException {
         String product = connection.getMetaData().getDatabaseProductName().toLowerCase(Locale.ROOT);
@@ -260,19 +260,19 @@ public final class Database implements AutoCloseable {
         return 64;
     }
     private static long memoryBudgetBytes() {
-        String raw = System.getenv("LMDB_MAX_MEMORY_MB");
+        String raw = Env.get("LMCLIENT_MAX_MEMORY_MB");
         if (raw == null || raw.isBlank()) return 4096L * 1024 * 1024;
         try {
             if (!raw.matches("[1-9][0-9]*")) throw new NumberFormatException();
             return Math.multiplyExact(Long.parseLong(raw), 1024L * 1024);
         } catch (NumberFormatException | ArithmeticException e) {
-            throw new IllegalArgumentException("LMDB_MAX_MEMORY_MB must be a positive whole number of MiB");
+            throw new IllegalArgumentException("LMCLIENT_MAX_MEMORY_MB must be a positive whole number of MiB");
         }
     }
     private static final class ReadBudget {
         private final long limit; private long used;
         ReadBudget(long limit) { this.limit = limit; }
-        void add(long bytes) { if (bytes > limit - used) throw new DatabaseException("LMDB_MAX_MEMORY_MB memory budget exceeded"); used += Math.max(0, bytes); }
+        void add(long bytes) { if (bytes > limit - used) throw new DatabaseException("LMCLIENT_MAX_MEMORY_MB memory budget exceeded"); used += Math.max(0, bytes); }
     }
 
     public QueryResult schemas() { return metadata("getSchemas", new String[]{"TABLE_SCHEM"}); }

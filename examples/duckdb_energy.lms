@@ -1,6 +1,6 @@
 # DuckDB window functions reveal a cumulative energy budget.
 mkdir("images"); mkdir("data"); mkdir("build");
-dbhost = _dsl_ cli="lmdb" install="github:lmctl-ai/lmdb@latest";
+dbhost = _dsl_ cli="lmclient" install="github:lmctl-ai/lmclient@latest";
 let c = connect("jdbc:duckdb:");
 c.exec("CREATE TABLE energy(day INT, kwh DOUBLE); INSERT INTO energy VALUES (1,14.2),(2,15.1),(3,13.7),(4,16.4),(5,18.0),(6,17.2),(7,15.8);");
 let q = c.query("SELECT day, kwh, SUM(kwh) OVER (ORDER BY day) AS cumulative FROM energy");

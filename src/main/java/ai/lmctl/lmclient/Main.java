@@ -1,6 +1,7 @@
-package ai.lmctl.lmdb;
+package ai.lmctl.lmclient;
 
-import ai.lmctl.lmdb.core.Database;
+import ai.lmctl.lmclient.core.Env;
+import ai.lmctl.lmclient.core.Database;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -9,7 +10,7 @@ import java.util.Map;
 
 /** Stateless JDBC command line. Database exceptions never echo queries or credentials. */
 public final class Main {
-    public static final String VERSION = "0.1.1";
+    public static final String VERSION = "0.2.0";
     private Main() {}
 
     public static void main(String[] args) {
@@ -17,31 +18,31 @@ public final class Main {
         System.setErr(new java.io.PrintStream(System.err, true, StandardCharsets.UTF_8));
         int code;
         try { RuntimeBudget.configure(memoryBudget(),args); code = run(args); }
-        catch (ai.lmctl.lmdb.core.DatabaseException e) { System.err.println("lmdb: " + e.getMessage()); code = 3; }
-        catch (IllegalArgumentException e) { System.err.println("lmdb: " + e.getMessage()); code = 2; }
+        catch (ai.lmctl.lmclient.core.DatabaseException e) { System.err.println("lmclient: " + e.getMessage()); code = 3; }
+        catch (IllegalArgumentException e) { System.err.println("lmclient: " + e.getMessage()); code = 2; }
         catch (Exception e) {
-            System.err.println("lmdb: database or file operation failed (" + e.getClass().getSimpleName() + ")");
+            System.err.println("lmclient: database or file operation failed (" + e.getClass().getSimpleName() + ")");
             code = 3;
         }
         catch (OutOfMemoryError e) {
-            System.err.println("lmdb: LMDB_MAX_MEMORY_MB memory budget exceeded");
+            System.err.println("lmclient: LMCLIENT_MAX_MEMORY_MB memory budget exceeded");
             if (java.util.Arrays.asList(args).contains("--dsl"))
-                System.out.println("{\"ok\":false,\"phase\":\"run\",\"code\":\"RUN_ERROR\",\"message\":\"LMDB_MAX_MEMORY_MB memory budget exceeded\"}");
+                System.out.println("{\"ok\":false,\"phase\":\"run\",\"code\":\"RUN_ERROR\",\"message\":\"LMCLIENT_MAX_MEMORY_MB memory budget exceeded\"}");
             code = 3;
         }
-        catch (LinkageError e) { System.err.println("lmdb: bundled native driver could not load (" + e.getClass().getSimpleName() + ")"); code = 3; }
+        catch (LinkageError e) { System.err.println("lmclient: bundled native driver could not load (" + e.getClass().getSimpleName() + ")"); code = 3; }
         if (code != 0) System.exit(code);
     }
 
     public static long memoryBudget() {
-        String raw = System.getenv("LMDB_MAX_MEMORY_MB");
+        String raw = Env.get("LMCLIENT_MAX_MEMORY_MB");
         if (raw == null) return 4096L * 1024 * 1024;
         try {
             if (!raw.matches("[1-9][0-9]*")) throw new NumberFormatException();
             long megabytes = Long.parseLong(raw);
             return Math.multiplyExact(megabytes, 1024L * 1024);
         } catch (ArithmeticException | NumberFormatException e) {
-            throw new IllegalArgumentException("LMDB_MAX_MEMORY_MB must be a positive whole number of MiB");
+            throw new IllegalArgumentException("LMCLIENT_MAX_MEMORY_MB must be a positive whole number of MiB");
         }
     }
 
@@ -49,7 +50,7 @@ public final class Main {
         memoryBudget();
         if (args.length == 0 || args[0].equals("--help")) { usage(); return args.length == 0 ? 2 : 0; }
         switch (args[0]) {
-            case "--version": System.out.println("lmdb " + VERSION); return 0;
+            case "--version": System.out.println("lmclient " + VERSION); return 0;
             case "--dsl-schema": System.out.print(HostApi.schema()); return 0;
             case "--dsl-signatures": System.out.print(HostApi.signatures()); return 0;
             case "--drivers": Drivers.names().forEach(System.out::println); return 0;
@@ -78,11 +79,11 @@ public final class Main {
         Map<String, String> options = new LinkedHashMap<>();
         for (int i = 0; i < args.length; i++) {
             if (!java.util.Set.of("--url", "--sql", "--file", "--format", "--output", "--metadata", "--table", "--credentials-file", "--max-rows", "--driver-jar", "--driver-class", "--explain", "--diff-url").contains(args[i]))
-                throw new IllegalArgumentException("unknown option; run lmdb --help");
+                throw new IllegalArgumentException("unknown option; run lmclient --help");
             if (i + 1 == args.length) throw new IllegalArgumentException("option requires a value");
             if (options.put(args[i], args[++i]) != null) throw new IllegalArgumentException("duplicate option");
         }
-        String url = options.getOrDefault("--url", System.getenv("LMDB_URL"));
+        String url = options.getOrDefault("--url", Env.get("LMCLIENT_URL"));
         Credentials.validateUrl(url);
         long actions = java.util.List.of("--sql", "--file", "--metadata", "--explain", "--diff-url").stream().filter(options::containsKey).count();
         if (actions != 1) throw new IllegalArgumentException("choose one of --sql, --file, --metadata, --explain or --diff-url");
@@ -96,14 +97,14 @@ public final class Main {
         try { maxRows = Integer.parseInt(options.getOrDefault("--max-rows", "10000")); }
         catch (NumberFormatException e) { throw new IllegalArgumentException("max-rows must be positive"); }
         if (maxRows <= 0 || maxRows > 1_000_000) throw new IllegalArgumentException("max-rows must be between 1 and 1000000");
-        var properties = Credentials.read(options.getOrDefault("--credentials-file", System.getenv("LMDB_CREDENTIALS_FILE")));
-        properties.setProperty("lmdb.maxRows", Integer.toString(maxRows));
+        var properties = Credentials.read(options.getOrDefault("--credentials-file", Env.get("LMCLIENT_CREDENTIALS_FILE")));
+        properties.setProperty("lmclient.maxRows", Integer.toString(maxRows));
         try (var database = Database.connect(url, properties)) {
             String sql = options.get("--sql");
             if (options.containsKey("--file")) {
                 if (sql != null) throw new IllegalArgumentException("choose --sql or --file");
                 Path file = Path.of(options.get("--file"));
-                if (Files.size(file) > memoryBudget() / 4) throw new IllegalArgumentException("SQL file exceeds LMDB_MAX_MEMORY_MB budget");
+                if (Files.size(file) > memoryBudget() / 4) throw new IllegalArgumentException("SQL file exceeds LMCLIENT_MAX_MEMORY_MB budget");
                 sql = Files.readString(file, StandardCharsets.UTF_8);
             }
             String output = execute(database, options, sql, maxRows, format);
@@ -137,7 +138,7 @@ public final class Main {
         }
         else {
             if (sql == null) throw new IllegalArgumentException("provide --sql, --file or --metadata");
-            var statements = ai.lmctl.lmdb.core.SqlScript.split(sql);
+            var statements = ai.lmctl.lmclient.core.SqlScript.split(sql);
             if (statements.isEmpty()) throw new IllegalArgumentException("SQL must not be empty");
             result = null;
             for (String statement : statements) result = database.query(statement, maxRows);
@@ -171,17 +172,17 @@ public final class Main {
 
     private static void usage() {
         System.out.println("""
-            lmdb: portable scriptable JDBC client
-            lmdb --url JDBC_URL --sql SQL [--format table|csv|json] [--output FILE]
-            lmdb --url JDBC_URL --file SQL_FILE [--max-rows N]
-            lmdb --url JDBC_URL --metadata schemas|tables|views|columns|keys|foreign_keys|indexes [--table NAME]
-            lmdb --url JDBC_URL --explain SQL
-            lmdb --url JDBC_URL --diff-url OTHER_JDBC_URL
-            lmdb --dsl BYTECODE [--dry-run] | --dsl-schema | --dsl-signatures
-            lmdb --drivers | --driver-test | --version | --notices
-            Credentials: LMDB_USER, LMDB_PASSWORD, or --credentials-file UTF8_PROPERTIES.
-            URL fallback: LMDB_URL. Optional drivers: --driver-jar JAR --driver-class CLASS (JVM only).
-            LMDB_MAX_MEMORY_MB: positive whole MiB; default 4096. Results default to 10000 rows.
+            lmclient: portable scriptable JDBC client
+            lmclient --url JDBC_URL --sql SQL [--format table|csv|json] [--output FILE]
+            lmclient --url JDBC_URL --file SQL_FILE [--max-rows N]
+            lmclient --url JDBC_URL --metadata schemas|tables|views|columns|keys|foreign_keys|indexes [--table NAME]
+            lmclient --url JDBC_URL --explain SQL
+            lmclient --url JDBC_URL --diff-url OTHER_JDBC_URL
+            lmclient --dsl BYTECODE [--dry-run] | --dsl-schema | --dsl-signatures
+            lmclient --drivers | --driver-test | --version | --notices
+            Credentials: LMCLIENT_USER, LMCLIENT_PASSWORD, or --credentials-file UTF8_PROPERTIES.
+            URL fallback: LMCLIENT_URL. Optional drivers: --driver-jar JAR --driver-class CLASS (JVM only).
+            LMCLIENT_MAX_MEMORY_MB: positive whole MiB; default 4096. Results default to 10000 rows.
             Linux binaries require glibc 2.35 or newer.
             """);
     }

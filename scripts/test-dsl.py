@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Compile lmdb DSL fixtures and exercise the JVM/native host contract."""
+"""Compile lmclient DSL fixtures and exercise the JVM/native host contract."""
 import csv
 import json
 import os
@@ -10,10 +10,10 @@ import sys
 import tempfile
 
 ROOT = Path(__file__).resolve().parents[1]
-COMPILER = Path(os.environ.get("LMDB_LMSCRIPT") or shutil.which("lmscript") or "/missing/lmscript").resolve()
-LAUNCHER = Path(sys.argv[1] if len(sys.argv) > 1 else os.environ.get("LMDB_LMDB_LAUNCHER", str(ROOT / "build/lmdb"))).resolve()
+COMPILER = Path(os.environ.get("LMCLIENT_LMSCRIPT") or shutil.which("lmscript") or "/missing/lmscript").resolve()
+LAUNCHER = Path(sys.argv[1] if len(sys.argv) > 1 else os.environ.get("LMCLIENT_LAUNCHER", str(ROOT / "build/lmclient"))).resolve()
 if not COMPILER.is_file() or not LAUNCHER.is_file():
-    raise SystemExit("DSL test prerequisites missing: pinned lmscript compiler and lmdb launcher are required")
+    raise SystemExit("DSL test prerequisites missing: pinned lmscript compiler and lmclient launcher are required")
 
 checks = 0
 
@@ -23,8 +23,8 @@ def invoke(args, cwd, timeout, expected=0, env=None):
         process_env = dict(os.environ if env is None else env)
         process_env["PATH"] = str(LAUNCHER.parent) + os.pathsep + os.environ.get("PATH", "")
         command = args
-        if os.environ.get("LMDB_TEST_ADDRESS_SPACE_LIMIT") == "1" and args[0] == str(LAUNCHER):
-            command = ["bash","-c",'ulimit -v 6291456; exec "$@"',"lmdb-memory-limit",*args]
+        if os.environ.get("LMCLIENT_TEST_ADDRESS_SPACE_LIMIT") == "1" and args[0] == str(LAUNCHER):
+            command = ["bash","-c",'ulimit -v 6291456; exec "$@"',"lmclient-memory-limit",*args]
         p = subprocess.run(command, cwd=cwd, env=process_env, text=True, encoding="utf-8",
                            stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=timeout)
     except (OSError, subprocess.TimeoutExpired):
@@ -38,7 +38,7 @@ def compile_fixture(directory, body, name):
     source = directory / (name + ".lms")
     bytecode = directory / (name + ".dslb")
     source.write_text(
-        'host = _dsl_ cli="lmdb" install="github:lmctl-ai/lmdb@latest";\n'
+        'host = _dsl_ cli="lmclient" install="github:lmctl-ai/lmclient@latest";\n'
         + body + f'\nend _dsl_\nsavedsl(host, "{bytecode.name}");\n', encoding="utf-8")
     # The outer compiler writes only the requested bytecode. It must not invoke
     # the generated host program; there is no dsl_cli/system call in fixtures.
@@ -56,7 +56,7 @@ def report(process):
         raise AssertionError("DSL host report is not an object")
     return value
 
-with tempfile.TemporaryDirectory(prefix="lmdb-dsl-test-") as raw:
+with tempfile.TemporaryDirectory(prefix="lmclient-dsl-test-") as raw:
     directory = Path(raw)
     body = '''
 let c = connect("jdbc:h2:mem:contract;DB_CLOSE_DELAY=-1");
@@ -113,10 +113,10 @@ let after = c.query("SELECT id,label FROM child ORDER BY id"); after.csv("after.
     if report(result).get("code") != "LOAD_SCHEMA_MISMATCH": raise AssertionError("schema mismatch was not detected")
 
     runaway = compile_fixture(directory, 'let c = connect("jdbc:h2:mem:runaway"); while (true) { let q = c.query("SELECT REPEAT(\'x\',200000)"); }', "runaway")
-    env = {**os.environ, "LMDB_MAX_MEMORY_MB": "64"}
+    env = {**os.environ, "LMCLIENT_MAX_MEMORY_MB": "64"}
     result = invoke([str(LAUNCHER), "--dsl", str(runaway)], directory, 90, expected=3, env=env)
     value = report(result)
-    if value.get("phase") != "run" or "memory" not in value.get("message", "").lower() or "LMDB_MAX_MEMORY_MB" not in result.stderr:
+    if value.get("phase") != "run" or "memory" not in value.get("message", "").lower() or "LMCLIENT_MAX_MEMORY_MB" not in result.stderr:
         raise AssertionError("memory budget report mismatch")
 
     bounded = compile_fixture(directory, 'let c = connect("jdbc:h2:mem:bounded"); let i = 0; while (i < 300) { let q = c.query("SELECT REPEAT(\'x\',10000)"); i = i + 1; }', "bounded")
@@ -129,12 +129,12 @@ let after = c.query("SELECT id,label FROM child ORDER BY id"); after.csv("after.
     result = invoke([str(LAUNCHER), "--dsl", str(native_limit)], directory, 90, expected=3)
     if "native connection limit" not in report(result).get("message", ""):
         raise AssertionError("native connection limit report mismatch")
-    if os.environ.get("LMDB_TEST_DEFAULT_BUDGET") == "1":
+    if os.environ.get("LMCLIENT_TEST_DEFAULT_BUDGET") == "1":
         default_env = dict(os.environ)
-        default_env.pop("LMDB_MAX_MEMORY_MB", None)
+        default_env.pop("LMCLIENT_MAX_MEMORY_MB", None)
         result = invoke([str(LAUNCHER), "--dsl", str(runaway)], directory, 180, expected=3, env=default_env)
         value = report(result)
-        if "memory" not in value.get("message", "").lower() or "LMDB_MAX_MEMORY_MB" not in result.stderr:
+        if "memory" not in value.get("message", "").lower() or "LMCLIENT_MAX_MEMORY_MB" not in result.stderr:
             raise AssertionError("default memory budget was not enforced")
 
-print(f"lmdb DSL checks: {checks} passed")
+print(f"lmclient DSL checks: {checks} passed")

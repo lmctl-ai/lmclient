@@ -1,6 +1,6 @@
 # Department budgets from H2, grouped for an executive view.
 mkdir("images"); mkdir("data"); mkdir("build");
-dbhost = _dsl_ cli="lmdb" install="github:lmctl-ai/lmdb@latest";
+dbhost = _dsl_ cli="lmclient" install="github:lmctl-ai/lmclient@latest";
 let c = connect("jdbc:h2:mem:budget");
 c.exec("CREATE TABLE spend(department VARCHAR(20), planned DECIMAL(10,2), actual DECIMAL(10,2)); INSERT INTO spend VALUES ('Research',90000,87000),('Sales',120000,131000),('Support',70000,65000),('Operations',110000,104000);");
 let q = c.query("SELECT department, planned, actual FROM spend ORDER BY department");

@@ -1,6 +1,6 @@
 # Route performance: join flights to airports and rank average delay.
 mkdir("images"); mkdir("data"); mkdir("build");
-dbhost = _dsl_ cli="lmdb" install="github:lmctl-ai/lmdb@latest";
+dbhost = _dsl_ cli="lmclient" install="github:lmctl-ai/lmclient@latest";
 let c = connect("jdbc:sqlite::memory:");
 c.exec("CREATE TABLE airports(code TEXT PRIMARY KEY, city TEXT); CREATE TABLE flights(origin TEXT, destination TEXT, delay REAL); INSERT INTO airports VALUES ('ORD','Chicago'),('SEA','Seattle'),('BOS','Boston'); INSERT INTO flights VALUES ('ORD','SEA',42),('ORD','BOS',18),('SEA','ORD',11),('BOS','ORD',27),('ORD','SEA',25);");
 let q = c.query("SELECT a.city || ' to ' || b.city AS route, AVG(f.delay) AS avg_delay FROM flights f JOIN airports a ON a.code=f.origin JOIN airports b ON b.code=f.destination GROUP BY route ORDER BY avg_delay DESC");

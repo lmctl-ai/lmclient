@@ -1,6 +1,6 @@
 # DuckDB joins population and area to show regional density.
 mkdir("images"); mkdir("data"); mkdir("build");
-dbhost = _dsl_ cli="lmdb" install="github:lmctl-ai/lmdb@latest";
+dbhost = _dsl_ cli="lmclient" install="github:lmctl-ai/lmclient@latest";
 let c = connect("jdbc:duckdb:");
 c.exec("CREATE TABLE region(name VARCHAR, population BIGINT, area_km2 DOUBLE); INSERT INTO region VALUES ('Alpine',1800000,42000),('Coastal',9200000,38000),('Prairie',2400000,160000),('Forest',3100000,210000);");
 let q = c.query("SELECT name, population/area_km2 AS density FROM region ORDER BY density DESC");

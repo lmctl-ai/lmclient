@@ -1,6 +1,6 @@
 # DuckDB computes a rolling return and drawdown series.
 mkdir("images"); mkdir("data"); mkdir("build");
-dbhost = _dsl_ cli="lmdb" install="github:lmctl-ai/lmdb@latest";
+dbhost = _dsl_ cli="lmclient" install="github:lmctl-ai/lmclient@latest";
 let c = connect("jdbc:duckdb:");
 c.exec("CREATE TABLE prices(day INT, close DOUBLE); INSERT INTO prices VALUES (1,100),(2,103),(3,101),(4,108),(5,105),(6,111),(7,109),(8,116);");
 let q = c.query("SELECT day, close, 100.0*(close/LAG(close) OVER (ORDER BY day)-1) AS return_pct FROM prices ORDER BY day");
