@@ -23,7 +23,9 @@ those prerequisites are present.
 
 - `cred set SERVICE FIELD (--value V | --env VAR | --stdin)` requires exactly
   one source. Empty values are allowed; an absent environment variable is not.
-  Stdin is read completely as UTF-8, preserving whitespace and trailing newlines.
+  Stdin is read completely as UTF-8, then exactly one trailing LF or CRLF is
+  removed for shell piping. Embedded line endings, extra trailing line endings,
+  a lone CR, and other whitespace are preserved. `--value` and `--env` are untouched.
   `--value` emits an argv-exposure warning to stderr. Prefer env or stdin.
   Result: `{"service":"...","field":"...","stored":true}`.
 - `cred get SERVICE FIELD` returns names and `set:true|false` without values.
@@ -46,4 +48,6 @@ Command parsing, result shapes, redaction, and missing-value behavior match
 lmconn. Runtime errors use lmclient's required exit **3**, versus lmconn's **1**;
 usage remains exit **2** and success exit **0**. Timestamp spelling comes from
 CredStore (`Instant` ISO format), while JS uses millisecond ISO formatting; both
-read each other's stored timestamps and values without conversion.
+read each other's stored timestamps and values without conversion. Unlike lmconn,
+lmclient removes one final shell line ending from `--stdin`; use `--env` or
+`--value` when that exact trailing newline is part of the credential.

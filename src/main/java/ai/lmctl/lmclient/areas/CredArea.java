@@ -61,7 +61,12 @@ public final class CredArea {
                     if (args[4].isEmpty() || value == null)
                         return Envelope.fail("USAGE", "The named environment variable must be set");
                 }
-                case "--stdin" -> value = new String(System.in.readAllBytes(), StandardCharsets.UTF_8);
+                case "--stdin" -> {
+                    value = new String(System.in.readAllBytes(), StandardCharsets.UTF_8);
+                    // Strip exactly one shell line ending, not other credential whitespace.
+                    if (value.endsWith("\r\n")) value = value.substring(0, value.length() - 2);
+                    else if (value.endsWith("\n")) value = value.substring(0, value.length() - 1);
+                }
                 default -> {
                     System.err.println("Warning: --value exposes credentials in argv, which is visible to other processes. Prefer --env or --stdin.");
                     value = args[4];

@@ -25,9 +25,13 @@ with tempfile.TemporaryDirectory(prefix='lmclient-cred-') as directory:
 
     def run(*args, code=0, error=None, stdin=None, env=None):
         global checks
-        process = subprocess.run(COMMAND + ['cred', *args], input=stdin, text=True,
-                                 encoding='utf-8', capture_output=True, timeout=30,
+        # Binary pipes avoid Python translating every LF to CRLF on Windows.
+        process = subprocess.run(COMMAND + ['cred', *args],
+                                 input=None if stdin is None else stdin.encode('utf-8'),
+                                 capture_output=True, timeout=30,
                                  env={**environment, **(env or {})})
+        process.stdout = process.stdout.decode('utf-8')
+        process.stderr = process.stderr.decode('utf-8')
         assert process.returncode == code, 'unexpected credential command exit'
         assert len(process.stdout.strip().splitlines()) == 1, 'exactly one JSON envelope required'
         envelope = json.loads(process.stdout)
@@ -62,8 +66,19 @@ with tempfile.TemporaryDirectory(prefix='lmclient-cred-') as directory:
         assert run('get', 'service', 'key', '--reveal')[0]['value'] == value
         assert run('get', 'service', 'key')[0]['set'] is True
     run('set', 'service', 'key', '--env', 'LMCLIENT_CRED_TEST_MISSING', code=2, error='USAGE')
-    for value in [f'  {SECRET} 🔑\nsecond\r\nline\t\x00end\n', '', SECRET + 'x' * 131072]:
+    # Stdin strips one trailing LF/CRLF; embedded line endings and other whitespace survive.
+    for value, expected in [
+        (SECRET + '\n', SECRET), (SECRET + '\r\n', SECRET),
+        (SECRET + '\n\n', SECRET + '\n'),
+        (SECRET + '\r\n\r\n', SECRET + '\r\n'),
+        (SECRET + '\r', SECRET + '\r'), ('\n', ''), ('\r\n', ''),
+        (f'  {SECRET} 🔑\nsecond\r\nline\t\x00end\n', f'  {SECRET} 🔑\nsecond\r\nline\t\x00end'),
+        ('', ''), (SECRET + 'x' * 131072, SECRET + 'x' * 131072),
+    ]:
         run('set', 'service', 'key', '--stdin', stdin=value)
+        assert run('get', 'service', 'key', '--reveal')[0]['value'] == expected
+    for value in [SECRET + '\n', SECRET + '\r\n']:
+        run('set', 'service', 'key', '--value', value)
         assert run('get', 'service', 'key', '--reveal')[0]['value'] == value
     assert len(run('list')[0]) == 1, 'updates must not insert duplicate rows'
     name = 'quoted"service\\世界'

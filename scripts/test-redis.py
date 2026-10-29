@@ -76,7 +76,9 @@ def require_docker():
     if not shutil.which('docker'):
         skip_docker('docker executable absent')
     try:
-        docker_setup('info', timeout=30)
+        os_type = docker_setup('info', '--format', '{{.OSType}}', timeout=30).lower()
+        if os_type != 'linux':
+            skip_docker(f"{os_type or 'unknown'} Docker daemon cannot run this suite's Linux image")
     except DockerUnavailable as exc:
         skip_docker(exc)
 
