@@ -1,0 +1,7 @@
+[
+  {"name":"org.apache.kafka.common.serialization.StringSerializer","allPublicConstructors":true},
+  {"name":"org.apache.kafka.common.serialization.StringDeserializer","allPublicConstructors":true},
+  {"name":"org.apache.kafka.clients.consumer.RangeAssignor","allPublicConstructors":true},
+  {"name":"org.apache.kafka.clients.consumer.CooperativeStickyAssignor","allPublicConstructors":true},
+  {"name":"org.apache.kafka.common.metrics.JmxReporter","allPublicConstructors":true}
+]

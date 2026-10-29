@@ -16,3 +16,4 @@ org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.5
 org.mongodb:mongodb-driver-sync:5.2.1
 redis.clients:jedis:5.2.0
 org.slf4j:slf4j-nop:1.7.36
+org.apache.kafka:kafka-clients:3.9.1

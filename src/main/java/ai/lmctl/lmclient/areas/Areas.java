@@ -18,6 +18,7 @@ public final class Areas {
         "redis", RedisArea::run,
         "mail", MailArea::run,
         "queue", QueueArea::run,
+        "kafka", KafkaArea::run,
         "mqtt", MqttArea::run,
         "mongo", MongoArea::run
     );
