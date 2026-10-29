@@ -45,7 +45,9 @@ with tempfile.TemporaryDirectory(prefix='lmclient-cred-') as directory:
         checks += 1
         return envelope.get('result', envelope.get('error')), process.stderr
 
-    assert run('path')[0] == {'path': database}
+    path_result = run('path')[0]
+    assert set(path_result) == {'path'}
+    assert os.path.realpath(path_result['path']) == os.path.realpath(database)
     assert not Path(database).exists(), 'path must not open the database'
     assert run('list')[0] == []
     assert run('get', 'service', 'key')[0] == {'service': 'service', 'field': 'key', 'set': False}

@@ -146,7 +146,8 @@ else: print('  pong  ')
                 assert result['text'] == 'pong' and result['model'] is None and result['keySource'] == 'none'
                 record = json.loads((root/'argv.json').read_text())
                 assert record['argv'] == prefix+['be brief\n\n'+prompt]
-                assert Path(record['cwd']) == Path(tempfile.gettempdir())
+                # macOS /var and /private/var name the same temporary directory.
+                assert os.path.realpath(record['cwd']) == os.path.realpath(tempfile.gettempdir())
             error = run('chat','claude','--prompt','x',code=3,extra_env={'CLI_FIXTURE_MODE':'error'})
             assert error['code'] == 'CLI_ERROR' and len(error['message'].split(': ',1)[1]) <= 500
             assert run('chat','claude','--prompt','x','--timeout','1000',code=3,extra_env={'CLI_FIXTURE_MODE':'slow'})['code'] == 'TIMEOUT'
