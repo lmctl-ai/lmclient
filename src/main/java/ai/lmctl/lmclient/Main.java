@@ -76,6 +76,8 @@ public final class Main {
                 try (var host = new DslHost()) { return host.run(Path.of(bytecode),dryRun); }
             default: break;
         }
+        var area = ai.lmctl.lmclient.areas.Areas.REGISTRY.get(args[0]);
+        if (area != null) return area.run(java.util.Arrays.copyOfRange(args, 1, args.length));
         Map<String, String> options = new LinkedHashMap<>();
         for (int i = 0; i < args.length; i++) {
             if (!java.util.Set.of("--url", "--sql", "--file", "--format", "--output", "--metadata", "--table", "--credentials-file", "--max-rows", "--driver-jar", "--driver-class", "--explain", "--diff-url").contains(args[i]))
@@ -172,7 +174,7 @@ public final class Main {
 
     private static void usage() {
         System.out.println("""
-            lmclient: portable scriptable JDBC client
+            lmclient: portable scriptable protocol client (JDBC databases plus redis/mail/queue/mqtt/mongo areas)
             lmclient --url JDBC_URL --sql SQL [--format table|csv|json] [--output FILE]
             lmclient --url JDBC_URL --file SQL_FILE [--max-rows N]
             lmclient --url JDBC_URL --metadata schemas|tables|views|columns|keys|foreign_keys|indexes [--table NAME]
@@ -180,6 +182,7 @@ public final class Main {
             lmclient --url JDBC_URL --diff-url OTHER_JDBC_URL
             lmclient --dsl BYTECODE [--dry-run] | --dsl-schema | --dsl-signatures
             lmclient --drivers | --driver-test | --version | --notices
+            lmclient redis|mail|queue|mqtt|mongo ...   (protocol areas; see docs/areas/)
             Credentials: LMCLIENT_USER, LMCLIENT_PASSWORD, or --credentials-file UTF8_PROPERTIES.
             URL fallback: LMCLIENT_URL. Optional drivers: --driver-jar JAR --driver-class CLASS (JVM only).
             LMCLIENT_MAX_MEMORY_MB: positive whole MiB; default 4096. Results default to 10000 rows.
