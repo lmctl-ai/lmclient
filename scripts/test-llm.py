@@ -10,10 +10,12 @@ import os
 from pathlib import Path
 import shutil
 import sqlite3
+from contextlib import closing
 import subprocess
 import sys
 from jvm_noise import java_command, strip_jvm_noise
 import tempfile
+from temp_cleanup import temporary_directory
 import threading
 import time
 
@@ -51,10 +53,10 @@ thread.start()
 checks = 0
 live_option = os.environ.get('LMCLIENT_TEST_LLM_LIVE', '')
 try:
-    with tempfile.TemporaryDirectory(prefix='lmclient-llm-') as directory:
+    with temporary_directory(prefix='lmclient-llm-') as directory:
         root = Path(directory)
         db = root / 'creds.db'
-        with sqlite3.connect(db) as connection:
+        with closing(sqlite3.connect(db)) as connection, connection:
             connection.execute('CREATE TABLE creds(service TEXT NOT NULL, field TEXT NOT NULL, value TEXT NOT NULL, updated_at TEXT NOT NULL, PRIMARY KEY(service,field))')
         env = {**os.environ, 'LMCLIENT_DB': str(db), 'DEEPSEEK_API_KEY': 'fixture-api-private',
                'LMCLIENT_LLM_DEEPSEEK_BASE_URL': f'http://127.0.0.1:{server.server_port}/v1',
@@ -109,11 +111,11 @@ else: print('  pong  ')
         assert result['usage'] == {'total_tokens':4} and result['keySource'] == 'env:DEEPSEEK_API_KEY'
         assert state['requests'][-1] == {'path':'/v1/chat/completions','auth':'Bearer fixture-api-private',
                                         'body':{'model':'override','max_tokens':12,'messages':[{'role':'system','content':'be brief'},{'role':'user','content':'ping'}]}}
-        with sqlite3.connect(db) as connection:
+        with closing(sqlite3.connect(db)) as connection, connection:
             connection.execute('INSERT INTO creds VALUES(?,?,?,?)',('deepseek','api_key','fixture-store-private','now'))
         assert run('chat','deepseek','--prompt','ping')['keySource'] == 'store'
         assert state['requests'][-1]['auth'] == 'Bearer fixture-store-private'
-        with sqlite3.connect(db) as connection: connection.execute('DELETE FROM creds')
+        with closing(sqlite3.connect(db)) as connection, connection: connection.execute('DELETE FROM creds')
         prompt_file = root / 'prompt.txt'
         prompt_file.write_text('file héllo',encoding='utf-8')
         run('chat','deepseek','--prompt-file',str(prompt_file))
@@ -171,7 +173,7 @@ finally:
 if live_option:
     names = ['deepseek','openrouter','ollama-cloud','claude','codex','agy','kimi'] if live_option == '1' else live_option.split(',')
     failures = []
-    with tempfile.TemporaryDirectory(prefix='lmclient-llm-live-') as directory:
+    with temporary_directory(prefix='lmclient-llm-live-') as directory:
         live_env = {k:v for k,v in os.environ.items() if not (k.startswith('LMCLIENT_LLM_') and k.endswith('_BASE_URL'))}
         live_env['LMCLIENT_DB'] = str(Path(directory)/'creds.db')
         for name in names:

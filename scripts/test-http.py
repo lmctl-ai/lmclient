@@ -13,10 +13,11 @@ import os
 from pathlib import Path
 import socket
 import sqlite3
+from contextlib import closing
 import subprocess
 import sys
 from jvm_noise import java_command, strip_jvm_noise
-import tempfile
+from temp_cleanup import temporary_directory
 import threading
 import time
 import urllib.parse
@@ -91,18 +92,18 @@ thread.start()
 base = f'http://127.0.0.1:{server.server_port}'
 checks = 0
 try:
-    with tempfile.TemporaryDirectory(prefix='lmclient-http-') as directory:
+    with temporary_directory(prefix='lmclient-http-') as directory:
         db = str(Path(directory) / 'creds.db')
         env = {**os.environ, 'LMCLIENT_DB': db}
         env.pop('HTTP_TEST_API_KEY', None)
-        with sqlite3.connect(db) as connection:
+        with closing(sqlite3.connect(db)) as connection, connection:
             connection.execute('CREATE TABLE creds(service TEXT NOT NULL, field TEXT NOT NULL, value TEXT NOT NULL, updated_at TEXT NOT NULL, PRIMARY KEY(service,field))')
         def seed(service, values):
-            with sqlite3.connect(db) as connection:
+            with closing(sqlite3.connect(db)) as connection, connection:
                 for field, value in values.items():
                     connection.execute('INSERT OR REPLACE INTO creds VALUES(?,?,?,?)', (service, field, value, '2026-01-01T00:00:00Z'))
         def stored(service, field):
-            with sqlite3.connect(db) as connection:
+            with closing(sqlite3.connect(db)) as connection, connection:
                 row = connection.execute('SELECT value FROM creds WHERE service=? AND field=?', (service, field)).fetchone()
                 return row[0] if row else None
         def run(*args, code=0, extra_env=None):

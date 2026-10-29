@@ -9,7 +9,7 @@ import shutil
 import subprocess
 import sys
 from jvm_noise import java_command, strip_jvm_noise
-import tempfile
+from temp_cleanup import temporary_directory
 
 ROOT = Path(__file__).resolve().parents[1]
 VERSION = (ROOT / 'VERSION').read_text().strip()
@@ -38,7 +38,7 @@ def redact(text, values):
 _probe = 'dummy-quote"\\line\n世界'
 assert redact(_probe + json.dumps(_probe), [_probe]) == '<redacted>"<redacted>"'
 
-with tempfile.TemporaryDirectory(prefix='lmclient-cred-') as directory:
+with temporary_directory(prefix='lmclient-cred-') as directory:
     database = str(Path(directory) / 'creds.db')
     environment = {**BASE_ENV, 'LMCLIENT_DB': database}
 

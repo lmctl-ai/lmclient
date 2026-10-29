@@ -12,7 +12,7 @@ import sqlite3
 import subprocess
 import sys
 from jvm_noise import java_command, strip_jvm_noise
-import tempfile
+from temp_cleanup import temporary_directory
 import threading
 import time
 import urllib.error
@@ -68,25 +68,25 @@ if (proxy) { proxy.closeAllConnections(); await new Promise(resolve => proxy.clo
 await idp.close();
 '''
 
-with tempfile.TemporaryDirectory(prefix='lmclient-oauth-') as directory:
+with temporary_directory(prefix='lmclient-oauth-') as directory:
     db = Path(directory) / 'creds.db'
     env = {**os.environ, 'LMCLIENT_DB': str(db)}
 
     def get(service, field):
         if not db.exists(): return None
-        with sqlite3.connect(db) as conn:
+        with contextlib.closing(sqlite3.connect(db)) as conn, conn:
             try: row = conn.execute('SELECT value FROM creds WHERE service=? AND field=?', (service, field)).fetchone()
             except sqlite3.OperationalError: return None
             return row[0] if row else None
 
     def put(service, field, value):
-        with sqlite3.connect(db) as conn:
+        with contextlib.closing(sqlite3.connect(db)) as conn, conn:
             conn.execute("INSERT OR REPLACE INTO creds VALUES (?,?,?,datetime('now'))", (service, field, value))
 
     def redacted(text):
         secrets = [SECRET, 'revoked-refresh-secret']
         if db.exists():
-            with sqlite3.connect(db) as conn:
+            with contextlib.closing(sqlite3.connect(db)) as conn, conn:
                 secrets += [r[0] for r in conn.execute("SELECT value FROM creds WHERE field IN ('oauth_access_token','oauth_refresh_token','oauth_client_secret')") if r[0]]
         assert all(s not in text for s in secrets), 'lmclient output disclosed a secret'
 
@@ -136,7 +136,8 @@ with tempfile.TemporaryDirectory(prefix='lmclient-oauth-') as directory:
         lines = queue.Queue()
         def pump():
             for line in child.stdout: lines.put(line)
-        threading.Thread(target=pump, daemon=True).start()
+        reader = threading.Thread(target=pump, daemon=True)
+        reader.start()
         try:
             urls = json.loads(lines.get(timeout=10))
             def logs():
@@ -145,12 +146,23 @@ with tempfile.TemporaryDirectory(prefix='lmclient-oauth-') as directory:
                 return json.loads(text)['events']
             yield urls, port, logs
         finally:
-            if child.poll() is None:
-                child.stdin.write('close\n'); child.stdin.flush()
-                try: child.wait(timeout=5)
-                except subprocess.TimeoutExpired: child.kill(); child.wait()
-            redacted(child.stderr.read())
-            child.stdin.close(); child.stdout.close(); child.stderr.close()
+            try:
+                if child.poll() is None:
+                    try:
+                        child.stdin.write('close\n'); child.stdin.flush()
+                    except (BrokenPipeError, OSError):
+                        pass
+                try:
+                    child.wait(timeout=5)
+                except subprocess.TimeoutExpired:
+                    child.kill(); child.wait()
+                reader.join(timeout=5)
+                assert not reader.is_alive(), 'mock IdP output reader did not stop'
+                redacted(child.stderr.read())
+            finally:
+                if child.poll() is None:
+                    child.kill(); child.wait()
+                child.stdin.close(); child.stdout.close(); child.stderr.close()
 
     def configure(service, urls):
         # Dummy credentials enter the shared store, never the Java process argv.
@@ -266,6 +278,8 @@ with tempfile.TemporaryDirectory(prefix='lmclient-oauth-') as directory:
             check(subprocess.CompletedProcess([],child.returncode,stdout,line+stderr))
             assert [e['path'] for e in logs()] == ['/authorize','/token']
         finally:
-            if child.poll() is None: child.kill(); child.communicate()
+            if child.poll() is None:
+                child.kill()
+            child.communicate()  # Reap and close all pipes, including early assertion failures.
     for output in outputs: redacted(output)
     print(f'oauth: {checks} checks passed; shared Node IdP verified PKCE, manual/body/form, refresh, protected userinfo, and adversarial errors')

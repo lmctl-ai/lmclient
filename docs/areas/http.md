@@ -20,6 +20,7 @@ On Windows, quote-heavy JSON passed through `--data` can lose embedded quotes du
 - Build: `mvn -q -B package -DskipTests`.
 - Test: `python3 scripts/test-http.py target/lmclient-0.2.0-all.jar` (also accepts a native executable).
 - Tests start a loopback Python `ThreadingHTTPServer` for both token and API endpoints; temporary credential DBs are seeded with Python's standard `sqlite3` module. No Docker, network services, or working cred command required. Server and DB connections are closed before cleanup.
+- Shared temporary-directory cleanup retries `PermissionError` ten times at 500 ms intervals after connections and child processes close; persistent locks still fail. Cleanup regression checks: `python3 scripts/test-temp-cleanup.py`.
 - No extra reflection metadata. Native-image testing is deferred to CI; local verification is JVM-only.
 
 ## Reference differences
