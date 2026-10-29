@@ -29,6 +29,68 @@ def run(*args, code=0, env=None):
     checks += 1
     return data.get('result')
 
+
+# Infrastructure failures skip live tests; application assertions still fail normally.
+class DockerUnavailable(Exception):
+    pass
+
+
+def docker_setup(*args, timeout=600):
+    try:
+        result = subprocess.run(['docker', *args], capture_output=True, text=True,
+                                encoding='utf-8', errors='replace', timeout=timeout)
+    except subprocess.TimeoutExpired as exc:
+        detail = exc.stderr or ''
+        if isinstance(detail, bytes):
+            detail = detail.decode('utf-8', errors='replace')
+        raise DockerUnavailable(f'Docker setup timed out after {timeout}s: {detail.strip()}') from None
+    except OSError as exc:
+        raise DockerUnavailable(f'Docker unavailable: {exc.strerror}') from None
+    if result.returncode:
+        raise DockerUnavailable(f'Docker setup exited {result.returncode}: {result.stderr.strip()}')
+    return result.stdout.strip()
+
+
+def skip_docker(reason):
+    message = str(reason)
+    for key in ('SECRET', 'WRONG', 'secret'):
+        value = globals().get(key)
+        if value:
+            message = message.replace(value, '(redacted)')
+    print('queue: SKIP live checks (' + message + ')')
+    sys.exit(0)
+
+
+def require_docker():
+    if not shutil.which('docker'):
+        skip_docker('docker executable absent')
+    try:
+        docker_setup('info', timeout=30)
+    except DockerUnavailable as exc:
+        skip_docker(exc)
+
+
+def published_port(name, container_port):
+    output = docker_setup('port', name, container_port, timeout=30)
+    try:
+        port = int(output.splitlines()[0].rsplit(':', 1)[1])
+        if not 1 <= port <= 65535:
+            raise ValueError()
+        return port
+    except (IndexError, ValueError):
+        raise DockerUnavailable('Docker did not report an ephemeral published port') from None
+
+
+def remove_container(name):
+    # Attempt cleanup even if a pull/start timed out or partially created a container.
+    # Do not mask either a skip or a failed live assertion if the daemon disappears.
+    try:
+        subprocess.run(['docker', 'rm', '-f', name], capture_output=True, timeout=60)
+    except (OSError, subprocess.TimeoutExpired):
+        print('queue: WARNING Docker cleanup unavailable for ' + name)
+
+require_docker()
+
 for args in [[], ['unknown'], ['ping'], ['ping', '--url'], ['ping', '--url', 'http://localhost'],
              ['publish', '--url', 'amqp://localhost/', '--queue', 'q'],
              ['consume', '--url', 'amqp://localhost/', '--queue', 'q', '--limit', '0'],
@@ -36,14 +98,11 @@ for args in [[], ['unknown'], ['ping'], ['ping', '--url'], ['ping', '--url', 'ht
              ['ping', '--password', SECRET]]:
     run(*args, code=2)
 run('ping', '--url', 'amqp://guest:' + SECRET + '@127.0.0.1:1/', '--timeout', '300', code=3)
-if not shutil.which('docker') or subprocess.run(['docker', 'info'], capture_output=True).returncode:
-    print(f'queue: {checks} checks passed; SKIPPED live checks (Docker unavailable)')
-    sys.exit(0)
 name = 'lmclient-queue-' + uuid.uuid4().hex[:10]
 try:
-    subprocess.run(['docker', 'run', '-d', '--name', name, '-e', 'RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS=+S 2:2',
-                    '-p', '127.0.0.1::5672', 'rabbitmq:3-alpine'], check=True, capture_output=True, timeout=180)
-    port = subprocess.check_output(['docker', 'port', name, '5672/tcp'], text=True).strip().rsplit(':', 1)[1]
+    docker_setup('run', '-d', '--name', name, '-e', 'RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS=+S 2:2',
+                 '-p', '127.0.0.1::5672', 'rabbitmq:3-alpine')
+    port = published_port(name, '5672/tcp')
     url = f'amqp://guest:guest@127.0.0.1:{port}/'
     for attempt in range(60):
         p = subprocess.run(COMMAND + ['queue', 'ping', '--url', url, '--timeout', '500'], env=ENV,
@@ -64,5 +123,7 @@ try:
         assert run('ping', '--url', f'amqp://127.0.0.1:{port}/', '--credentials-file', str(credentials))['connected']
     run('ping', '--url', url, '--timeout', '1000', code=3, env={**ENV, 'LMCLIENT_PASSWORD': SECRET})
     print(f'queue: {checks} checks passed; live publish 3 / consume 3 preserved order and auto-ack')
+except DockerUnavailable as exc:
+    skip_docker(exc)
 finally:
-    subprocess.run(['docker', 'rm', '-f', name], capture_output=True, timeout=30)
+    remove_container(name)

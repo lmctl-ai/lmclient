@@ -32,6 +32,68 @@ def run(*args, code=0, env=None):
     return envelope(subprocess.run(COMMAND + ['mqtt', *args], capture_output=True, text=True,
                                    timeout=25, env=env or ENV), code)
 
+
+# Infrastructure failures skip live tests; application assertions still fail normally.
+class DockerUnavailable(Exception):
+    pass
+
+
+def docker_setup(*args, timeout=600):
+    try:
+        result = subprocess.run(['docker', *args], capture_output=True, text=True,
+                                encoding='utf-8', errors='replace', timeout=timeout)
+    except subprocess.TimeoutExpired as exc:
+        detail = exc.stderr or ''
+        if isinstance(detail, bytes):
+            detail = detail.decode('utf-8', errors='replace')
+        raise DockerUnavailable(f'Docker setup timed out after {timeout}s: {detail.strip()}') from None
+    except OSError as exc:
+        raise DockerUnavailable(f'Docker unavailable: {exc.strerror}') from None
+    if result.returncode:
+        raise DockerUnavailable(f'Docker setup exited {result.returncode}: {result.stderr.strip()}')
+    return result.stdout.strip()
+
+
+def skip_docker(reason):
+    message = str(reason)
+    for key in ('SECRET', 'WRONG', 'secret'):
+        value = globals().get(key)
+        if value:
+            message = message.replace(value, '(redacted)')
+    print('mqtt: SKIP live checks (' + message + ')')
+    sys.exit(0)
+
+
+def require_docker():
+    if not shutil.which('docker'):
+        skip_docker('docker executable absent')
+    try:
+        docker_setup('info', timeout=30)
+    except DockerUnavailable as exc:
+        skip_docker(exc)
+
+
+def published_port(name, container_port):
+    output = docker_setup('port', name, container_port, timeout=30)
+    try:
+        port = int(output.splitlines()[0].rsplit(':', 1)[1])
+        if not 1 <= port <= 65535:
+            raise ValueError()
+        return port
+    except (IndexError, ValueError):
+        raise DockerUnavailable('Docker did not report an ephemeral published port') from None
+
+
+def remove_container(name):
+    # Attempt cleanup even if a pull/start timed out or partially created a container.
+    # Do not mask either a skip or a failed live assertion if the daemon disappears.
+    try:
+        subprocess.run(['docker', 'rm', '-f', name], capture_output=True, timeout=60)
+    except (OSError, subprocess.TimeoutExpired):
+        print('mqtt: WARNING Docker cleanup unavailable for ' + name)
+
+require_docker()
+
 for args in [[], ['unknown'], ['ping'], ['ping', '--url'], ['ping', '--url', 'http://localhost'],
              ['pub', '--url', 'tcp://localhost:1883', '--topic', 'a'],
              ['pub', '--url', 'tcp://localhost:1883', '--topic', '#', '--message', 'x'],
@@ -41,9 +103,6 @@ for args in [[], ['unknown'], ['ping'], ['ping', '--url'], ['ping', '--url', 'ht
              ['ping', '--url', 'tcp://localhost:1883', '--timeout', '0'], ['ping', '--password', SECRET]]:
     run(*args, code=2)
 run('ping', '--url', 'tcp://127.0.0.1:1', '--timeout', '300', code=3, env={**ENV, 'LMCLIENT_PASSWORD': SECRET})
-if not shutil.which('docker') or subprocess.run(['docker', 'info'], capture_output=True).returncode:
-    print(f'mqtt: {checks} checks passed; SKIPPED live checks (Docker unavailable)')
-    sys.exit(0)
 name = 'lmclient-mqtt-' + uuid.uuid4().hex[:10]
 subscriber = None
 try:
@@ -51,11 +110,10 @@ try:
         config = Path(directory) / 'mosquitto.conf'
         config.write_text('listener 1883\nallow_anonymous true\nlog_type all\n')
         # docker cp avoids host bind-mount permission differences across platforms.
-        subprocess.run(['docker', 'create', '--name', name, '-p', '127.0.0.1::1883', 'eclipse-mosquitto:2'],
-                       check=True, capture_output=True, timeout=180)
-        subprocess.run(['docker', 'cp', str(config), name + ':/mosquitto/config/mosquitto.conf'], check=True, capture_output=True)
-        subprocess.run(['docker', 'start', name], check=True, capture_output=True)
-    port = subprocess.check_output(['docker', 'port', name, '1883/tcp'], text=True).strip().rsplit(':', 1)[1]
+        docker_setup('create', '--name', name, '-p', '127.0.0.1::1883', 'eclipse-mosquitto:2')
+        docker_setup('cp', str(config), name + ':/mosquitto/config/mosquitto.conf', timeout=60)
+        docker_setup('start', name, timeout=60)
+    port = published_port(name, '1883/tcp')
     url = f'tcp://127.0.0.1:{port}'
     for attempt in range(30):
         p = subprocess.run(COMMAND + ['mqtt', 'ping', '--url', url, '--timeout', '500'], env=ENV,
@@ -83,8 +141,10 @@ try:
     assert result['messages'] == [{'topic': topic, 'payload': p} for p in messages], result
     assert run('sub', '--url', url, '--topic', topic, '--timeout', '1500')['messages'] == []
     print(f'mqtt: {checks} checks passed; live pub/sub delivered QoS 0/1/2 payloads in order')
+except DockerUnavailable as exc:
+    skip_docker(exc)
 finally:
     if subscriber is not None and subscriber.poll() is None:
         subscriber.kill()
         subscriber.communicate()
-    subprocess.run(['docker', 'rm', '-f', name], capture_output=True, timeout=30)
+    remove_container(name)

@@ -40,6 +40,68 @@ def run(*args, code=0, error=None, env=None):
     return envelope.get('result', envelope.get('error'))
 
 
+
+# Infrastructure failures skip live tests; application assertions still fail normally.
+class DockerUnavailable(Exception):
+    pass
+
+
+def docker_setup(*args, timeout=600):
+    try:
+        result = subprocess.run(['docker', *args], capture_output=True, text=True,
+                                encoding='utf-8', errors='replace', timeout=timeout)
+    except subprocess.TimeoutExpired as exc:
+        detail = exc.stderr or ''
+        if isinstance(detail, bytes):
+            detail = detail.decode('utf-8', errors='replace')
+        raise DockerUnavailable(f'Docker setup timed out after {timeout}s: {detail.strip()}') from None
+    except OSError as exc:
+        raise DockerUnavailable(f'Docker unavailable: {exc.strerror}') from None
+    if result.returncode:
+        raise DockerUnavailable(f'Docker setup exited {result.returncode}: {result.stderr.strip()}')
+    return result.stdout.strip()
+
+
+def skip_docker(reason):
+    message = str(reason)
+    for key in ('SECRET', 'WRONG', 'secret'):
+        value = globals().get(key)
+        if value:
+            message = message.replace(value, '(redacted)')
+    print('redis: SKIP live checks (' + message + ')')
+    sys.exit(0)
+
+
+def require_docker():
+    if not shutil.which('docker'):
+        skip_docker('docker executable absent')
+    try:
+        docker_setup('info', timeout=30)
+    except DockerUnavailable as exc:
+        skip_docker(exc)
+
+
+def published_port(name, container_port):
+    output = docker_setup('port', name, container_port, timeout=30)
+    try:
+        port = int(output.splitlines()[0].rsplit(':', 1)[1])
+        if not 1 <= port <= 65535:
+            raise ValueError()
+        return port
+    except (IndexError, ValueError):
+        raise DockerUnavailable('Docker did not report an ephemeral published port') from None
+
+
+def remove_container(name):
+    # Attempt cleanup even if a pull/start timed out or partially created a container.
+    # Do not mask either a skip or a failed live assertion if the daemon disappears.
+    try:
+        subprocess.run(['docker', 'rm', '-f', name], capture_output=True, timeout=60)
+    except (OSError, subprocess.TimeoutExpired):
+        print('redis: WARNING Docker cleanup unavailable for ' + name)
+
+require_docker()
+
 for args in [[], ['wat'], ['get'], ['ping', 'extra'], ['del'], ['set', 'k'],
              ['lpush', 'k'], ['rpop'], ['lrange', 'k', 'x', '0'], ['publish', 'c'],
              ['set', 'k', 'v', '--ttl', '0'], ['set', 'k', 'v', '--ttl', '-1'],
@@ -71,12 +133,6 @@ with socket.socket() as listener:
         done.set()
         worker.join(11)
 
-if not shutil.which('docker'):
-    print(f'Redis: {checks} checks passed; SKIPPED live checks (docker absent)')
-    sys.exit(0)
-if subprocess.run(['docker', 'info'], capture_output=True, timeout=20).returncode:
-    print(f'Redis: {checks} checks passed; SKIPPED live checks (docker daemon unavailable)')
-    sys.exit(0)
 
 
 def docker(*args):
@@ -91,8 +147,8 @@ def start_redis(password=None):
             'redis-server', '--save', '', '--appendonly', 'no']
     if password:
         args += ['--requirepass', password]
-    docker(*args)
-    port = int(docker('port', name, '6379/tcp').rsplit(':', 1)[1])
+    docker_setup(*args)
+    port = published_port(name, '6379/tcp')
     for _ in range(60):
         command = ['exec'] + (['-e', 'REDISCLI_AUTH=' + password] if password else [])
         command += [name, 'redis-cli', 'ping']
@@ -155,6 +211,8 @@ try:
     assert run('ping', env={'LMCLIENT_REDIS_URL': embedded}) == {'pong': 'PONG'}
     run('ping', env={'LMCLIENT_REDIS_URL': embedded, 'LMCLIENT_REDIS_PASSWORD': WRONG}, code=3, error='CONN')
     print(f'Redis: {checks} checks passed, including live key/value, TTL, lists, publish, auth, replica, and timeouts')
+except DockerUnavailable as exc:
+    skip_docker(exc)
 finally:
     for name in containers:
-        subprocess.run(['docker', 'rm', '-f', name], capture_output=True, timeout=30)
+        remove_container(name)

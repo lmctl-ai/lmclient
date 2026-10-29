@@ -2,9 +2,9 @@
 """Behavioral checks for the mongo area against the shaded jar or a native binary.
 
 Usage: python3 scripts/test-mongo.py [path-to-lmclient-binary]
-Usage and envelope checks always run. Live checks start a throwaway mongo:7
-container on an ephemeral loopback port and always remove it; they are skipped
-with a clear message when docker is unavailable. LMCLIENT_MONGO_URL, when set,
+When Docker is unavailable, the suite skips cleanly before invoking the client.
+Live checks start a throwaway mongo:7 container on an ephemeral loopback port
+and always remove it; setup failures also skip with Docker diagnostics. LMCLIENT_MONGO_URL, when set,
 is used instead of a container (CI service container).
 """
 import json
@@ -44,6 +44,69 @@ def error(*args, code, expect, env=None):
     envelope, process = run(*args, code=code, env=env)
     assert envelope["error"]["code"] == expect, (expect, envelope)
     return envelope, process
+
+
+# Infrastructure failures skip live tests; application assertions still fail normally.
+class DockerUnavailable(Exception):
+    pass
+
+
+def docker_setup(*args, timeout=600):
+    try:
+        result = subprocess.run(['docker', *args], capture_output=True, text=True,
+                                encoding='utf-8', errors='replace', timeout=timeout)
+    except subprocess.TimeoutExpired as exc:
+        detail = exc.stderr or ''
+        if isinstance(detail, bytes):
+            detail = detail.decode('utf-8', errors='replace')
+        raise DockerUnavailable(f'Docker setup timed out after {timeout}s: {detail.strip()}') from None
+    except OSError as exc:
+        raise DockerUnavailable(f'Docker unavailable: {exc.strerror}') from None
+    if result.returncode:
+        raise DockerUnavailable(f'Docker setup exited {result.returncode}: {result.stderr.strip()}')
+    return result.stdout.strip()
+
+
+def skip_docker(reason):
+    message = str(reason)
+    for key in ('SECRET', 'WRONG', 'secret'):
+        value = globals().get(key)
+        if value:
+            message = message.replace(value, '(redacted)')
+    print('mongo: SKIP live checks (' + message + ')')
+    sys.exit(0)
+
+
+def require_docker():
+    if not shutil.which('docker'):
+        skip_docker('docker executable absent')
+    try:
+        docker_setup('info', timeout=30)
+    except DockerUnavailable as exc:
+        skip_docker(exc)
+
+
+def published_port(name, container_port):
+    output = docker_setup('port', name, container_port, timeout=30)
+    try:
+        port = int(output.splitlines()[0].rsplit(':', 1)[1])
+        if not 1 <= port <= 65535:
+            raise ValueError()
+        return port
+    except (IndexError, ValueError):
+        raise DockerUnavailable('Docker did not report an ephemeral published port') from None
+
+
+def remove_container(name):
+    # Attempt cleanup even if a pull/start timed out or partially created a container.
+    # Do not mask either a skip or a failed live assertion if the daemon disappears.
+    try:
+        subprocess.run(['docker', 'rm', '-f', name], capture_output=True, timeout=60)
+    except (OSError, subprocess.TimeoutExpired):
+        print('mongo: WARNING Docker cleanup unavailable for ' + name)
+
+if not os.environ.get('LMCLIENT_MONGO_URL'):
+    require_docker()
 
 # --- usage and input validation (no server needed) ---
 error(code=2, expect="USAGE")
@@ -119,19 +182,17 @@ if preset:
     wait_ready(preset)
     live(preset)
     mode = "live via LMCLIENT_MONGO_URL"
-elif shutil.which("docker") and subprocess.run(["docker", "info"], capture_output=True, timeout=60).returncode == 0:
+else:
     name = "lmclient-mongo-test-" + uuid.uuid4().hex[:8]
-    subprocess.run(["docker", "run", "-d", "--rm", "--name", name, "-p", "127.0.0.1::27017", "mongo:7"],
-                   check=True, capture_output=True, timeout=600)
     try:
-        port = subprocess.run(["docker", "port", name, "27017/tcp"], check=True, capture_output=True,
-                              text=True, timeout=30).stdout.strip().splitlines()[0].rsplit(":", 1)[1]
+        docker_setup("run", "-d", "--rm", "--name", name, "-p", "127.0.0.1::27017", "mongo:7")
+        port = published_port(name, "27017/tcp")
         url = f"mongodb://127.0.0.1:{port}"
         wait_ready(url)
         live(url)
         mode = "live via docker"
+    except DockerUnavailable as exc:
+        skip_docker(exc)
     finally:
-        subprocess.run(["docker", "rm", "-f", name], capture_output=True, timeout=120)
-else:
-    mode = "live checks SKIPPED (docker unavailable and LMCLIENT_MONGO_URL unset)"
+        remove_container(name)
 print(f"lmclient mongo checks: {checks} passed ({'native' if NATIVE else 'JVM'}; {mode})")
