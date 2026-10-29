@@ -13,7 +13,22 @@ run, no server-side driver install. Owner: Fable (wave 5b).
   throwaway `mongo:7` container on an ephemeral loopback port and remove it,
   or use `LMCLIENT_MONGO_URL` when set (CI service container). Live checks are
   skipped with a message when docker is unavailable.
-- CI service: `mongo:7`, TCP 27017, no auth; set
+- lmmock tier: after the docker/preset tier, the script starts the released
+  lmmock `mongodb` mock (`scripts/lmmock-helpers.py`, pinned version, config
+  `{"maxDocuments": 1000}`) and runs the same live block against it: ping,
+  insert with generated and custom `_id`, find with equality and numeric `$gt`,
+  `--limit`, the `LMCLIENT_MONGO_URL` fallback, unknown-operator rejection
+  (`SERVER`), delete by filter and by `{}`. CI sets `LMMOCK_BIN` and
+  `LMMOCK_REQUIRED=1`, so the tier is mandatory on all five platforms without
+  docker; locally an unobtainable binary prints `SKIP lmmock` and exits 0.
+  A stale `lmmock` on PATH shadows the pinned download, so set `LMMOCK_BIN`
+  to the cached release binary when running locally.
+- Docker-only: the SCRAM authentication check (`LMCLIENT_USER`/`LMCLIENT_PASSWORD`
+  against a server without that user must fail as `CONN` and never echo the
+  password). The mock is auth-less by design and rejects `users` configs;
+  transactions, aggregation and multi-batch cursors are likewise outside the
+  mock's documented scope, and lmclient's mongo commands do not use them.
+- CI service (optional): `mongo:7`, TCP 27017, no auth; set
   `LMCLIENT_MONGO_URL=mongodb://127.0.0.1:27017` for the test script.
 - Native: the Document-based API needs no application reflection entries;
   optional driver features (compression, DNS SRV, snappy/zstd) probe classes

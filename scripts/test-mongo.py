@@ -5,8 +5,13 @@ Usage: python3 scripts/test-mongo.py [path-to-lmclient-binary]
 When Docker is unavailable, the suite skips cleanly before invoking the client.
 Live checks start a throwaway mongo:7 container on an ephemeral loopback port
 and always remove it; setup failures also skip with Docker diagnostics. LMCLIENT_MONGO_URL, when set,
+is used instead of a container. The lmmock tier then runs the same live block against the released
+lmmock mongodb mock (scripts/lmmock-helpers.py; strict under LMMOCK_REQUIRED=1 in CI, SKIP locally
+when the binary is unobtainable). Only the SCRAM authentication check stays docker-only: the mock
+documents that it is auth-less and rejects user configs by design.
 is used instead of a container (CI service container).
 """
+import importlib.util
 import json
 import os
 from pathlib import Path
@@ -69,24 +74,22 @@ def docker_setup(*args, timeout=600):
 
 
 def skip_docker(reason):
-    message = str(reason)
-    for key in ('SECRET', 'WRONG', 'secret'):
-        value = globals().get(key)
-        if value:
-            message = message.replace(value, '(redacted)')
-    print('mongo: SKIP live checks (' + message + ')')
-    sys.exit(0)
+    message = str(reason).strip() or 'Docker unavailable'
+    if len(message) > 300:
+        message = message[:300] + '...'
+    print('mongo: SKIP docker tier (' + message + ')')
+    return 'docker tier SKIPPED'
 
 
 def require_docker():
     if not shutil.which('docker'):
-        skip_docker('docker executable absent')
+        raise DockerUnavailable('docker executable absent')
     try:
         os_type = docker_setup('info', '--format', '{{.OSType}}', timeout=30).lower()
         if os_type != 'linux':
-            skip_docker(f"{os_type or 'unknown'} Docker daemon cannot run this suite's Linux image")
+            raise DockerUnavailable(f"{os_type or 'unknown'} Docker daemon cannot run this suite's Linux image")
     except DockerUnavailable as exc:
-        skip_docker(exc)
+        raise DockerUnavailable(str(exc))
 
 
 def published_port(name, container_port):
@@ -107,9 +110,6 @@ def remove_container(name):
         subprocess.run(['docker', 'rm', '-f', name], capture_output=True, timeout=60)
     except (OSError, subprocess.TimeoutExpired):
         print('mongo: WARNING Docker cleanup unavailable for ' + name)
-
-if not os.environ.get('LMCLIENT_MONGO_URL'):
-    require_docker()
 
 # --- usage and input validation (no server needed) ---
 error(code=2, expect="USAGE")
@@ -138,7 +138,8 @@ _, process = error("ping", "--url", f"mongodb://tester:{secret}@127.0.0.1:1", "-
 assert secret not in process.stdout + process.stderr
 
 # --- live checks ---
-def live(url):
+def live(url, scram=False):
+    """Live checks shared by the docker and lmmock tiers; scram=True adds the docker-only auth check."""
     global checks
     db, coll = "lmclient_test", "items_" + uuid.uuid4().hex[:8]
     base = ["--url", url, "--db", db, "--collection", coll]
@@ -169,6 +170,13 @@ def live(url):
     assert envelope["result"] == {"deleted": 1}, envelope
     envelope, _ = run("find", *base, env=env)
     assert envelope["result"]["count"] == 0
+    if scram:
+        # DOCKER-ONLY: a real SCRAM exchange against a server without that user must fail as CONN and
+        # never echo the password. The lmmock mongodb mock is auth-less and rejects user configs.
+        secret = "DO_NOT_LOG_lmclient_mongo_scram"
+        _, process = error("ping", "--url", url, code=3, expect="CONN",
+                           env={**env, "LMCLIENT_USER": "nobody", "LMCLIENT_PASSWORD": secret})
+        assert secret not in process.stdout + process.stderr
 
 def wait_ready(url, seconds=90):
     deadline = time.monotonic() + seconds
@@ -183,19 +191,34 @@ def wait_ready(url, seconds=90):
 preset = os.environ.get("LMCLIENT_MONGO_URL")
 if preset:
     wait_ready(preset)
-    live(preset)
+    live(preset, scram=True)
     mode = "live via LMCLIENT_MONGO_URL"
 else:
     name = "lmclient-mongo-test-" + uuid.uuid4().hex[:8]
+    started = False
     try:
+        require_docker()
         docker_setup("run", "-d", "--rm", "--name", name, "-p", "127.0.0.1::27017", "mongo:7")
+        started = True
         port = published_port(name, "27017/tcp")
         url = f"mongodb://127.0.0.1:{port}"
         wait_ready(url)
-        live(url)
+        live(url, scram=True)
         mode = "live via docker"
     except DockerUnavailable as exc:
-        skip_docker(exc)
+        mode = skip_docker(exc)
     finally:
-        remove_container(name)
-print(f"lmclient mongo checks: {checks} passed ({'native' if NATIVE else 'JVM'}; {mode})")
+        if started:
+            remove_container(name)
+docker_checks = checks
+
+# --- lmmock tier: the released lmmock mongodb mock serves the same live block (no SCRAM) ---
+spec = importlib.util.spec_from_file_location('lmmock_helpers', Path(__file__).with_name('lmmock-helpers.py'))
+lmmock = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(lmmock)
+lmmock.locate_lmmock()
+with lmmock.lmmock_proto('mongodb', {'maxDocuments': 1000}) as url:
+    wait_ready(url, seconds=30)
+    live(url)
+print(f"PASS {checks - docker_checks} lmmock mongodb checks: ping, insert, _id handling, find with equality and $gt, limit, URL fallback, operator rejection, delete")
+print(f"lmclient mongo checks: {checks} passed ({'native' if NATIVE else 'JVM'}; {mode}; lmmock tier ran)")
