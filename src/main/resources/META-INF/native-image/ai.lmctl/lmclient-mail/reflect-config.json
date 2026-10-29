@@ -1,0 +1,4 @@
+[
+  {"name":"org.eclipse.angus.mail.util.MailStreamProvider","allPublicConstructors":true},
+  {"name":"org.eclipse.angus.mail.handlers.text_plain","allPublicConstructors":true}
+]

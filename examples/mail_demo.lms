@@ -1,0 +1,32 @@
+# Chapter: lmclient mail - SMTP delivery and IMAP headers
+# Shows: SMTP send and newest-first IMAP read through JSON envelopes
+# Run: lmscript examples/mail_demo.lms [host] [smtp-port] [imap-port] [user]
+# Needs: lmclient on PATH; local GreenMail fixture; LMCLIENT_MAIL_PASSWORD=secret
+# exit: 0
+if (which("lmclient") == null) {
+  println("SKIPPED: lmclient is not on PATH");
+  exit(0);
+}
+host = ARGV.get(0, "127.0.0.1");
+smtp = ARGV.get(1, "3025");
+imap = ARGV.get(2, "3143");
+user = ARGV.get(3, "test");
+for (port in [smtp, imap]) {
+  r = system(["lmclient", "mail", "ping", "--host", host, "--port", port, "--timeout", "1000"], 5000);
+  if (r.timed_out || r.code != 0) {
+    println("SKIPPED: local mail fixture is unreachable");
+    exit(0);
+  }
+}
+r = system(["lmclient", "mail", "send", "--host", host, "--port", smtp, "--from", "sender@example.test", "--to", "test@localhost", "--subject", "Hello from lmclient", "--body", "SMTP replaces an email connector node."], 30000);
+if (r.timed_out) { println("Mail send timed out"); exit(1); }
+env = json_parse(r.stdout);
+if (!env.ok) { println("Mail send failed: " + env.error.message); exit(1); }
+println("sent: " + str(env.result.sent));
+r = system(["lmclient", "mail", "read", "--host", host, "--port", imap, "--user", user, "--limit", "5"], 30000);
+if (r.timed_out) { println("Mail read timed out"); exit(1); }
+env = json_parse(r.stdout);
+if (!env.ok) { println("Mail read failed: " + env.error.message); exit(1); }
+for (message in env.result.messages) {
+  println(str(message.date) + " | " + str(message.from) + " | " + str(message.subject));
+}
