@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Offline JVM/native OAuth tests using lmconn's actual Node mock IdP as oracle."""
+"""Offline JVM/native OAuth tests using the vendored strict Node mock IdP (scripts/mock-idp.js) as oracle."""
 import contextlib
 import json
 import os
@@ -19,7 +19,8 @@ import urllib.request
 ROOT = Path(__file__).resolve().parents[1]
 artifact = Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / 'target/lmclient-0.2.0-all.jar'
 COMMAND = ['java', '-jar', str(artifact.resolve())] if artifact.suffix == '.jar' else [str(artifact.resolve())]
-MOCK = Path(os.environ.get('LMCONN_MOCK_IDP', str(Path.home() / 'lmworkflow/lmconn/scripts/mock-idp.js')))
+# The strict mock IdP is vendored in-repo (canonical copy: lmconn scripts/mock-idp.js); LMCONN_MOCK_IDP overrides it.
+MOCK = Path(os.environ.get('LMCONN_MOCK_IDP', str(ROOT / 'scripts/mock-idp.js')))
 SECRET = 'dummy-oauth-client-secret'
 checks = 0
 outputs = []
@@ -113,8 +114,10 @@ with tempfile.TemporaryDirectory(prefix='lmclient-oauth-') as directory:
     assert status == {'service':'absent','authorized':False,'expiresAt':None,'expired':False,
                       'hasRefreshToken':False,'scope':'','tokenUrl':None}
 
-    if not shutil.which('node') or not MOCK.exists():
-        print(f'oauth: {checks} offline checks passed; SKIPPED cross-language checks (Node or shared mock missing: {MOCK})')
+    if not MOCK.exists():
+        raise SystemExit(f'oauth: mock IdP missing: {MOCK} (vendored at scripts/mock-idp.js; LMCONN_MOCK_IDP overrides)')
+    if not shutil.which('node'):
+        print(f'oauth: {checks} offline checks passed; SKIPPED cross-language checks (node is not on PATH)')
         sys.exit(0)
 
     @contextlib.contextmanager

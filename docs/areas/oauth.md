@@ -52,9 +52,11 @@ message. Callers obtain the token from `CredStore` after refreshing.
   and the existing `CredStore`/SQLite implementation are used.
 - Test: `python3 scripts/test-oauth.py target/lmclient-0.2.0-all.jar`;
   the same script also accepts a native executable path.
-- Oracle: Node plus `~/lmworkflow/lmconn/scripts/mock-idp.js`.
-  Override the path with `LMCONN_MOCK_IDP`. Without Node or that file, usage
-  and status tests run and the cross-language portion prints SKIPPED.
+- Oracle: Node plus the strict mock IdP vendored in this repository at
+  `scripts/mock-idp.js` (RFC 6749 + PKCE; canonical copy in lmconn, synced on
+  change). `LMCONN_MOCK_IDP` overrides the path. CI runners have Node, so CI
+  runs the full cross-language suite; only a machine without `node` on PATH
+  runs the usage and status tests alone and prints SKIPPED for the rest.
 - The Python harness starts Node importing the shared mock's factory.
   Its standalone entry point lacks fault-mode flags and a request-log API,
   so the child wrapper supplies those controls and emits the mock's redacted
