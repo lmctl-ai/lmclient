@@ -23,6 +23,12 @@ The Redis area uses one bounded, plain-socket Jedis connection per command.
   Containers are always removed; Docker unavailability skips only that tier
   after mock checks pass. No existing assertions are excluded from the mock.
   TLS, persistence and actual replication are not asserted by this suite.
+- Windows uses ASCII argv values for SET/GET and list round trips because
+  launcher argument transport can alter quotes, backslashes and Unicode before
+  RedisArea receives them (the same restriction as the credential suite). POSIX
+  retains the Unicode/newline/quote/tab fixture and Unicode list entry. Both
+  tiers retain exact value and ordering assertions; Windows does not claim
+  special-character argv coverage. Credential env/file/URL checks are unchanged.
 - Native config: direct `Jedis` + `DefaultJedisClientConfig` calls, no pool,
   Netty, dynamic proxies, or reflection used by this area. No handwritten
   reflection entries needed. Verify with the CI native build, not a local build.

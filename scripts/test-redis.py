@@ -168,7 +168,9 @@ def live(url, protected_url, make_readonly):
     assert run('ping', env=env) == {'pong': 'PONG'}
     assert run('--url', url, 'ping', '--readonly') == {'pong': 'PONG'}
     assert run('get', 'missing', env=env) == {'value': None}
-    value = 'héllo 世界\n"quoted"\\\t'
+    # Windows launchers may transform special characters before RedisArea sees
+    # argv (see test-cred.py). Keep the full fixture on POSIX, safe argv on Windows.
+    value = 'hello redis value' if os.name == 'nt' else 'héllo 世界\n"quoted"\\\t'
     assert run('set', 'key', value, env=env) == {'stored': True}
     assert run('get', 'key', env=env) == {'value': value}
     assert run('set', '--', '--literal-key', '--literal-value', env=env) == {'stored': True}
@@ -181,8 +183,9 @@ def live(url, protected_url, make_readonly):
     assert run('del', 'key', 'missing', env=env) == {'deleted': 1}
     assert run('del', 'key', env=env) == {'deleted': 0}
     assert run('rpop', 'list', env=env) == {'value': None}
-    assert run('lpush', 'list', 'one', 'two', '三', env=env) == {'length': 3}
-    assert run('lrange', 'list', '0', '-1', env=env) == {'values': ['三', 'two', 'one']}
+    third = 'three' if os.name == 'nt' else '三'
+    assert run('lpush', 'list', 'one', 'two', third, env=env) == {'length': 3}
+    assert run('lrange', 'list', '0', '-1', env=env) == {'values': [third, 'two', 'one']}
     assert run('rpop', 'list', env=env) == {'value': 'one'}
     assert run('lrange', 'list', '10', '20', env=env) == {'values': []}
     run('get', 'list', env=env, code=3, error='CONN')
