@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
-"""MQTT envelope and live pub/sub checks. Owns and always removes its container."""
+"""MQTT envelope, lmmock and live pub/sub checks. Owns and always removes its container."""
+import contextlib
+import select
+import socket
+import threading
+from urllib.parse import urlsplit
+from lmmock_tiers import mock
 import json
 import os
 from pathlib import Path
@@ -61,7 +67,7 @@ def skip_docker(reason):
         value = globals().get(key)
         if value:
             message = message.replace(value, '(redacted)')
-    print('mqtt: SKIP live checks (' + message + ')')
+    print('mqtt: SKIP Docker live checks (' + message + ')')
     sys.exit(0)
 
 
@@ -95,7 +101,6 @@ def remove_container(name):
     except (OSError, subprocess.TimeoutExpired):
         print('mqtt: WARNING Docker cleanup unavailable for ' + name)
 
-require_docker()
 
 for args in [[], ['unknown'], ['ping'], ['ping', '--url'], ['ping', '--url', 'http://localhost'],
              ['pub', '--url', 'tcp://localhost:1883', '--topic', 'a'],
@@ -106,6 +111,118 @@ for args in [[], ['unknown'], ['ping'], ['ping', '--url'], ['ping', '--url', 'ht
              ['ping', '--url', 'tcp://localhost:1883', '--timeout', '0'], ['ping', '--password', SECRET]]:
     run(*args, code=2)
 run('ping', '--url', 'tcp://127.0.0.1:1', '--timeout', '300', code=3, env={**ENV, 'LMCLIENT_PASSWORD': SECRET})
+
+@contextlib.contextmanager
+def subscription_proxy(url):
+    """Forward the subscriber unchanged; observe its broker SUBACK, not a sleep.
+
+    lmmock intentionally emits no broker logs. Parsing only MQTT frame boundaries
+    lets the test observe readiness without replacing either client or broker.
+    """
+    endpoint = urlsplit(url)
+    subscribed, stop = threading.Event(), threading.Event()
+    errors = []
+    with socket.socket() as listener:
+        listener.bind(('127.0.0.1', 0))
+        listener.listen(1)
+        listener.settimeout(.2)
+
+        def relay():
+            try:
+                while not stop.is_set():
+                    try:
+                        downstream, _ = listener.accept()
+                        break
+                    except socket.timeout:
+                        continue
+                else:
+                    return
+                with downstream, socket.create_connection((endpoint.hostname, endpoint.port), timeout=5) as upstream:
+                    downstream.settimeout(5)
+                    buffered = bytearray()
+                    while not stop.is_set():
+                        readable, _, _ = select.select([downstream, upstream], [], [], .2)
+                        for source in readable:
+                            data = source.recv(65536)
+                            if not data:
+                                return
+                            (upstream if source is downstream else downstream).sendall(data)
+                            if source is upstream:
+                                buffered.extend(data)
+                                while len(buffered) >= 2:
+                                    length, multiplier, end = 0, 1, 1
+                                    while end < len(buffered):
+                                        digit = buffered[end]
+                                        length += (digit & 127) * multiplier
+                                        end += 1
+                                        if digit < 128:
+                                            break
+                                        assert end <= 4, 'invalid MQTT frame length'
+                                        multiplier *= 128
+                                    else:
+                                        break
+                                    if len(buffered) < end + length:
+                                        break
+                                    if buffered[0] == 0x90:
+                                        assert length >= 3 and all(q in (0, 1, 2) for q in buffered[end + 2:end + length]), 'subscription rejected'
+                                        subscribed.set()
+                                    del buffered[:end + length]
+            except Exception as exc:
+                errors.append(exc)
+
+        worker = threading.Thread(target=relay, daemon=True)
+        worker.start()
+        try:
+            yield f'tcp://127.0.0.1:{listener.getsockname()[1]}', subscribed
+            assert not errors, 'MQTT readiness relay failed'
+        finally:
+            stop.set()
+            worker.join(6)
+            assert not worker.is_alive(), 'MQTT readiness relay did not stop'
+
+
+def mock_tier():
+    before = checks
+    with mock.lmmock_proto('mqtt') as ready_url:
+        assert ready_url.startswith('mqtt://'), 'unexpected MQTT readiness scheme'
+        url = 'tcp://' + ready_url.removeprefix('mqtt://')
+        assert run('ping', env={**ENV, 'LMCLIENT_MQTT_URL': url})['connected']
+        topic = 'lmclient/' + uuid.uuid4().hex
+        with subscription_proxy(url) as (subscriber_url, subscribed):
+            child = subprocess.Popen(COMMAND + ['mqtt', 'sub', '--url', subscriber_url, '--topic', topic,
+                                     '--limit', '3', '--qos', '2', '--timeout', '15000'], env=ENV,
+                                     stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, encoding='utf-8')
+            try:
+                assert subscribed.wait(10), 'mock subscription did not receive SUBACK'
+                messages = ['first', 'héllo "world"\nsecond', 'third']
+                for qos, payload in enumerate(messages):
+                    assert run('pub', '--url', url, '--topic', topic, '--message', payload, '--qos', str(qos))['published']
+                stdout, stderr = child.communicate(timeout=20)
+                result = envelope(subprocess.CompletedProcess([], child.returncode, stdout, stderr))
+                assert result['messages'] == [{'topic': topic, 'payload': p} for p in messages], result
+            finally:
+                if child.poll() is None:
+                    child.kill()
+                child.communicate()
+        assert run('sub', '--url', url, '--topic', topic, '--timeout', '1500')['messages'] == []
+    with mock.lmmock_proto('mqtt', {'users': {'tester': SECRET}}) as ready_url:
+        url = 'tcp://' + ready_url.removeprefix('mqtt://')
+        run('ping', '--url', url, '--timeout', '1500', code=3)
+        run('ping', '--url', url, '--timeout', '1500', code=3,
+            env={**ENV, 'LMCLIENT_USER': 'tester', 'LMCLIENT_PASSWORD': 'wrong-' + SECRET})
+        assert run('ping', '--url', url,
+                   env={**ENV, 'LMCLIENT_USER': 'tester', 'LMCLIENT_PASSWORD': SECRET})['connected']
+        with tempfile.TemporaryDirectory() as directory:
+            credentials = Path(directory) / 'mqtt.properties'
+            credentials.write_text('user=tester\npassword=' + SECRET + '\n', encoding='utf-8')
+            assert run('ping', '--url', url, '--credentials-file', str(credentials))['connected']
+    print(f'mqtt lmmock: {checks - before} checks passed; QoS 0/1/2, empty subscription and authentication')
+
+
+print(f'mqtt: {checks} offline checks passed')
+mock_tier()
+require_docker()
+before = checks
 name = 'lmclient-mqtt-' + uuid.uuid4().hex[:10]
 subscriber = None
 try:
@@ -143,7 +260,7 @@ try:
     result = envelope(subprocess.CompletedProcess([], subscriber.returncode, stdout, stderr))
     assert result['messages'] == [{'topic': topic, 'payload': p} for p in messages], result
     assert run('sub', '--url', url, '--topic', topic, '--timeout', '1500')['messages'] == []
-    print(f'mqtt: {checks} checks passed; live pub/sub delivered QoS 0/1/2 payloads in order')
+    print(f'mqtt Docker: {checks - before} live checks passed; {checks} total; QoS 0/1/2 payloads delivered in order')
 except DockerUnavailable as exc:
     skip_docker(exc)
 finally:

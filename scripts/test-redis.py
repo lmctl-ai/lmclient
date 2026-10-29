@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Envelope/usage checks plus real Redis containers; accepts a shaded jar or native binary."""
+"""Envelope/usage checks plus lmmock and real Redis containers; accepts a shaded jar or native binary."""
 import json
 import os
 from pathlib import Path
@@ -12,7 +12,8 @@ import tempfile
 import threading
 import time
 import uuid
-from urllib.parse import quote
+from urllib.parse import quote, urlsplit
+from lmmock_tiers import mock
 
 ROOT = Path(__file__).resolve().parents[1]
 TARGET = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else ROOT / 'target/lmclient-0.2.0-all.jar'
@@ -69,7 +70,7 @@ def skip_docker(reason):
         value = globals().get(key)
         if value:
             message = message.replace(value, '(redacted)')
-    print('redis: SKIP live checks (' + message + ')')
+    print('redis: SKIP Docker live checks (' + message + ')')
     sys.exit(0)
 
 
@@ -103,7 +104,6 @@ def remove_container(name):
     except (OSError, subprocess.TimeoutExpired):
         print('redis: WARNING Docker cleanup unavailable for ' + name)
 
-require_docker()
 
 for args in [[], ['wat'], ['get'], ['ping', 'extra'], ['del'], ['set', 'k'],
              ['lpush', 'k'], ['rpop'], ['lrange', 'k', 'x', '0'], ['publish', 'c'],
@@ -161,9 +161,9 @@ def start_redis(password=None):
     raise AssertionError('Redis container did not become ready')
 
 
-try:
-    name, port = start_redis()
-    url = f'redis://127.0.0.1:{port}/0'
+def live(url, protected_url, make_readonly):
+    port = urlsplit(url).port
+    protected_port = urlsplit(protected_url).port
     env = {'LMCLIENT_REDIS_URL': url}
     assert run('ping', env=env) == {'pong': 'PONG'}
     assert run('--url', url, 'ping', '--readonly') == {'pong': 'PONG'}
@@ -195,11 +195,9 @@ try:
         assert run('publish', 'news', 'hello', env=env) == {'receivers': 1}
         assert [stream.readline() for _ in range(7)] == [b'*3\r\n', b'$7\r\n', b'message\r\n', b'$4\r\n', b'news\r\n', b'$5\r\n', b'hello\r\n']
         stream.close()
-    # Replica rejection uses Redis' real READONLY response.
-    docker('exec', name, 'redis-cli', 'REPLICAOF', '127.0.0.1', '1')
+    # Real Redis enters replica mode; lmmock simulates the same READONLY error.
+    make_readonly()
     run('set', 'replica-key', 'v', env=env, code=3, error='READONLY')
-    protected, protected_port = start_redis(SECRET)
-    protected_url = f'redis://127.0.0.1:{protected_port}/0'
     protected_env = {'LMCLIENT_REDIS_URL': protected_url}
     run('ping', env=protected_env, code=3, error='CONN')
     run('ping', env={**protected_env, 'LMCLIENT_REDIS_PASSWORD': WRONG}, code=3, error='CONN')
@@ -213,7 +211,27 @@ try:
     embedded = f'redis://:{quote(SECRET, safe="")}@127.0.0.1:{protected_port}/0'
     assert run('ping', env={'LMCLIENT_REDIS_URL': embedded}) == {'pong': 'PONG'}
     run('ping', env={'LMCLIENT_REDIS_URL': embedded, 'LMCLIENT_REDIS_PASSWORD': WRONG}, code=3, error='CONN')
-    print(f'Redis: {checks} checks passed, including live key/value, TTL, lists, publish, auth, replica, and timeouts')
+
+# Identical live assertions run on released mocks before Docker is considered.
+print(f'Redis: {checks} offline/timeout checks passed')
+before = checks
+with mock.lmmock_proto('redis') as base, mock.lmmock_proto('redis', {'requirepass': SECRET}) as protected:
+    def mock_readonly():
+        with socket.create_connection((urlsplit(base).hostname, urlsplit(base).port), timeout=5) as conn:
+            conn.sendall(b'*3\r\n$9\r\nREPLICAOF\r\n$9\r\n127.0.0.1\r\n$1\r\n1\r\n')
+            with conn.makefile('rb') as response:
+                assert response.readline() == b'+OK\r\n'
+    live(base + '/0', protected + '/0', mock_readonly)
+print(f'Redis lmmock: {checks - before} live checks passed; {checks} including offline/timeout checks')
+
+require_docker()
+before = checks
+try:
+    name, port = start_redis()
+    protected, protected_port = start_redis(SECRET)
+    live(f'redis://127.0.0.1:{port}/0', f'redis://127.0.0.1:{protected_port}/0',
+         lambda: docker('exec', name, 'redis-cli', 'REPLICAOF', '127.0.0.1', '1'))
+    print(f'Redis Docker: {checks - before} live checks passed; {checks} total including offline and lmmock')
 except DockerUnavailable as exc:
     skip_docker(exc)
 finally:

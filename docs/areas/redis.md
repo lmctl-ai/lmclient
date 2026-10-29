@@ -7,10 +7,22 @@ The Redis area uses one bounded, plain-socket Jedis connection per command.
 - Maven dependency: `redis.clients:jedis:5.2.0` (normal compile scope).
 - Test invocation: `python3 scripts/test-redis.py target/lmclient-0.2.0-all.jar`.
   The same script accepts a native executable path for CI.
-- CI services: `redis:7-alpine`, TCP 6379. The script starts two isolated
-  containers with dynamically allocated loopback host ports; one requires a
-  dummy password. Docker access is required for live checks. The script always
-  removes its containers and skips live checks clearly if Docker is absent.
+- The additive lmmock tier runs before Docker detection on every platform, using
+  the pinned release from `scripts/lmmock-helpers.py` (v0.1.10 or newer).
+  `LMMOCK_BIN` overrides the binary; otherwise PATH or a checksum-verified release
+  download is used. `LMMOCK_REQUIRED=1` makes acquisition failures fatal in CI;
+  local missing binaries print `SKIP lmmock` and exit successfully.
+- The same live assertions run against fresh loopback `lmmock proto redis`
+  processes: one plain and one configured through temporary JSON with
+  `{"requirepass":"<dummy password>"}`. Coverage includes key/value Unicode,
+  TTL, DB selection, lists, RESP pub/sub, credential precedence/redaction and
+  READONLY errors. The mock simulates REPLICAOF; it does not replicate data.
+- The existing Docker tier remains: `redis:7-alpine`, two isolated containers
+  with ephemeral loopback ports, one password-protected. Real replica-mode
+  setup is Docker-only; the resulting READONLY assertion runs in both tiers.
+  Containers are always removed; Docker unavailability skips only that tier
+  after mock checks pass. No existing assertions are excluded from the mock.
+  TLS, persistence and actual replication are not asserted by this suite.
 - Native config: direct `Jedis` + `DefaultJedisClientConfig` calls, no pool,
   Netty, dynamic proxies, or reflection used by this area. No handwritten
   reflection entries needed. Verify with the CI native build, not a local build.
@@ -63,3 +75,11 @@ lmscript examples/redis_demo.lms
 Pub/sub subscription, cluster/sentinel routing, and blocking list operations are
 outside this command contract. `publish` sends a message and reports recipient
 count; it does not wait for acknowledgments.
+
+## Mock-tier verification
+
+Linux JVM validation against released lmmock v0.1.10: 27 offline/timeout checks,
+30 mock checks and 30 real Redis checks passed (87 total). Hiding Docker from
+PATH preserved all 57 offline/mock checks and skipped only Docker. A forced
+missing `LMMOCK_BIN` skipped locally; strict acquisition rejected it with
+`LMMOCK_REQUIRED=1`. Windows/macOS runtime verification belongs to CI.
