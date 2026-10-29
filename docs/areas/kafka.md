@@ -33,7 +33,7 @@ broker failover are outside this small gate.
 ## Verdict
 
 JVM live round-trip passed against `apache/kafka:3.9.1` (UTF-8 key/payload
-and offset verified; container removed). Native result is pending.
+and offset verified; container removed). Native gates passed on all five platforms after one metadata-fix round.
 
 The first CI dispatch (40822836520) failed before Kafka analysis with an
 unrelated family-jar feature error:
@@ -62,3 +62,48 @@ StringDeserializer, RangeAssignor, CooperativeStickyAssignor, and JmxReporter,
 and includes `kafka/kafka-version.properties`. No substitutions or Kafka source
 changes are used. The Windows harness also uses `native-image.cmd`; its previous
 `native-image: command not found` was not a Kafka compatibility result.
+
+### Final evidence and recommendation
+
+**Verdict: adopt with config**, for the tested plaintext String producer/consumer
+path. No deep substitutions were needed. Keep the five constructor entries and
+version resource with the dependency when integrating a production area.
+
+[Final CI run 40823460378](https://github.com/lmctl-ai/lmclient/actions/runs/40823460378)
+tested commit `5779f5b` with GraalVM Community Java 25:
+
+| Platform | Native build | Native producer/consumer construction | Native live round-trip |
+| --- | --- | --- | --- |
+| Linux x64 | passed | passed | passed |
+| Linux arm64 | passed | passed | passed |
+| macOS x64 | passed | passed | not run |
+| macOS arm64 | passed | passed | not run |
+| Windows x64 | passed | passed | not run |
+
+Local JVM verification commands:
+
+```sh
+mvn -q -B package -DskipTests
+python3 scripts/test-kafka-spike.py target/lmclient-0.2.0-all.jar
+```
+
+The JVM and both Linux native tests returned `{"ok":true,"result":{"roundTrip":true,...}}`
+with the exact payload `hello Kafka — UTF-8`; key and offset were also checked.
+The Docker broker was removed after each live test. Every platform also passed
+shaded-jar JVM client construction in CI.
+
+The successful native executable deliberately contains only Kafka's dependency
+graph plus the spike entry point and Envelope. **The full lmclient native image
+has not been validated with Kafka integrated.** The initial unrelated SQLite
+feature failure remains a family-build integration concern, not evidence that
+Kafka itself fails. macOS/Windows network I/O, subscription/rebalancing,
+TLS/SASL, compression, transactions, and failure recovery remain unverified.
+Do not treat construction-only checks as live broker coverage.
+
+The final branch was rebased onto main's subsequent GitHub-area commit; this
+changes no Kafka spike code or native metadata from the tested commit. This
+branch is an experiment, not a production area implementation.
+
+Earlier evidence: [initial harness run](https://github.com/lmctl-ai/lmclient/actions/runs/40822836520)
+and [missing-reflection run](https://github.com/lmctl-ai/lmclient/actions/runs/40823047697).
+Exactly one Kafka metadata-fix round was applied; no further fixes are pending.
