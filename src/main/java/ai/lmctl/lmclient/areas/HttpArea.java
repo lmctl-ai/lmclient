@@ -129,7 +129,7 @@ public final class HttpArea {
         token = System.getenv(envName);
         if (present(token)) { secret(secrets, token); return new Auth(token, "env:" + envName); }
         token = CredStore.get(service, "oauth_access_token");
-        if (!present(token)) throw fail("MISSING_KEY", "configure an API key with lmclient cred set SERVICE api_key or connect with lmclient oauth authorize SERVICE");
+        if (!present(token)) throw fail("MISSING_KEY", "configure an API key with lmclient cred set " + service + " api_key or connect with lmclient oauth authorize " + service);
         String expiry = CredStore.get(service, "oauth_expires_at");
         boolean expired = false;
         if (present(expiry)) {
@@ -141,12 +141,12 @@ public final class HttpArea {
         secret(secrets, CredStore.get(service, "oauth_refresh_token"));
         return new Auth(token, "store-oauth");
     }
-    private static Failure reconnect() { return fail("RECONNECT", "OAuth authorization expired or revoked; run lmclient oauth authorize SERVICE again"); }
+    private static Failure reconnect(String service) { return fail("RECONNECT", "OAuth authorization expired or revoked; run lmclient oauth authorize " + service + " again"); }
 
     /** Shared credential-field contract; does not depend on the concurrently implemented OAuth area. */
     public static String refreshOAuth(String service, int timeout) {
         String refresh = CredStore.get(service, "oauth_refresh_token");
-        if (!present(refresh)) throw reconnect();
+        if (!present(refresh)) throw reconnect(service);
         try {
             String endpoint = CredStore.get(service, "oauth_token_url");
             String id = CredStore.get(service, "oauth_client_id");
@@ -162,7 +162,7 @@ public final class HttpArea {
             else body += "&client_id=" + encode(id) + "&client_secret=" + encode(secret);
             HttpResponse<byte[]> response = exchange(uri(endpoint), "POST", headers, body, timeout);
             Map<String,Object> data = Json.object(Json.parse(response.body()));
-            if ("invalid_grant".equals(data.get("error"))) throw reconnect();
+            if ("invalid_grant".equals(data.get("error"))) throw reconnect(service);
             if (response.statusCode() < 200 || response.statusCode() >= 300 || data.get("error") != null || !(data.get("access_token") instanceof String access) || access.isEmpty()) throw new IllegalArgumentException();
             String expiresAt = null;
             if (data.containsKey("expires_in")) {

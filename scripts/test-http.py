@@ -46,7 +46,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
             pass
     def do_GET(self):
         body = self.rfile.read(int(self.headers.get('content-length', '0'))).decode()
-        request = {'method': self.command, 'headers': dict(self.headers), 'body': body, 'path': self.path}
+        request = {'method': self.command, 'headers': {key.title(): value for key, value in self.headers.items()}, 'body': body, 'path': self.path}
         state['requests'].append(request)
         if self.path == '/token':
             state['tokens'].append(request)
@@ -200,7 +200,8 @@ try:
         oauth('revoked')
         state['reply'] = {'error': 'invalid_grant', 'error_description': 'client-private refresh-private'}
         state['token_status'] = 400
-        assert run('request', base, '--auth', 'revoked', code=3)['code'] == 'RECONNECT'
+        revoked = run('request', base, '--auth', 'revoked', code=3)
+        assert revoked['code'] == 'RECONNECT' and 'oauth authorize revoked' in revoked['message']
         assert stored('revoked', 'oauth_access_token') == 'old-access-private'
         oauth('no-refresh', refresh=False)
         assert run('request', base, '--auth', 'no-refresh', code=3)['code'] == 'RECONNECT'
