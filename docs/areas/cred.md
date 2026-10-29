@@ -7,6 +7,9 @@ No additional dependencies or native reflection configuration are required.
 
 Build: `mvn -q -B package -DskipTests`.
 
+Store smoke test: `mvn -q -B verify` runs direct special-identifier round trips
+in a child JVM with a temporary `LMCLIENT_DB`, without identifier argv transport.
+
 Test: `python3 scripts/test-cred.py target/lmclient-0.2.0-all.jar`.
 The script also accepts a native executable, or defaults to the versioned jar.
 It uses a fresh temporary `LMCLIENT_DB`; it needs no containers or network.
@@ -51,3 +54,5 @@ CredStore (`Instant` ISO format), while JS uses millisecond ISO formatting; both
 read each other's stored timestamps and values without conversion. Unlike lmconn,
 lmclient removes one final shell line ending from `--stdin`; use `--env` or
 `--value` when that exact trailing newline is part of the credential.
+
+Known limit: identifier argv transport of quotes/backslashes/Unicode is verified on Linux/macOS; Windows argv transport is OS-defined and untested; the store itself is verified cross-platform by `CredStoreSmokeTest`.

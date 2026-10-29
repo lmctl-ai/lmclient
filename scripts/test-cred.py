@@ -115,24 +115,21 @@ with tempfile.TemporaryDirectory(prefix='lmclient-cred-') as directory:
         run('set', 'service', 'key', '--value', value)
         assert run('get', 'service', 'key', '--reveal')[0]['value'] == value
     assert len(run('list')[0]) == 1, 'updates must not insert duplicate rows'
-    # Isolate argument transport from stdin: on Windows the launcher parses
-    # quotes/backslashes and Unicode before CredArea ever receives the args.
-    for name, field in [('plain-service', 'plain-field'),
-                        ('quoted"service', 'field'),
-                        ('backslash\\service', 'field'),
-                        ('世界', 'field'), ('service', 'line\nfield')]:
-        if sys.platform == 'win32' and ('\n' in name or '\n' in field):
-            print('SKIP newline name/field case: newline in argv is not portable on Windows')
-            continue
-        run('set', name, field, '--stdin', stdin=SECRET)
-        assert run('get', name, field, '--reveal')[0] == {
-            'service': name, 'field': field, 'set': True, 'value': SECRET}
-        assert run('delete', name, field)[0] == {'deleted': True}
-    name = 'quoted"service\\世界'
-    field = 'line\nfield'
     if sys.platform == 'win32':
-        print('SKIP combined newline name/field case: newline in argv is not portable on Windows')
+        print('SKIP special identifier argv transport: OS-defined on Windows; covered directly by CredStoreSmokeTest')
     else:
+        # Isolate argument transport from stdin: on Windows the launcher parses
+        # quotes/backslashes and Unicode before CredArea ever receives the args.
+        for name, field in [('plain-service', 'plain-field'),
+                            ('quoted"service', 'field'),
+                            ('backslash\\service', 'field'),
+                            ('世界', 'field'), ('service', 'line\nfield')]:
+            run('set', name, field, '--stdin', stdin=SECRET)
+            assert run('get', name, field, '--reveal')[0] == {
+                'service': name, 'field': field, 'set': True, 'value': SECRET}
+            assert run('delete', name, field)[0] == {'deleted': True}
+        name = 'quoted"service\\世界'
+        field = 'line\nfield'
         run('set', name, field, '--stdin', stdin=SECRET)
         assert run('get', name, field)[0] == {'service': name, 'field': field, 'set': True}
         rows = run('list')[0]

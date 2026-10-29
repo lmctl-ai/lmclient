@@ -109,6 +109,10 @@
           <execution><id>sqlite-duckdb-core-smoke</id><phase>verify</phase><goals><goal>java</goal></goals><configuration>
             <mainClass>ai.lmctl.lmclient.core.MultiDriverCoreSmokeTest</mainClass><classpathScope>test</classpathScope>
           </configuration></execution>
+          <execution><id>cred-store-smoke</id><phase>verify</phase><goals><goal>exec</goal></goals><configuration>
+            <executable>${java.home}/bin/java</executable><classpathScope>test</classpathScope>
+            <arguments><argument>-classpath</argument><classpath/><argument>ai.lmctl.lmclient.core.CredStoreSmokeTest</argument></arguments>
+          </configuration></execution>
         </executions>
       </plugin>
     </plugins>
