@@ -215,8 +215,9 @@ jobs:
             jar uf target/kafka-spike-classes.jar -C src/main/resources META-INF/native-image/ai.lmctl/lmclient-kafka
           fi
           sep=:
-          if [[ "$RUNNER_OS" == Windows ]]; then sep=';'; fi
-          native-image --no-fallback -J-Xmx4g -H:NumberOfThreads=2 -cp "target/kafka-spike-classes.jar${sep}target/kafka-deps/*" ai.lmctl.lmclient.spike.KafkaSpike target/kafka-spike
+          native_image=native-image
+          if [[ "$RUNNER_OS" == Windows ]]; then sep=';'; native_image=native-image.cmd; fi
+          "$native_image" --no-fallback -J-Xmx4g -H:NumberOfThreads=2 -cp "target/kafka-spike-classes.jar${sep}target/kafka-deps/*" ai.lmctl.lmclient.spike.KafkaSpike target/kafka-spike
       - name: Native producer and consumer construction
         run: |
           exe=target/kafka-spike

@@ -46,3 +46,19 @@ The spike harness now builds a Kafka-only classpath (the two spike classes,
 Kafka, SLF4J, and Kafka compression dependencies), excluding unrelated JDBC
 metadata. This corrects the experiment; it is not a Kafka reflection fix.
 No native build is run locally.
+
+
+### Single Kafka metadata-fix round
+
+Run 40823047697 compiled Kafka natively on Linux x64/arm64 and macOS arm64,
+but native construction failed with:
+
+```
+org.apache.kafka.common.config.ConfigException: Invalid value org.apache.kafka.common.serialization.StringSerializer for configuration key.serializer: Class org.apache.kafka.common.serialization.StringSerializer could not be found.
+```
+
+One hand-written metadata round registers public constructors for StringSerializer,
+StringDeserializer, RangeAssignor, CooperativeStickyAssignor, and JmxReporter,
+and includes `kafka/kafka-version.properties`. No substitutions or Kafka source
+changes are used. The Windows harness also uses `native-image.cmd`; its previous
+`native-image: command not found` was not a Kafka compatibility result.
