@@ -106,7 +106,7 @@ try:
             with closing(sqlite3.connect(db)) as connection, connection:
                 row = connection.execute('SELECT value FROM creds WHERE service=? AND field=?', (service, field)).fetchone()
                 return row[0] if row else None
-        def run(*args, code=0, extra_env=None):
+        def run(*args, code=0, extra_env=None, error=None):
             global checks
             p = subprocess.run(COMMAND + ['http'] + list(args), capture_output=True, text=True,
                                encoding='utf-8', timeout=20, env={**env, **(extra_env or {})})
@@ -118,6 +118,8 @@ try:
             assert value['ok'] == (code == 0)
             if code == 2:
                 assert value['error']['code'] == 'USAGE'
+            if error is not None:
+                assert value['error']['code'] == error, value
             checks += 1
             return value.get('result') if code == 0 else value['error']
 
@@ -228,7 +230,10 @@ try:
         with socket.socket() as closed:
             closed.bind(('127.0.0.1', 0))
             port = closed.getsockname()[1]
-        assert run('request', f'http://127.0.0.1:{port}', '--timeout', '1000', code=3)['code'] == 'NETWORK'
+        # Test connection refusal, not a short deadline: a slow Windows runner can
+        # hit a 1 s request timeout before reporting refusal. Keep NETWORK strict;
+        # run() still bounds the subprocess and prints the full envelope on failure.
+        run('request', f'http://127.0.0.1:{port}', code=3, error='NETWORK')
         from lmmock_tiers import http_tier
         http_tier(run)
         print(f'PASS {checks} HTTP checks: envelopes, echo, auth precedence, OAuth refresh, redaction, bounds, timeout, redirects and no retry')
