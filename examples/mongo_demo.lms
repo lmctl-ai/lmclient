@@ -1,0 +1,54 @@
+# MongoDB round-trip through the lmclient mongo area: ping, insert, find, delete.
+# Run: lmscript examples/mongo_demo.lms [lmclient-binary] [mongodb-url]
+#   The binary defaults to `lmclient` on PATH (or the LMCLIENT_BIN env var); the URL defaults to
+#   mongodb://127.0.0.1:27017 (start one with: docker run -d --name lmclient-mongo -p 27017:27017 mongo:7).
+#   Skips cleanly (exit 0) when the binary is missing or the server is unreachable. No credentials needed.
+bin = ARGV.get(0, env("LMCLIENT_BIN", "lmclient"));
+url = ARGV.get(1, env("LMCLIENT_MONGO_URL", "mongodb://127.0.0.1:27017"));
+if (which(bin) == null && !file_exists(bin)) {
+  println("SKIPPED: lmclient binary not found (" + bin + ")");
+  exit(0);
+}
+
+# Every lmclient run prints one JSON envelope: {ok, result} or {ok:false, error:{code, message}}.
+fn join_lists(a, b) {
+  out = [];
+  for (x in a) { push(out, x); }
+  for (x in b) { push(out, x); }
+  return out;
+}
+
+fn mongo(args) {
+  r = system(join_lists([bin, "mongo"], args), 30000);
+  if (r.timed_out) { return {ok: false, error: {code: "TIMEOUT", message: "lmclient timed out"}}; }
+  return json_parse(r.stdout);
+}
+
+ping = mongo(["ping", "--url", url, "--timeout", "3000"]);
+if (!ping.ok) {
+  println("SKIPPED: MongoDB unreachable at " + url + " (" + ping.error.code + ": " + ping.error.message + ")");
+  exit(0);
+}
+
+coll = ["--url", url, "--db", "lmclient_demo", "--collection", "inventory"];
+mongo(join_lists(join_lists(["delete"], coll), ["--filter", "{}"]));
+inserted = mongo(join_lists(join_lists(["insert"], coll), ["--doc", "{\"item\":\"tea\",\"qty\":3,\"tags\":[\"hot\",\"green\"]}"]));
+assert(inserted.ok);
+inserted2 = mongo(join_lists(join_lists(["insert"], coll), ["--doc", "{\"item\":\"coffee\",\"qty\":7}"]));
+assert(inserted2.ok);
+println("inserted _id: " + inserted.result.insertedId);
+
+found = mongo(join_lists(join_lists(["find"], coll), ["--filter", "{\"qty\":{\"$gt\":5}}", "--limit", "10"]));
+assert(found.ok && found.result.count == 1);
+for (doc in found.result.docs) {
+  println("qty > 5: " + doc.item + " (" + str(doc.qty) + ")");
+}
+
+all = mongo(join_lists(["find"], coll));
+println("documents: " + str(all.result.count));
+
+deleted = mongo(join_lists(join_lists(["delete"], coll), ["--filter", "{\"item\":\"tea\"}"]));
+assert(deleted.ok && deleted.result.deleted == 1);
+println("deleted: " + str(deleted.result.deleted));
+mongo(join_lists(join_lists(["delete"], coll), ["--filter", "{}"]));
+println("mongo demo OK");
