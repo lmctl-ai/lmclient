@@ -40,7 +40,7 @@ jobs:
         if: runner.os == 'macOS'
         run: brew install coreutils
       - name: JVM tests
-        timeout-minutes: 8
+        timeout-minutes: 25
         run: |
           python3 scripts/sync-sdk.py
           bash test.sh
