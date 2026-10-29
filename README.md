@@ -1,6 +1,6 @@
 # lmclient
 
-**A scriptable JDBC database client for queries, exports, schema inspection and visual results.**
+**A scriptable protocol client in one native executable: JDBC databases plus Redis, mail, message queues, MQTT and MongoDB, for queries, exports, schema inspection and visual results.**
 
 | Query chart | ER diagram | Schema map |
 | --- | --- | --- |
@@ -47,6 +47,29 @@ Every example is self-contained and binds lmclient plus lmplot by release. Each 
 | `duckdb_population.lms` | Regional population density | `lmctl https://raw.githubusercontent.com/lmctl-ai/lmclient/main/examples/duckdb_population.lms` |
 | `schema_map.lms` | JDBC tables, columns and primary keys | `lmctl https://raw.githubusercontent.com/lmctl-ai/lmclient/main/examples/schema_map.lms` |
 | `er_diagram.lms` | JDBC primary and foreign key relationship | `lmctl https://raw.githubusercontent.com/lmctl-ai/lmclient/main/examples/er_diagram.lms` |
+
+## Protocol areas
+
+lmclient replaces n8n's non-HTTP connector nodes with one executable and one
+output contract. Every area prints exactly one JSON object on stdout,
+`{"ok":true,"result":...}` or `{"ok":false,"error":{"code","message"}}`, and
+exits 0 on success, 2 on a usage error, 3 on a runtime failure. Connections
+come from `--url` or `LMCLIENT_<AREA>_URL`; passwords come from the
+environment or `--credentials-file`, never from stdout or stderr.
+Each area has a page under [docs/areas/](docs/areas/) and a runnable
+`examples/<area>_demo.lms`.
+
+| Area | n8n node | Example |
+| --- | --- | --- |
+| `db` (JDBC) | Postgres, MySQL, MSSQL, SQLite nodes | `lmclient --url jdbc:sqlite:app.db --sql 'SELECT * FROM orders' --format json` |
+| `redis` | Redis | `lmclient redis set greeting hello --url redis://127.0.0.1:6379/0 --ttl 60` |
+| `mail` | Send Email, Email Trigger (IMAP) | `lmclient mail send --host 127.0.0.1 --port 3025 --from a@x.test --to b@x.test --subject hi --body 'hello'` |
+| `queue` | RabbitMQ | `lmclient queue publish --url amqp://127.0.0.1:5672/ --queue jobs --body hello` |
+| `mqtt` | MQTT | `lmclient mqtt pub --url tcp://127.0.0.1:1883 --topic demo --message hello --qos 1` |
+| `mongo` | MongoDB | `lmclient mongo find --url mongodb://127.0.0.1:27017 --db shop --collection orders --filter '{"qty":{"$gt":5}}'` |
+
+AWS services are covered by the sibling repository lmaws; HTTP APIs and LLM
+providers by lmconn.
 
 ## JDBC host API
 

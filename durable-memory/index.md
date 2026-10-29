@@ -4,3 +4,4 @@
 - [02 Initial release validation](02-validation.md)
 - [03 Native JDBC resource size](03-native-size.md)
 - [Rename lmdb to lmclient, 0.2.0](rename-2026-10-29.md)
+- [Protocol areas: redis, mail, queue, mqtt, mongo](lmclient-areas-2026-10-29.md)

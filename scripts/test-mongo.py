@@ -18,14 +18,18 @@ import uuid
 
 ROOT = Path(__file__).resolve().parents[1]
 VERSION = (ROOT / "VERSION").read_text().strip()
-COMMAND = ([str(Path(sys.argv[1]).resolve())] if len(sys.argv) > 1 else
-           ["java", "-jar", str(ROOT / f"target/lmclient-{VERSION}-all.jar")])
+TARGET = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else ROOT / f"target/lmclient-{VERSION}-all.jar"
+COMMAND = ["java", "-jar", str(TARGET)] if TARGET.suffix == ".jar" else [str(TARGET)]  # jar or native binary
+NATIVE = TARGET.suffix != ".jar"
 checks = 0
+
+# Usage checks must not see a CI-provided LMCLIENT_MONGO_URL; live() passes it explicitly.
+BASE_ENV = {k: v for k, v in os.environ.items() if k != "LMCLIENT_MONGO_URL"}
 
 def run(*args, code=0, env=None):
     global checks
     process = subprocess.run(COMMAND + ["mongo", *args], text=True, encoding="utf-8",
-                             capture_output=True, timeout=90, env=env)
+                             capture_output=True, timeout=90, env=BASE_ENV if env is None else env)
     assert process.returncode == code, (args[:1], process.returncode, process.stdout, process.stderr)
     lines = [line for line in process.stdout.splitlines() if line.strip()]
     assert len(lines) == 1, ("exactly one JSON line on stdout", process.stdout)
@@ -61,7 +65,7 @@ error("delete", "--url", "mongodb://127.0.0.1:1", "--db", "d", "--collection", "
 secret = "DO_NOT_LOG_lmclient_mongo_secret"
 started = time.monotonic()
 _, process = error("ping", "--url", "mongodb://127.0.0.1:1", "--timeout", "1500", code=3, expect="CONN",
-                   env={**os.environ, "LMCLIENT_PASSWORD": secret, "LMCLIENT_USER": "tester"})
+                   env={**BASE_ENV, "LMCLIENT_PASSWORD": secret, "LMCLIENT_USER": "tester"})
 assert time.monotonic() - started < 30, "timeout was not honoured"
 assert secret not in process.stdout + process.stderr
 _, process = error("ping", "--url", f"mongodb://tester:{secret}@127.0.0.1:1", "--timeout", "1500", code=3, expect="CONN")
@@ -72,7 +76,7 @@ def live(url):
     global checks
     db, coll = "lmclient_test", "items_" + uuid.uuid4().hex[:8]
     base = ["--url", url, "--db", db, "--collection", coll]
-    env = {k: v for k, v in os.environ.items() if k != "LMCLIENT_MONGO_URL"}
+    env = BASE_ENV
     envelope, process = run("ping", "--url", url, env=env)
     assert envelope["result"] == {"pong": True}, envelope
     assert process.stderr.strip() == "", ("stderr must stay silent", process.stderr)
@@ -130,4 +134,4 @@ elif shutil.which("docker") and subprocess.run(["docker", "info"], capture_outpu
         subprocess.run(["docker", "rm", "-f", name], capture_output=True, timeout=120)
 else:
     mode = "live checks SKIPPED (docker unavailable and LMCLIENT_MONGO_URL unset)"
-print(f"lmclient mongo checks: {checks} passed ({'native' if len(sys.argv) > 1 else 'JVM'}; {mode})")
+print(f"lmclient mongo checks: {checks} passed ({'native' if NATIVE else 'JVM'}; {mode})")

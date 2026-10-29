@@ -8,6 +8,9 @@ else echo 'GNU timeout/coreutils is required' >&2; exit 2; fi
 "$deadline" 30 python3 scripts/check-version.py
 "$deadline" 30 python3 scripts/test-native-resources.py
 "$deadline" 300 python3 scripts/test-cli.py
+for area in redis mail queue mqtt mongo; do
+  "$deadline" 600 python3 "scripts/test-$area.py" "target/lmclient-$(cat VERSION)-all.jar"
+done
 if [[ -n "${LMCLIENT_NATIVE_BINARY:-}" ]]; then
   "$deadline" 300 python3 scripts/test-cli.py "$LMCLIENT_NATIVE_BINARY"
   if [[ "$(uname -s)" == Linux ]]; then

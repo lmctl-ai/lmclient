@@ -99,7 +99,7 @@ jobs:
           path: dist/*
           if-no-files-found: error
   network:
-    name: PostgreSQL and SQL Server native integration
+    name: Server and protocol-area native integration
     needs: native
     runs-on: ubuntu-22.04
     timeout-minutes: 15
@@ -121,6 +121,12 @@ jobs:
           MSSQL_PID: Developer
           MSSQL_SA_PASSWORD: Lmclient-CI-only-2026!
         ports: ['1433:1433']
+      mongo:
+        image: mongo:7
+        ports: ['27017:27017']
+        options: >-
+          --health-cmd "mongosh --quiet --eval 'db.runCommand({ping:1}).ok'"
+          --health-interval 5s --health-timeout 5s --health-retries 30
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
@@ -140,6 +146,15 @@ jobs:
         run: |
           chmod +x native/lmclient-linux-x64
           timeout 600 python3 scripts/test-network.py native/lmclient-linux-x64
+      - name: Protocol areas against the native executable (redis, mail, queue, mqtt, mongo)
+        # mongo uses the service container above; the redis, mail, queue and mqtt scripts start
+        # and remove their own docker containers (see docs/areas/<area>.md ## wiring).
+        env:
+          LMCLIENT_MONGO_URL: mongodb://127.0.0.1:27017
+        run: |
+          for area in redis mail queue mqtt mongo; do
+            timeout 600 python3 "scripts/test-$area.py" native/lmclient-linux-x64
+          done
   release:
     if: startsWith(github.ref, 'refs/tags/v')
     needs: [native, network]
