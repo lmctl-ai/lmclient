@@ -19,6 +19,24 @@ SECRET = 'dummy-credential-DO-NOT-LOG'
 SECRETS = [SECRET, 'dummy-java-to-node', 'dummy-node-to-java', 'dummy-path-secret']
 checks = 0
 
+
+def redact(text, values):
+    # Cover raw output and JSON-escaped values without logging argv or stdin.
+    variants = set()
+    for value in values:
+        if value:
+            variants.add(value)
+            variants.add(json.dumps(value, ensure_ascii=True)[1:-1])
+            variants.add(json.dumps(value, ensure_ascii=False)[1:-1])
+    for value in sorted(variants, key=len, reverse=True):
+        text = text.replace(value, '<redacted>')
+    return text
+
+
+# Diagnostics must remain useful even if a failing process echoes its input.
+_probe = 'dummy-quote"\\line\n世界'
+assert redact(_probe + json.dumps(_probe), [_probe]) == '<redacted>"<redacted>"'
+
 with tempfile.TemporaryDirectory(prefix='lmclient-cred-') as directory:
     database = str(Path(directory) / 'creds.db')
     environment = {**BASE_ENV, 'LMCLIENT_DB': database}
@@ -30,9 +48,22 @@ with tempfile.TemporaryDirectory(prefix='lmclient-cred-') as directory:
                                  input=None if stdin is None else stdin.encode('utf-8'),
                                  capture_output=True, timeout=30,
                                  env={**environment, **(env or {})})
+        secrets = [*SECRETS, stdin, *(env or {}).values()]
+        if '--value' in args:
+            index = args.index('--value') + 1
+            if index < len(args):
+                secrets.append(args[index])
+        if process.returncode != code:
+            # Decode leniently only for diagnostics: launcher/OS errors may use
+            # the Windows code page rather than the CLI's UTF-8 encoding.
+            stdout = redact(process.stdout.decode('utf-8', errors='replace'), secrets)
+            stderr = redact(process.stderr.decode('utf-8', errors='replace'), secrets)
+            raise AssertionError(
+                f'unexpected credential command exit (check {checks + 1}, '
+                f'expected {code}, actual {process.returncode}); '
+                f'stdout={stdout[:4000]!r}; stderr={stderr[:4000]!r}')
         process.stdout = process.stdout.decode('utf-8')
         process.stderr = process.stderr.decode('utf-8')
-        assert process.returncode == code, 'unexpected credential command exit'
         assert len(process.stdout.strip().splitlines()) == 1, 'exactly one JSON envelope required'
         envelope = json.loads(process.stdout)
         assert envelope['ok'] is (code == 0)
@@ -83,6 +114,16 @@ with tempfile.TemporaryDirectory(prefix='lmclient-cred-') as directory:
         run('set', 'service', 'key', '--value', value)
         assert run('get', 'service', 'key', '--reveal')[0]['value'] == value
     assert len(run('list')[0]) == 1, 'updates must not insert duplicate rows'
+    # Isolate argument transport from stdin: on Windows the launcher parses
+    # quotes/backslashes and Unicode before CredArea ever receives the args.
+    for name, field in [('plain-service', 'plain-field'),
+                        ('quoted"service', 'field'),
+                        ('backslash\\service', 'field'),
+                        ('世界', 'field'), ('service', 'line\nfield')]:
+        run('set', name, field, '--stdin', stdin=SECRET)
+        assert run('get', name, field, '--reveal')[0] == {
+            'service': name, 'field': field, 'set': True, 'value': SECRET}
+        assert run('delete', name, field)[0] == {'deleted': True}
     name = 'quoted"service\\世界'
     field = 'line\nfield'
     run('set', name, field, '--stdin', stdin=SECRET)

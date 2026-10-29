@@ -62,6 +62,9 @@ public final class CredArea {
                         return Envelope.fail("USAGE", "The named environment variable must be set");
                 }
                 case "--stdin" -> {
+                    // Read the pipe to EOF directly, including on Windows; no console,
+                    // platform charset, line reader, or /dev/stdin dependency. Do not
+                    // close System.in: callers can invoke this area in-process.
                     value = new String(System.in.readAllBytes(), StandardCharsets.UTF_8);
                     // Strip exactly one shell line ending, not other credential whitespace.
                     if (value.endsWith("\r\n")) value = value.substring(0, value.length() - 2);
