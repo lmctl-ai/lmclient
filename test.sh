@@ -7,6 +7,7 @@ else echo 'GNU timeout/coreutils is required' >&2; exit 2; fi
 "$deadline" 300 mvn -B -q verify
 "$deadline" 30 python3 scripts/check-version.py
 "$deadline" 30 python3 scripts/test-native-resources.py
+"$deadline" 30 python3 scripts/test-lmmock-harness.py
 "$deadline" 300 python3 scripts/test-cli.py
 for area in redis mail queue mqtt mongo cred http oauth llm github kafka network; do
   "$deadline" 600 python3 "scripts/test-$area.py" "target/lmclient-$(cat VERSION)-all.jar"

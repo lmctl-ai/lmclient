@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-"""Shared lmmock lifecycle and verified release acquisition (stdlib only)."""
+"""Shared lmmock lifecycle and verified release acquisition (stdlib only).
+PATH binaries must match the configured version pin and support proto --list.
+"""
 import contextlib
 import hashlib
 import json
@@ -27,10 +29,15 @@ def skip(reason):
     raise SystemExit(0)
 
 
-def release_asset(name):
+def configured_version():
     version = os.environ.get('LMMOCK_VERSION', PINNED_VERSION).removeprefix('v')
     if not re.fullmatch(r'[0-9]+\.[0-9]+\.[0-9]+', version):
         raise ValueError('invalid LMMOCK_VERSION')
+    return version
+
+
+def release_asset(name):
+    version = configured_version()
     cache = ROOT / 'build/lmmock-cache' / version
     cache.mkdir(parents=True, exist_ok=True)
     base = f'https://github.com/lmctl-ai/lmmock/releases/download/v{version}/'
@@ -63,9 +70,23 @@ def locate_lmmock():
             skip('LMMOCK_BIN is not executable: ' + explicit)
         return str(Path(found).resolve())
     found = shutil.which('lmmock')
-    if found:
+    if found and compatible_path_binary(found):
         return str(Path(found).resolve())
     return download_lmmock()
+
+
+def compatible_path_binary(binary):
+    version = configured_version()
+    try:
+        reported = subprocess.run([binary, '--version'], capture_output=True,
+                                  text=True, encoding='utf-8', errors='replace', timeout=5)
+        if reported.returncode != 0 or reported.stdout.strip() != f'lmmock {version}':
+            return False
+        protocols = subprocess.run([binary, 'proto', '--list'], capture_output=True,
+                                   timeout=5)
+        return protocols.returncode == 0
+    except (OSError, subprocess.TimeoutExpired):
+        return False
 
 
 def download_lmmock():
