@@ -121,17 +121,23 @@ with tempfile.TemporaryDirectory(prefix='lmclient-cred-') as directory:
                         ('quoted"service', 'field'),
                         ('backslash\\service', 'field'),
                         ('世界', 'field'), ('service', 'line\nfield')]:
+        if sys.platform == 'win32' and ('\n' in name or '\n' in field):
+            print('SKIP newline name/field case: newline in argv is not portable on Windows')
+            continue
         run('set', name, field, '--stdin', stdin=SECRET)
         assert run('get', name, field, '--reveal')[0] == {
             'service': name, 'field': field, 'set': True, 'value': SECRET}
         assert run('delete', name, field)[0] == {'deleted': True}
     name = 'quoted"service\\世界'
     field = 'line\nfield'
-    run('set', name, field, '--stdin', stdin=SECRET)
-    assert run('get', name, field)[0] == {'service': name, 'field': field, 'set': True}
-    rows = run('list')[0]
-    assert [(r['service'], r['field']) for r in rows] == sorted((r['service'], r['field']) for r in rows)
-    assert run('delete', name, field)[0] == {'deleted': True}
+    if sys.platform == 'win32':
+        print('SKIP combined newline name/field case: newline in argv is not portable on Windows')
+    else:
+        run('set', name, field, '--stdin', stdin=SECRET)
+        assert run('get', name, field)[0] == {'service': name, 'field': field, 'set': True}
+        rows = run('list')[0]
+        assert [(r['service'], r['field']) for r in rows] == sorted((r['service'], r['field']) for r in rows)
+        assert run('delete', name, field)[0] == {'deleted': True}
     assert run('delete', 'service', 'key')[0] == {'deleted': True}
     assert run('delete', 'service', 'key')[0] == {'deleted': False}
     assert run('get', 'service', 'key')[0]['set'] is False
