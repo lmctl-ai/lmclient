@@ -82,7 +82,7 @@ public final class MailArea {
         message.setDataHandler(new DataHandler(new ByteArrayDataSource(body.getBytes(StandardCharsets.UTF_8), "text/plain; charset=UTF-8")));
         message.saveChanges();
         try (SMTPTransport transport = new SMTPTransport(session, null)) {
-            transport.connect(o.host, o.port, o.user, o.password);
+            transport.connect(o.host, o.port, o.user, o.user == null ? null : o.password);
             transport.sendMessage(message, to);
         }
         StringBuilder json = new StringBuilder("{\"sent\":true,\"to\":[");

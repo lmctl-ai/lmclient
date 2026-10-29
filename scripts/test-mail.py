@@ -105,7 +105,7 @@ try:
             sent = run('send', '--host', '127.0.0.1', '--port', smtp,
                        '--from', 'sender@example.test', '--to', 'test@localhost,other@example.test',
                        '--subject', subject, '--body-file', str(body),
-                       *(['--user', 'test', '--credentials-file', str(credentials)] if i else []))
+                       *(['--user', 'test', '--credentials-file', str(credentials)] if i else []), env=password)
             assert sent['result'] == {'sent': True, 'to': ['test@localhost', 'other@example.test']}
         read_args = ['read', '--host', '127.0.0.1', '--port', imap, '--limit', '10', '--credentials-file', str(credentials)]
         messages = run(*read_args)['result']['messages']
