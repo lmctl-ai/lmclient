@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Kafka envelope and local KRaft round-trip checks; owns its temporary container."""
+"""Kafka envelope checks, released lmmock tier, and real KRaft round trips."""
 import json
 import os
 from pathlib import Path
@@ -9,17 +9,19 @@ import sys
 from jvm_noise import java_command, strip_jvm_noise
 import time
 import uuid
+from urllib.parse import urlsplit
+from lmmock_tiers import mock
 
 ROOT = Path(__file__).resolve().parents[1]
 artifact = Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / 'target/lmclient-0.2.0-all.jar'
 COMMAND = java_command(artifact)
-ENV = {k: v for k, v in os.environ.items() if k != 'LMCLIENT_KAFKA_URL'}
+ENV = {k: v for k, v in os.environ.items() if k not in ('LMCLIENT_KAFKA_URL', 'LMDB_KAFKA_URL')}
 SECRET = 'dummy-secret-never-print'
 checks = 0
 
 def run(*args, code=0, env=None):
     global checks
-    p = subprocess.run(COMMAND + ['kafka', *args], capture_output=True, text=True, timeout=25, env=env or ENV)
+    p = subprocess.run(COMMAND + ['kafka', *args], capture_output=True, text=True, encoding='utf-8', timeout=25, env=env or ENV)
     assert p.returncode == code, (args[:1], p.returncode, p.stdout, p.stderr)
     assert SECRET not in p.stdout + p.stderr
     assert len(p.stdout.strip().splitlines()) == 1, p.stdout
@@ -57,7 +59,7 @@ def skip_docker(reason):
         value = globals().get(key)
         if value:
             message = message.replace(value, '(redacted)')
-    print('kafka: SKIP live checks (' + message + ')')
+    print('kafka: SKIP Docker live checks (' + message + ')')
     sys.exit(0)
 
 
@@ -91,7 +93,6 @@ def remove_container(name):
     except (OSError, subprocess.TimeoutExpired):
         print('kafka: WARNING Docker cleanup unavailable for ' + name)
 
-require_docker()
 
 for args in [[], ['unknown'], ['ping'], ['ping', '--url'],
              ['ping', '--url', 'http://localhost:9092'],
@@ -109,6 +110,33 @@ for args in [['ping'], ['produce', '--topic', 't', '--message', SECRET], ['consu
     start = time.monotonic()
     run(*args, '--url', '127.0.0.1:1', '--timeout', '300', code=3)
     assert time.monotonic() - start < 10, 'operation exceeded timeout allowance'
+print(f'kafka: {checks} offline/timeout checks passed')
+
+
+def live(url):
+    """Identical client assertions for the in-memory broker and real KRaft."""
+    assert run('ping', env={**ENV, 'LMCLIENT_KAFKA_URL': url})['connected']
+    assert run('ping', '--url', url, env={**ENV, 'LMCLIENT_KAFKA_URL': '127.0.0.1:1'})['connected']
+    messages = ['first', 'héllo "Kafka"\nsecond', 'third']
+    for message in messages:
+        assert run('produce', '--url', url, '--topic', 'roundtrip', '--message', message)['published']
+    result = run('consume', '--url', url, '--topic', 'roundtrip', '--limit', '3', '--timeout', '5000')
+    assert result['messages'] == messages, result
+    assert run('consume', '--url', url, '--topic', 'roundtrip', '--limit', '1')['messages'] == messages[:1]
+    assert run('consume', '--url', url, '--topic', 'roundtrip', '--limit', '5', '--timeout', '1500')['messages'] == messages
+    assert run('produce', '--url', url, '--topic', 'empty-value', '--message', '')['published']
+    assert run('consume', '--url', url, '--topic', 'empty-value')['messages'] == ['']
+
+
+before = checks
+with mock.lmmock_proto('kafka', {'topics': {'roundtrip': 1}}) as base:
+    endpoint = urlsplit(base)
+    assert endpoint.scheme == 'kafka' and endpoint.hostname and endpoint.port, base
+    # KafkaArea accepts host:port rather than the readiness kafka:// URL.
+    live(endpoint.netloc)
+print(f'kafka lmmock: {checks - before} live checks passed; {checks} including offline/timeout checks')
+
+require_docker()
 name = 'lmclient-kafka-' + uuid.uuid4().hex[:10]
 try:
     # Docker selects the host port. Delay Kafka startup until its advertised
@@ -144,18 +172,9 @@ try:
         time.sleep(1)
     else:
         raise AssertionError('Kafka did not become ready')
-    assert run('ping', env={**ENV, 'LMCLIENT_KAFKA_URL': url})['connected']
-    assert run('ping', '--url', url, env={**ENV, 'LMCLIENT_KAFKA_URL': '127.0.0.1:1'})['connected']
-    messages = ['first', 'héllo "Kafka"\nsecond', 'third']
-    for message in messages:
-        assert run('produce', '--url', url, '--topic', 'roundtrip', '--message', message)['published']
-    result = run('consume', '--url', url, '--topic', 'roundtrip', '--limit', '3', '--timeout', '5000')
-    assert result['messages'] == messages, result
-    assert run('consume', '--url', url, '--topic', 'roundtrip', '--limit', '1')['messages'] == messages[:1]
-    assert run('consume', '--url', url, '--topic', 'roundtrip', '--limit', '5', '--timeout', '1500')['messages'] == messages
-    assert run('produce', '--url', url, '--topic', 'empty-value', '--message', '')['published']
-    assert run('consume', '--url', url, '--topic', 'empty-value')['messages'] == ['']
-    print(f'kafka: {checks} checks passed; live ping / produce 3 / consume 3 preserved order; replay and partial timeout verified')
+    before = checks
+    live(url)
+    print(f'kafka Docker: {checks - before} live checks passed; {checks} total including offline and lmmock')
 except DockerUnavailable as exc:
     skip_docker(exc)
 finally:

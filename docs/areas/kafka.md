@@ -39,9 +39,29 @@ management settings. Credentials embedded in bootstrap URLs are rejected.
 - JVM gate: `mvn -q -B verify`.
 - Live gate: `python3 scripts/test-kafka.py target/lmclient-0.2.0-all.jar`.
   The same script accepts a native binary path. `test.sh` includes Kafka.
+- Tier order: 17 offline usage/connection-timeout checks, then 10 live checks
+  against released `lmmock proto kafka`, then the same 10 checks against Docker.
+  The mock uses the shared `scripts/lmmock-helpers.py` acquisition/lifecycle
+  harness, with `{"topics":{"roundtrip":1}}` passed through a temporary config
+  file. The `kafka://` readiness URL is converted to the required host:port.
+  It runs without Docker on all five CI platforms and accepts `LMMOCK_BIN` for
+  an explicit binary. Missing mocks print SKIP locally; `LMMOCK_REQUIRED=1`
+  makes acquisition failure fatal in CI.
+- Shared live assertions cover env fallback/flag priority, partition-zero
+  idempotent production with acks=all, ordered UTF-8 and empty values, earliest
+  replay, and partial reads at 1500 ms. No existing live assertion is Docker-only.
+  Docker additionally validates this contract against a real KRaft broker;
+  persistence, replication, TLS/SASL, transactions, and group rebalancing are
+  outside the current suite and are not claimed by the mock.
 - Broker: `apache/kafka:3.9.1` single-node KRaft. Tests choose a local host port,
   configure the advertised address, and always remove their unique container.
-  Docker unavailable: offline envelope checks run and live checks clearly skip.
+  Docker unavailable: offline and lmmock checks have already run; only the
+  Docker tier clearly skips. Force a local mock-acquisition skip with
+  `LMMOCK_BIN=/nonexistent/lmmock LMMOCK_REQUIRED=0 python3 scripts/test-kafka.py`.
+- Wave 8 local verification: the JVM area suite passed **37 checks** (17 offline,
+  10 lmmock, 10 Docker); forced mock acquisition skip retained all 17 offline
+  checks and exited successfully. The original 1500 ms partial-read assertion
+  is unchanged. No mock bugs or assertion exclusions were needed.
 - Native metadata: `src/main/resources/META-INF/native-image/ai.lmctl/lmclient-kafka/`.
   Five public-constructor registrations (StringSerializer, StringDeserializer,
   RangeAssignor, CooperativeStickyAssignor, JmxReporter) plus the
