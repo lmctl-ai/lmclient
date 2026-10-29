@@ -59,11 +59,14 @@ message. Callers obtain the token from `CredStore` after refreshing.
   CI installs an isolated mock compiler `@lmctl-ai/lmctl@0.2.444` via
   `LMMOCK_LMSCRIPT_JS`, retaining the existing example compiler. The harness
   invokes this JS entry with Node directly, compiles to temporary bytecode, then
-  runs `lmmock serve --dsl` on every platform. Local runs default to
+  runs `lmmock serve --dsl` on every platform. It stages the source beside
+  `schema.json` exported from the exact serving binary, preserving raw bytes
+  without newline conversion; no checked-in or release-archive schema is used.
+  Local runs default to
   `LMSCRIPT_BIN` or `lmscript` on PATH. Compiler and server startup errors include
   stderr (last 16 KiB); compilation failures never become skips.
 - The IdP comes from the checksum-verified `examples.tar.gz` of that same
-  release, including its schema. No OAuth handler copy is vendored: lmmock is
+  release (script only). No OAuth handler copy is vendored: lmmock is
   the single source of truth, pinned for reproducibility. Tests mirror lmconn's
   PKCE S256, header/body client authentication, JSON/form tokens, protected
   userinfo, rotating refresh tokens, revoked grants, bad state, malformed JSON,

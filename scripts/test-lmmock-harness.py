@@ -103,7 +103,9 @@ class HarnessTests(unittest.TestCase):
 
     def test_failing_compiler_reports_stderr_without_starting_server(self):
         self.fake_compiler("import sys; sys.stderr.write('fixture compiler syntax error'); sys.exit(7)")
-        with patch.object(harness, 'locate_lmmock', return_value='lmmock'), \
+        (self.directory / 'source.lms').write_text('fixture source', encoding='utf-8')
+        with patch.object(harness, 'export_schema'), \
+             patch.object(harness, 'locate_lmmock', return_value='lmmock'), \
              patch.object(harness, '_server') as server:
             with self.assertRaisesRegex(RuntimeError, 'compiler exited 7: fixture compiler syntax error'):
                 with harness.lmmock_serve(self.directory / 'source.lms'):
@@ -115,16 +117,20 @@ class HarnessTests(unittest.TestCase):
         shim.write_text('@echo off\nexit /b 99\n', encoding='utf-8')
         self.stack.enter_context(patch.dict(os.environ, {'LMSCRIPT_BIN': str(shim)}))
         self.fake_compiler("import sys; from pathlib import Path; Path(sys.argv[-1]).write_bytes(b'fixture-bytecode')")
+        source = self.directory / 'source with spaces.lms'
+        source.write_text('fixture source', encoding='utf-8')
         paths = []
         @contextlib.contextmanager
-        def server(arguments, config):
+        def server(arguments, config, *, binary):
+            self.assertEqual(binary, 'lmmock')
             self.assertEqual(arguments[:2], ['serve', '--dsl'])
             bytecode = Path(arguments[2])
             self.assertEqual(bytecode.read_bytes(), b'fixture-bytecode')
             self.assertEqual(config, {'fixture': True})
             paths.append(bytecode)
             yield 'http://127.0.0.1:1234'
-        with patch.object(harness, 'locate_lmmock', return_value='lmmock'), \
+        with patch.object(harness, 'export_schema'), \
+             patch.object(harness, 'locate_lmmock', return_value='lmmock'), \
              patch.object(harness, '_server', server):
             with harness.lmmock_serve(self.directory / 'source with spaces.lms', {'fixture': True}) as url:
                 self.assertEqual(url, 'http://127.0.0.1:1234')
@@ -135,6 +141,49 @@ class HarnessTests(unittest.TestCase):
             with self.assertRaisesRegex(RuntimeError, r'before readiness \(exit 1\): fixture server error'):
                 with harness._server(['-c', "import sys; sys.stderr.write('fixture server error'); sys.exit(1)"]):
                     self.fail('failed server became ready')
+
+
+    def test_compile_uses_exact_serving_schema_not_source_schema(self):
+        source = self.directory / 'fixture.lms'
+        source.write_bytes(b'p = _lmcode_ schema="schema.json";\n')
+        stale = b'{"schema":"stale"}\r\n'
+        (self.directory / 'schema.json').write_bytes(stale)
+        canonical = b'{"schema":"serving binary"}\n'
+        self.fake_compiler(
+            "import sys; from pathlib import Path; "
+            "source = Path(sys.argv[-2]); "
+            f"assert source.with_name('schema.json').read_bytes() == {canonical!r}; "
+            "Path(sys.argv[-1]).write_bytes(b'checked-schema')")
+        real_run = harness.subprocess.run
+        def run(args, **kwargs):
+            if args == ['selected-lmmock', 'schema']:
+                self.assertNotIn('text', kwargs)
+                return harness.subprocess.CompletedProcess(args, 0, canonical, b'')
+            return real_run(args, **kwargs)
+        @contextlib.contextmanager
+        def server(arguments, config, *, binary):
+            self.assertEqual(binary, 'selected-lmmock')
+            self.assertEqual(Path(arguments[2]).read_bytes(), b'checked-schema')
+            yield 'http://127.0.0.1:1234'
+        with patch.object(harness, 'locate_lmmock', side_effect=['selected-lmmock', 'wrong-binary']) as locate, \
+             patch.object(harness.subprocess, 'run', side_effect=run), \
+             patch.object(harness, '_server', server):
+            with harness.lmmock_serve(source):
+                pass
+            locate.assert_called_once_with()
+        self.assertEqual((self.directory / 'schema.json').read_bytes(), stale)
+
+    def test_schema_export_failure_stops_before_compilation(self):
+        source = self.directory / 'fixture.lms'
+        source.write_bytes(b'fixture')
+        failed = harness.subprocess.CompletedProcess([], 2, b'', b'fixture schema export error')
+        with patch.object(harness, 'locate_lmmock', return_value='selected-lmmock'), \
+             patch.object(harness.subprocess, 'run', return_value=failed), \
+             patch.object(harness, 'compile_script') as compile_script:
+            with self.assertRaisesRegex(RuntimeError, 'schema export exited 2: fixture schema export error'):
+                with harness.lmmock_serve(source):
+                    self.fail('failed export became ready')
+            compile_script.assert_not_called()
 
 
 if __name__ == '__main__':

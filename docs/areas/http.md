@@ -27,11 +27,14 @@ On Windows, quote-heavy JSON passed through `--data` can lose embedded quotes du
   CI installs an isolated mock compiler `@lmctl-ai/lmctl@0.2.444` via
   `LMMOCK_LMSCRIPT_JS`, retaining the existing example compiler. The harness
   invokes this JS entry with Node directly, compiles to temporary bytecode, then
-  runs `lmmock serve --dsl` on every platform. Local runs default to
+  runs `lmmock serve --dsl` on every platform. It stages the source beside
+  `schema.json` exported from the exact serving binary, preserving raw bytes
+  without newline conversion; no checked-in or release-archive schema is used.
+  Local runs default to
   `LMSCRIPT_BIN` or `lmscript` on PATH. Compiler and server startup errors include
   stderr (last 16 KiB); compilation failures never become skips.
-- `scripts/mocks/http.lms` is a small lmclient-owned fixture (schema exported
-  from lmmock 0.1.4). It checks health JSON, POST echo, request headers, 404/429/503
+- `scripts/mocks/http.lms` is a small lmclient-owned fixture. It checks health
+  JSON, POST echo, request headers, 404/429/503
   envelopes, and an unfollowed redirect. Existing Python-server checks retain
   their broader timeout, size-bound, credential, and refresh coverage.
 

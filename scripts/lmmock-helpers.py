@@ -100,21 +100,21 @@ def download_lmmock():
 
 
 def oauth_source(directory):
-    """Extract only regular example files, never archive paths or links."""
+    """Extract the OAuth script; compilation obtains the schema from the server."""
     archive = release_asset('examples.tar.gz')
     destination = Path(directory)
     with tarfile.open(archive, 'r:gz') as tar:
-        for name in ('examples/oauth.lms', 'examples/schema.json'):
-            member = tar.getmember(name)
-            if not member.isfile():
-                raise RuntimeError('invalid lmmock example archive')
-            (destination / Path(name).name).write_bytes(tar.extractfile(member).read())
+        member = tar.getmember('examples/oauth.lms')
+        if not member.isfile():
+            raise RuntimeError('invalid lmmock example archive')
+        (destination / 'oauth.lms').write_bytes(tar.extractfile(member).read())
     return destination / 'oauth.lms'
 
 
 @contextlib.contextmanager
-def _server(arguments, config=None):
-    binary = locate_lmmock()
+def _server(arguments, config=None, *, binary=None):
+    if binary is None:
+        binary = locate_lmmock()
     with temporary_directory(prefix='lmclient-lmmock-') as directory:
         ready = Path(directory) / 'ready.json'
         args = [binary, *arguments, '--ready-file', str(ready)]
@@ -153,6 +153,18 @@ def _server(arguments, config=None):
                 child.wait(timeout=5)
 
 
+def export_schema(binary, destination):
+    # The schema hash covers exact bytes. Never use text mode/newline conversion.
+    try:
+        result = subprocess.run([binary, 'schema'], capture_output=True, timeout=10)
+    except (OSError, subprocess.TimeoutExpired) as exc:
+        raise RuntimeError(f'lmmock schema export failed: {exc}') from exc
+    if result.returncode != 0:
+        diagnostic = result.stderr[-16384:].decode('utf-8', errors='replace').strip()
+        raise RuntimeError(f'lmmock schema export exited {result.returncode}: {diagnostic}')
+    destination.write_bytes(result.stdout)
+
+
 def compile_script(source, destination):
     # CI invokes the package's JS entry directly: no npm .cmd parsing or shell.
     javascript = os.environ.get('LMMOCK_LMSCRIPT_JS')
@@ -188,11 +200,14 @@ def lmmock_serve(dsl_path, config=None):
             yield url
         return
     # Preserve unavailable-lmmock skip behavior before attempting compilation.
-    locate_lmmock()
+    binary = locate_lmmock()
     with temporary_directory(prefix='lmclient-lmmock-compile-') as directory:
+        staged_source = Path(directory) / path.name
+        staged_source.write_bytes(path.read_bytes())
+        export_schema(binary, Path(directory) / 'schema.json')
         bytecode = Path(directory) / 'mock.dslb'
-        compile_script(path, bytecode)
-        with _server(['serve', '--dsl', str(bytecode)], config) as url:
+        compile_script(staged_source, bytecode)
+        with _server(['serve', '--dsl', str(bytecode)], config, binary=binary) as url:
             yield url
 
 
