@@ -34,9 +34,11 @@ import java.util.logging.Logger;
  * mongo area — replaces n8n's MongoDB node.
  * PINNED CLI contract (wave 5b; owner Fable; details docs/areas/mongo.md):
  *   lmclient mongo ping --url mongodb://host:27017
- *   lmclient mongo insert --url ... --db D --collection C --doc '{"json"}'
- *   lmclient mongo find --url ... --db D --collection C [--filter '{"json"}'] [--limit N]
- *   lmclient mongo delete --url ... --db D --collection C --filter '{"json"}'
+ *   lmclient mongo insert --url ... --db D --collection C --doc '{"json"}' | --doc-file PATH
+ *   lmclient mongo find --url ... --db D --collection C [--filter '{"json"}' | --filter-file PATH] [--limit N]
+ *   lmclient mongo delete --url ... --db D --collection C --filter '{"json"}' | --filter-file PATH
+ * --doc-file / --filter-file read the JSON document from a UTF-8 file (like http --data-file): the portable
+ * way to pass documents whose quotes a platform's argv handling would mangle (Windows JVM launcher).
  * Common flags: --timeout MS (default 10000), --credentials-file FILE (java .properties with
  * user/password; LMCLIENT_USER / LMCLIENT_PASSWORD also work). LMCLIENT_MONGO_URL env fallback.
  * Envelope per Envelope.java; error codes CONN (cannot reach or authenticate), USAGE, BAD_JSON
@@ -47,12 +49,12 @@ public final class MongoArea {
     private MongoArea() {}
 
     private static final Set<String> COMMANDS = Set.of("ping", "insert", "find", "delete");
-    private static final Set<String> OPTIONS = Set.of("--url", "--db", "--collection", "--doc", "--filter", "--limit", "--timeout", "--credentials-file");
+    private static final Set<String> OPTIONS = Set.of("--url", "--db", "--collection", "--doc", "--doc-file", "--filter", "--filter-file", "--limit", "--timeout", "--credentials-file");
     private static final int DEFAULT_LIMIT = 100;
     private static final int MAX_LIMIT = 10000;
     private static final String USAGE =
         "usage: lmclient mongo ping|insert|find|delete --url mongodb://host:27017 [--db D --collection C] " +
-        "[--doc JSON] [--filter JSON] [--limit N] [--timeout MS] [--credentials-file FILE]";
+        "[--doc JSON | --doc-file PATH] [--filter JSON | --filter-file PATH] [--limit N] [--timeout MS] [--credentials-file FILE]";
     private static final JsonWriterSettings JSON = JsonWriterSettings.builder().outputMode(JsonMode.RELAXED).build();
 
     public static int run(String[] args) {
@@ -75,7 +77,7 @@ public final class MongoArea {
             secret = credentials.getProperty("password");
 
             if (command.equals("ping")) {
-                forbid(options, "--db", "--collection", "--doc", "--filter", "--limit");
+                forbid(options, "--db", "--collection", "--doc", "--doc-file", "--filter", "--filter-file", "--limit");
                 try (MongoClient client = connect(url, credentials, timeoutMs)) {
                     Document reply = client.getDatabase("admin").runCommand(new Document("ping", 1));
                     return Envelope.ok("{\"pong\":" + (reply.get("ok") instanceof Number n && n.doubleValue() == 1.0) + "}");
@@ -85,8 +87,8 @@ public final class MongoArea {
             String collection = required(options, "--collection");
             switch (command) {
                 case "insert" -> {
-                    forbid(options, "--filter", "--limit");
-                    Document doc = parse(required(options, "--doc"), "--doc");
+                    forbid(options, "--filter", "--filter-file", "--limit");
+                    Document doc = parse(jsonOption(options, "--doc", true), "--doc");
                     try (MongoClient client = connect(url, credentials, timeoutMs)) {
                         var result = collection(client, db, collection).insertOne(doc);
                         String id = result.getInsertedId() == null ? stringId(doc.get("_id")) : stringId(result.getInsertedId());
@@ -94,8 +96,9 @@ public final class MongoArea {
                     }
                 }
                 case "find" -> {
-                    forbid(options, "--doc");
-                    Document filter = options.containsKey("--filter") ? parse(options.get("--filter"), "--filter") : new Document();
+                    forbid(options, "--doc", "--doc-file");
+                    String filterJson = jsonOption(options, "--filter", false);
+                    Document filter = filterJson == null ? new Document() : parse(filterJson, "--filter");
                     int limit = positive(options.getOrDefault("--limit", Integer.toString(DEFAULT_LIMIT)), "--limit", MAX_LIMIT);
                     try (MongoClient client = connect(url, credentials, timeoutMs)) {
                         List<String> docs = new ArrayList<>();
@@ -107,8 +110,8 @@ public final class MongoArea {
                     }
                 }
                 case "delete" -> {
-                    forbid(options, "--doc", "--limit");
-                    Document filter = parse(required(options, "--filter"), "--filter");
+                    forbid(options, "--doc", "--doc-file", "--limit");
+                    Document filter = parse(jsonOption(options, "--filter", true), "--filter");
                     try (MongoClient client = connect(url, credentials, timeoutMs)) {
                         long deleted = collection(client, db, collection).deleteMany(filter).getDeletedCount();
                         return Envelope.ok("{\"deleted\":" + deleted + "}");
@@ -155,6 +158,25 @@ public final class MongoArea {
 
     private static MongoCollection<Document> collection(MongoClient client, String db, String collection) {
         return client.getDatabase(db).getCollection(collection);
+    }
+
+    /** Inline JSON from --flag or the UTF-8 contents of --flag-file; exactly one of them when required. */
+    private static String jsonOption(Map<String, String> options, String flag, boolean mandatory) {
+        String inline = options.get(flag);
+        String file = options.get(flag + "-file");
+        if (inline != null && file != null) throw usage("use only one of " + flag + " and " + flag + "-file");
+        if (file != null) {
+            try {
+                return java.nio.file.Files.readString(java.nio.file.Path.of(file), java.nio.charset.StandardCharsets.UTF_8);
+            } catch (java.io.IOException | java.nio.file.InvalidPathException e) {
+                throw usage("cannot read " + flag + "-file: " + e.getClass().getSimpleName());
+            }
+        }
+        if (inline == null || inline.isBlank()) {
+            if (!mandatory) return null;
+            throw usage(flag + " or " + flag + "-file is required; " + USAGE);
+        }
+        return inline;
     }
 
     private static Document parse(String json, String flag) {

@@ -18,6 +18,7 @@ from pathlib import Path
 import shutil
 import subprocess
 import sys
+import tempfile
 from jvm_noise import java_command, strip_jvm_noise
 import time
 import uuid
@@ -28,6 +29,22 @@ TARGET = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else ROOT / f"target/l
 COMMAND = java_command(TARGET)  # jar (with --enable-native-access) or native binary
 NATIVE = TARGET.suffix != ".jar"
 checks = 0
+
+# Windows: Python's list2cmdline and the Java launcher's own command-line re-parsing disagree on
+# embedded double quotes, so JSON documents reach the JVM with their quotes stripped there. The
+# area accepts --doc-file / --filter-file; on Windows every quoted JSON argument travels that way,
+# on POSIX it stays inline for full argv fidelity. The file flags are also exercised on every OS.
+JSON_FILES = tempfile.TemporaryDirectory(prefix="lmclient-mongo-json-")
+json_counter = 0
+
+def json_arg(flag, text, via_file=os.name == "nt"):
+    global json_counter
+    if not via_file:
+        return [flag, text]
+    json_counter += 1
+    path = Path(JSON_FILES.name) / f"{json_counter}.json"
+    path.write_text(text, encoding="utf-8")
+    return [flag + "-file", str(path)]
 
 # Usage checks must not see a CI-provided LMCLIENT_MONGO_URL; live() passes it explicitly.
 BASE_ENV = {k: v for k, v in os.environ.items() if k != "LMCLIENT_MONGO_URL"}
@@ -126,6 +143,9 @@ error("insert", "--url", "mongodb://127.0.0.1:1", "--db", "d", "--collection", "
 error("insert", "--url", "mongodb://127.0.0.1:1", "--db", "d", "--collection", "c", "--doc", "[1]", code=2, expect="BAD_JSON")
 error("find", "--url", "mongodb://127.0.0.1:1", "--db", "d", "--collection", "c", "--filter", "nope", code=2, expect="BAD_JSON")
 error("delete", "--url", "mongodb://127.0.0.1:1", "--db", "d", "--collection", "c", code=2, expect="USAGE")   # filter required
+error("insert", "--url", "mongodb://127.0.0.1:1", "--db", "d", "--collection", "c", "--doc", "{}", "--doc-file", "x", code=2, expect="USAGE")
+error("insert", "--url", "mongodb://127.0.0.1:1", "--db", "d", "--collection", "c", "--doc-file", str(Path(JSON_FILES.name) / "absent.json"), code=2, expect="USAGE")
+error("find", "--url", "mongodb://127.0.0.1:1", "--db", "d", "--collection", "c", *json_arg("--filter", "not json", via_file=True), code=2, expect="BAD_JSON")
 
 # --- unreachable server: CONN, bounded by --timeout, no secret leaks ---
 secret = "DO_NOT_LOG_lmclient_mongo_secret"
@@ -147,24 +167,24 @@ def live(url, scram=False):
     envelope, process = run("ping", "--url", url, env=env)
     assert envelope["result"] == {"pong": True}, envelope
     assert strip_jvm_noise(process.stderr).strip() == "", ("stderr must stay silent", process.stderr)
-    envelope, _ = run("insert", *base, "--doc", '{"name":"tea","qty":3,"tags":["hot","green"]}', env=env)
+    envelope, _ = run("insert", *base, *json_arg("--doc", '{"name":"tea","qty":3,"tags":["hot","green"]}'), env=env)
     oid = envelope["result"]["insertedId"]
     assert isinstance(oid, str) and len(oid) == 24, envelope
-    envelope, _ = run("insert", *base, "--doc", '{"_id":"custom-1","name":"coffee","qty":7}', env=env)
+    envelope, _ = run("insert", *base, *json_arg("--doc", '{"_id":"custom-1","name":"coffee","qty":7}', via_file=True), env=env)
     assert envelope["result"] == {"insertedId": "custom-1"}, envelope
     envelope, _ = run("find", *base, env=env)
     docs = envelope["result"]["docs"]
     assert envelope["result"]["count"] == 2 and {d["_id"] for d in docs} == {oid, "custom-1"}, envelope
     assert all(isinstance(d["_id"], str) for d in docs), "_id must be stringified"
     assert next(d for d in docs if d["_id"] == oid)["tags"] == ["hot", "green"]
-    envelope, _ = run("find", *base, "--filter", '{"qty":{"$gt":5}}', "--limit", "1", env=env)
+    envelope, _ = run("find", *base, *json_arg("--filter", '{"qty":{"$gt":5}}'), "--limit", "1", env=env)
     assert envelope["result"]["count"] == 1 and envelope["result"]["docs"][0]["name"] == "coffee", envelope
-    envelope, _ = run("find", *base, "--filter", '{"name":"nobody"}', env=env)
+    envelope, _ = run("find", *base, *json_arg("--filter", '{"name":"nobody"}', via_file=True), env=env)
     assert envelope["result"] == {"count": 0, "docs": []}, envelope
     envelope, _ = run("find", "--db", db, "--collection", coll, env={**env, "LMCLIENT_MONGO_URL": url})
     assert envelope["result"]["count"] == 2, "LMCLIENT_MONGO_URL fallback"
-    envelope, _ = error("find", *base, "--filter", '{"$bogus":1}', code=3, expect="SERVER")
-    envelope, _ = run("delete", *base, "--filter", '{"name":"tea"}', env=env)
+    envelope, _ = error("find", *base, *json_arg("--filter", '{"$bogus":1}'), code=3, expect="SERVER")
+    envelope, _ = run("delete", *base, *json_arg("--filter", '{"name":"tea"}'), env=env)
     assert envelope["result"] == {"deleted": 1}, envelope
     envelope, _ = run("delete", *base, "--filter", "{}", env=env)
     assert envelope["result"] == {"deleted": 1}, envelope

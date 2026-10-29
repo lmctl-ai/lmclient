@@ -18,7 +18,10 @@ run, no server-side driver install. Owner: Fable (wave 5b).
   `{"maxDocuments": 1000}`) and runs the same live block against it: ping,
   insert with generated and custom `_id`, find with equality and numeric `$gt`,
   `--limit`, the `LMCLIENT_MONGO_URL` fallback, unknown-operator rejection
-  (`SERVER`), delete by filter and by `{}`. CI sets `LMMOCK_BIN` and
+  (`SERVER`), delete by filter and by `{}`. On Windows the suite passes every
+  quoted JSON document through `--doc-file`/`--filter-file` (see Commands);
+  POSIX keeps inline argv and the file flags are exercised once on every OS.
+  CI sets `LMMOCK_BIN` and
   `LMMOCK_REQUIRED=1`, so the tier is mandatory on all five platforms without
   docker; locally an unobtainable binary prints `SKIP lmmock` and exits 0.
   A stale `lmmock` on PATH shadows the pinned download, so set `LMMOCK_BIN`
@@ -44,10 +47,17 @@ run, no server-side driver install. Owner: Fable (wave 5b).
 
 ```
 lmclient mongo ping   --url mongodb://host:27017
-lmclient mongo insert --url ... --db D --collection C --doc '{"json"}'
-lmclient mongo find   --url ... --db D --collection C [--filter '{"json"}'] [--limit N]
-lmclient mongo delete --url ... --db D --collection C --filter '{"json"}'
+lmclient mongo insert --url ... --db D --collection C --doc '{"json"}' | --doc-file PATH
+lmclient mongo find   --url ... --db D --collection C [--filter '{"json"}' | --filter-file PATH] [--limit N]
+lmclient mongo delete --url ... --db D --collection C --filter '{"json"}' | --filter-file PATH
 ```
+
+`--doc-file` and `--filter-file` read the JSON document from a UTF-8 file, like
+`http --data-file`. Use them wherever a shell or launcher would mangle the quotes
+of an inline document: on Windows the JVM launcher re-parses its command line
+and drops the double quotes inside a JSON argument, so inline `--doc` is only
+reliable for quote-free JSON there. Giving both the inline and the file form of
+one flag is a `USAGE` error, as is an unreadable file.
 
 Common flags: `--timeout MS` (default 10000; applies to server selection,
 connect, read and the find cursor), `--credentials-file FILE` (Java
