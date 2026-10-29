@@ -23,10 +23,10 @@ COMMAND = ['java', '-jar', str(artifact)] if artifact.suffix == '.jar' else [str
 ENV = {k: v for k, v in os.environ.items() if not k.startswith('LMCLIENT_MAIL_')}
 checks = 0
 
-def run(*args, code=0, env=None):
+def run(*args, code=0, env=None, process_timeout=30):
     global checks
     result = subprocess.run(COMMAND + ['mail'] + list(args), capture_output=True,
-                            text=True, encoding='utf-8', timeout=30, env={**ENV, **(env or {})})
+                            text=True, encoding='utf-8', timeout=process_timeout, env={**ENV, **(env or {})})
     assert result.returncode == code, f'mail {args[0] if args else "usage"}: unexpected exit {result.returncode}'
     assert len(result.stdout.splitlines()) == 1, 'expected exactly one JSON envelope'
     envelope = json.loads(result.stdout)
@@ -62,14 +62,26 @@ def check_stalled_peer(protocol, trickle):
     last_timing = ''
     for attempt in range(2):  # One retry for scheduling jitter, not protocol/envelope failures.
         stop = threading.Event()
+        ready = threading.Event()
+        timeout_seconds = 10  # Includes cold mail/activation initialization before connect.
         accepted_at = []
         peer_errors = []
         with socket.socket() as listener:
             listener.bind(('127.0.0.1', 0))
-            listener.listen(1)
+            listener.listen(2)
             listener.settimeout(0.2)
             def serve():
                 try:
+                    # Accept and acknowledge a real probe before the client starts.
+                    while not stop.is_set():
+                        try:
+                            probe, _ = listener.accept()
+                            with probe:
+                                probe.sendall(b'READY')
+                            ready.set()
+                            break
+                        except socket.timeout:
+                            continue
                     while not stop.is_set():
                         try:
                             connection, _ = listener.accept()
@@ -91,18 +103,29 @@ def check_stalled_peer(protocol, trickle):
                         peer_errors.append('fixture socket failed')
             peer = threading.Thread(target=serve, daemon=True)
             peer.start()
-            args = ['--host', '127.0.0.1', '--port', str(listener.getsockname()[1]), '--timeout', '2000']
+            args = ['--host', '127.0.0.1', '--port', str(listener.getsockname()[1]),
+                    '--timeout', str(timeout_seconds * 1000)]
             command = (['send', *args, '--from', 'sender@example.test', '--to', 'test@example.test']
                        if protocol == 'SMTP' else ['read', *args, '--user', 'test', '--limit', '1'])
             try:
+                with socket.create_connection(listener.getsockname(), timeout=10) as probe:
+                    greeting = b''
+                    while len(greeting) < 5:
+                        chunk = probe.recv(5 - len(greeting))
+                        assert chunk, label + ': readiness probe closed'
+                        greeting += chunk
+                    assert greeting == b'READY', label + ': readiness probe failed'
+                assert ready.wait(10), label + ': fixture did not acknowledge readiness'
                 try:
-                    run(*command, code=3, env={'LMCLIENT_MAIL_PASSWORD': 'secret'})
+                    envelope = run(*command, code=3, env={'LMCLIENT_MAIL_PASSWORD': 'secret'},
+                                   process_timeout=60)
                     duration = time.monotonic() - accepted_at[0] if accepted_at else None
-                    passed = duration is not None and duration < 15
-                    last_timing = 'no accepted connection' if duration is None else f'{duration:.1f}s after accept'
+                    passed = duration is not None and duration <= 4 * timeout_seconds
+                    last_timing = (f"no accepted connection (client error: {envelope['error']['code']})"
+                                   if duration is None else f'{duration:.1f}s after accept')
                 except subprocess.TimeoutExpired:
                     passed = False
-                    last_timing = 'client exceeded 30s process watchdog'
+                    last_timing = 'client exceeded 60s process watchdog'
             finally:
                 stop.set()
                 peer.join(timeout=2)
@@ -120,33 +143,80 @@ for protocol in ('SMTP', 'IMAP'):
 if shutil.which('docker') is None:
     print(f'PASS {checks} mail checks; SKIPPED live GreenMail: docker is absent')
     sys.exit(0)
-info = subprocess.run(['docker', 'info'], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-if info.returncode:
+def diagnostic(text):
+    # GreenMail logs can include its configured dummy password.
+    for value in ('dummy-private-password', 'secret'):
+        text = text.replace(value, '[REDACTED]')
+    return text[-8000:]
+
+try:
+    info = subprocess.run(['docker', 'info', '--format', '{{.OSType}}'],
+                          capture_output=True, text=True, timeout=30)
+except (OSError, subprocess.TimeoutExpired):
+    info = None
+if info is None or info.returncode:
     print(f'PASS {checks} mail checks; SKIPPED live GreenMail: Docker daemon unavailable')
     sys.exit(0)
+if info.stdout.strip() != 'linux':
+    print(f'PASS {checks} mail checks; SKIPPED live GreenMail: Docker must support Linux containers')
+    sys.exit(0)
+image = 'greenmail/standalone:2.0.1'
+# Pulling is separate from the readiness clock; a cold runner needs more time.
+for attempt in range(2):
+    try:
+        pulled = subprocess.run(['docker', 'pull', image], capture_output=True, text=True, timeout=300)
+        pull_error = diagnostic(pulled.stdout + pulled.stderr)
+        if pulled.returncode == 0:
+            break
+    except subprocess.TimeoutExpired:
+        pull_error = 'image pull exceeded 300s'
+    if attempt == 1:
+        raise AssertionError('GreenMail image pull failed: ' + pull_error)
+    time.sleep(3)
 name = 'lmclient-mail-' + uuid.uuid4().hex[:12]
+
+def container_diagnostics():
+    try:
+        logs = subprocess.run(['docker', 'logs', '--tail', '100', name],
+                              capture_output=True, text=True, timeout=15)
+        return diagnostic(logs.stdout + logs.stderr)
+    except (OSError, subprocess.TimeoutExpired):
+        return 'container logs unavailable'
+
 try:
-    started = subprocess.run(['docker', 'run', '-d', '--name', name,
-        '-p', '127.0.0.1::3025', '-p', '127.0.0.1::3143',
-        '-e', 'GREENMAIL_OPTS=-Dgreenmail.setup.test.all -Dgreenmail.hostname=0.0.0.0 -Dgreenmail.users=test:secret@localhost',
-        'greenmail/standalone:2.0.1'], capture_output=True, text=True, timeout=180)
-    assert started.returncode == 0, 'GreenMail container startup failed (check Docker/image availability)'
+    try:
+        started = subprocess.run(['docker', 'run', '--pull=never', '-d', '--name', name,
+            '-p', '127.0.0.1::3025', '-p', '127.0.0.1::3143',
+            '-e', 'GREENMAIL_OPTS=-Dgreenmail.setup.test.all -Dgreenmail.hostname=0.0.0.0 -Dgreenmail.users=test:secret@localhost',
+            image], capture_output=True, text=True, timeout=120)
+    except subprocess.TimeoutExpired:
+        raise AssertionError('GreenMail docker run exceeded 120s; logs: ' + container_diagnostics()) from None
+    assert started.returncode == 0, ('GreenMail container startup failed: ' +
+        diagnostic(started.stdout + started.stderr) + '; logs: ' + container_diagnostics())
     def port(container_port):
-        mapping = subprocess.check_output(['docker', 'port', name, str(container_port)], text=True).strip()
-        return mapping.rsplit(':', 1)[1]
-    smtp, imap = port(3025), port(3143)
-    deadline = time.monotonic() + 60
+        mapping = subprocess.run(['docker', 'port', name, str(container_port)],
+                                 capture_output=True, text=True, timeout=10)
+        if mapping.returncode or not mapping.stdout.strip():
+            raise OSError('port mapping unavailable: ' + diagnostic(mapping.stderr))
+        return mapping.stdout.strip().splitlines()[0].rsplit(':', 1)[1]
+    deadline = time.monotonic() + 120
     while True:
         try:
-            with socket.create_connection(('127.0.0.1', int(smtp)), timeout=1) as connection:
-                assert connection.recv(1024).startswith(b'220')
-            with socket.create_connection(('127.0.0.1', int(imap)), timeout=1) as connection:
-                assert connection.recv(1024).startswith(b'* OK')
+            smtp, imap = port(3025), port(3143)
+            for published, prefix in ((smtp, b'220'), (imap, b'* OK')):
+                with socket.create_connection(('127.0.0.1', int(published)), timeout=2) as connection:
+                    greeting = b''
+                    while len(greeting) < len(prefix):
+                        chunk = connection.recv(len(prefix) - len(greeting))
+                        assert chunk, 'greeting closed before ready'
+                        greeting += chunk
+                    assert greeting == prefix, 'unexpected greeting'
             break
-        except (OSError, AssertionError):
-            if time.monotonic() > deadline:
-                raise AssertionError('GreenMail did not become ready')
-            time.sleep(0.5)
+        except (OSError, AssertionError, subprocess.TimeoutExpired) as error:
+            if time.monotonic() >= deadline:
+                raise AssertionError('GreenMail did not become ready within 120s: ' +
+                    diagnostic(str(error)) + '; logs: ' + container_diagnostics()) from None
+            time.sleep(1)
     run('ping', '--host', '127.0.0.1', '--port', smtp)
     common = ['--host', '127.0.0.1', '--port', imap, '--user', 'test', '--limit', '10']
     password = {'LMCLIENT_MAIL_PASSWORD': 'secret'}
