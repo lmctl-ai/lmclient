@@ -15,9 +15,17 @@ if not compiler:
     raise SystemExit("lmscript compiler required; install @lmctl-ai/lmctl@0.2.369")
 compiler = str(Path(compiler).resolve())
 for example in sorted((root / "examples").glob("*.lms")):
+    # Gallery examples render into images/; protocol-area demos (redis_demo.lms, mail_demo.lms, ...)
+    # print text and skip cleanly without their service. Only examples that write images are
+    # held to the picture contract; every example must still exit 0.
+    renders = "images/" in example.read_text(encoding="utf-8")
     with tempfile.TemporaryDirectory(prefix="lmclient-example-") as directory:
         subprocess.run([compiler,str(example)],cwd=directory,check=True,timeout=180)
         images = list((Path(directory)/"images").glob("*.png"))
+        if not renders:
+            assert not images, "example wrote images without declaring images/: " + example.name
+            print(example.name + ": PASS (no images expected)")
+            continue
         assert images, "example produced no images: " + example.name
         for image in images:
             data = image.read_bytes()
