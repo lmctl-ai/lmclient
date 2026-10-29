@@ -4,7 +4,6 @@ import json
 import os
 from pathlib import Path
 import shutil
-import socket
 import subprocess
 import sys
 import time
@@ -30,6 +29,67 @@ def run(*args, code=0, env=None):
     checks += 1
     return data.get('result')
 
+# Infrastructure failures skip live tests; application assertions still fail normally.
+class DockerUnavailable(Exception):
+    pass
+
+
+def docker_setup(*args, timeout=600):
+    try:
+        result = subprocess.run(['docker', *args], capture_output=True, text=True,
+                                encoding='utf-8', errors='replace', timeout=timeout)
+    except subprocess.TimeoutExpired as exc:
+        detail = exc.stderr or ''
+        if isinstance(detail, bytes):
+            detail = detail.decode('utf-8', errors='replace')
+        raise DockerUnavailable(f'Docker setup timed out after {timeout}s: {detail.strip()}') from None
+    except OSError as exc:
+        raise DockerUnavailable(f'Docker unavailable: {exc.strerror}') from None
+    if result.returncode:
+        raise DockerUnavailable(f'Docker setup exited {result.returncode}: {result.stderr.strip()}')
+    return result.stdout.strip()
+
+
+def skip_docker(reason):
+    message = str(reason)
+    for key in ('SECRET', 'WRONG', 'secret'):
+        value = globals().get(key)
+        if value:
+            message = message.replace(value, '(redacted)')
+    print('kafka: SKIP live checks (' + message + ')')
+    sys.exit(0)
+
+
+def require_docker():
+    if not shutil.which('docker'):
+        skip_docker('docker executable absent')
+    try:
+        docker_setup('info', timeout=30)
+    except DockerUnavailable as exc:
+        skip_docker(exc)
+
+
+def published_port(name, container_port):
+    output = docker_setup('port', name, container_port, timeout=30)
+    try:
+        port = int(output.splitlines()[0].rsplit(':', 1)[1])
+        if not 1 <= port <= 65535:
+            raise ValueError()
+        return port
+    except (IndexError, ValueError):
+        raise DockerUnavailable('Docker did not report an ephemeral published port') from None
+
+
+def remove_container(name):
+    # Attempt cleanup even if a pull/start timed out or partially created a container.
+    # Do not mask either a skip or a failed live assertion if the daemon disappears.
+    try:
+        subprocess.run(['docker', 'rm', '-f', name], capture_output=True, timeout=60)
+    except (OSError, subprocess.TimeoutExpired):
+        print('kafka: WARNING Docker cleanup unavailable for ' + name)
+
+require_docker()
+
 for args in [[], ['unknown'], ['ping'], ['ping', '--url'],
              ['ping', '--url', 'http://localhost:9092'],
              ['ping', '--url', 'localhost:99999'],
@@ -46,18 +106,12 @@ for args in [['ping'], ['produce', '--topic', 't', '--message', SECRET], ['consu
     start = time.monotonic()
     run(*args, '--url', '127.0.0.1:1', '--timeout', '300', code=3)
     assert time.monotonic() - start < 10, 'operation exceeded timeout allowance'
-if not shutil.which('docker') or subprocess.run(['docker', 'info'], capture_output=True, timeout=20).returncode:
-    print(f'kafka: {checks} checks passed; SKIPPED live checks (Docker unavailable)')
-    sys.exit(0)
 name = 'lmclient-kafka-' + uuid.uuid4().hex[:10]
-with socket.socket() as reservation:
-    reservation.bind(('127.0.0.1', 0))
-    port = reservation.getsockname()[1]
-url = f'127.0.0.1:{port}'
 try:
-    subprocess.run(['docker', 'run', '-d', '--name', name,
-                    '-p', f'127.0.0.1:{port}:9092',
-                    '-e', f'KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://{url}',
+    # Docker selects the host port. Delay Kafka startup until its advertised
+    # listener can use that exact mapping, avoiding bind/release port races.
+    docker_setup('run', '-d', '--name', name,
+                    '-p', '127.0.0.1::9092',
                     '-e', 'KAFKA_NODE_ID=1',
                     '-e', 'KAFKA_PROCESS_ROLES=broker,controller',
                     '-e', 'KAFKA_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093',
@@ -67,7 +121,16 @@ try:
                     '-e', 'KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1',
                     '-e', 'KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR=1',
                     '-e', 'KAFKA_TRANSACTION_STATE_LOG_MIN_ISR=1',
-                    'apache/kafka:3.9.1'], check=True, capture_output=True, timeout=180)
+                    'apache/kafka:3.9.1', 'sh', '-c',
+                    'while [ ! -s /tmp/lmclient-listener ]; do sleep 0.1; done; '
+                    'export KAFKA_ADVERTISED_LISTENERS="$(cat /tmp/lmclient-listener)"; '
+                    'exec /etc/kafka/docker/run')
+    port = published_port(name, '9092/tcp')
+    url = f'127.0.0.1:{port}'
+    docker_setup('exec', name, 'sh', '-c',
+                 'printf "%s" "$1" > /tmp/lmclient-listener.tmp && '
+                 'mv /tmp/lmclient-listener.tmp /tmp/lmclient-listener',
+                 'sh', f'PLAINTEXT://{url}', timeout=30)
     for attempt in range(60):
         state = subprocess.check_output(['docker', 'inspect', '-f', '{{.State.Running}}', name], text=True, timeout=10).strip()
         assert state == 'true', 'Kafka container exited before becoming ready'
@@ -90,5 +153,7 @@ try:
     assert run('produce', '--url', url, '--topic', 'empty-value', '--message', '')['published']
     assert run('consume', '--url', url, '--topic', 'empty-value')['messages'] == ['']
     print(f'kafka: {checks} checks passed; live ping / produce 3 / consume 3 preserved order; replay and partial timeout verified')
+except DockerUnavailable as exc:
+    skip_docker(exc)
 finally:
-    subprocess.run(['docker', 'rm', '-f', name], capture_output=True, timeout=30)
+    remove_container(name)
