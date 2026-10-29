@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
-"""Envelope/usage tests and a real SMTP -> IMAP GreenMail round trip.
+"""Envelope/usage tests, lmmock SMTP -> IMAP, and a GreenMail round trip.
 Usage: python3 scripts/test-mail.py target/lmclient-0.2.0-all.jar
 Accepts a native executable too. Only dummy credentials; no external delivery.
-Docker absent: usage checks run, live checks print SKIPPED. Containers always removed.
+Docker absent: usage and lmmock checks run; GreenMail prints SKIPPED.
+Mock children and containers are always reaped before fixture cleanup.
 """
 import json
+import importlib.util
 import imaplib
 import os
 from pathlib import Path
@@ -17,6 +19,8 @@ import tempfile
 import threading
 import time
 import uuid
+from urllib.parse import urlsplit
+from temp_cleanup import temporary_directory
 
 ROOT = Path(__file__).resolve().parents[1]
 artifact = Path(sys.argv[1] if len(sys.argv) > 1 else ROOT / 'target/lmclient-0.2.0-all.jar').resolve()
@@ -141,6 +145,64 @@ for protocol in ('SMTP', 'IMAP'):
     for trickle in (False, True):
         check_stalled_peer(protocol, trickle)
 
+def lmmock_mail_tier():
+    spec = importlib.util.spec_from_file_location('lmmock_helpers', Path(__file__).with_name('lmmock-helpers.py'))
+    mock = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mock)
+    try:
+        mock.locate_lmmock()
+    except SystemExit as skipped:
+        if skipped.code != 0:
+            raise
+        # Local acquisition failures skip only this tier; keep the existing
+        # Docker checks. LMMOCK_REQUIRED=1 raises instead and fails CI.
+        return
+    before = checks
+    with temporary_directory(prefix='lmclient-mail-mock-') as directory:
+        root = Path(directory)
+        config = {'users': {'test': 'secret'}, 'spool': str(root / 'mail.jsonl')}
+        # Two independent processes exchange raw MIME via the shared spool.
+        with mock.lmmock_proto('smtp', config) as smtp_url, mock.lmmock_proto('imap', config) as imap_url:
+            smtp, imap = urlsplit(smtp_url), urlsplit(imap_url)
+            smtp_args = ['--host', smtp.hostname, '--port', str(smtp.port)]
+            common = ['--host', imap.hostname, '--port', str(imap.port), '--user', 'test', '--limit', '10']
+            password = {'LMCLIENT_MAIL_PASSWORD': 'secret'}
+            run('ping', *smtp_args)
+            assert run('read', *common, env=password)['result']['messages'] == []
+            body = root / 'body.txt'
+            body.write_text('Body marker must never be returned by read: BODY_ONLY_123', encoding='utf-8')
+            credentials = root / 'mail.properties'
+            credentials.write_text('user=test\npassword=secret\n', encoding='utf-8')
+            for i, subject in enumerate(['First message', 'Second café 世界']):
+                sent = run('send', *smtp_args,
+                           '--from', 'sender@example.test', '--to', 'test@localhost,other@example.test',
+                           '--subject', subject, '--body-file', str(body),
+                           *(['--user', 'test', '--credentials-file', str(credentials)] if i else []), env=password)
+                assert sent['result'] == {'sent': True, 'to': ['test@localhost', 'other@example.test']}
+            read_args = ['read', '--host', imap.hostname, '--port', str(imap.port),
+                         '--limit', '10', '--credentials-file', str(credentials)]
+            messages = run(*read_args)['result']['messages']
+            assert [message['subject'] for message in messages] == ['Second café 世界', 'First message']
+            for message in messages:
+                assert set(message) == {'from', 'subject', 'date'}
+                assert message['from'] == 'sender@example.test'
+                assert message['date'].endswith('Z')
+            assert 'BODY_ONLY_123' not in json.dumps(messages)
+            with imaplib.IMAP4(imap.hostname, imap.port, timeout=5) as mailbox:
+                mailbox.login('test', 'secret')
+                mailbox.select('INBOX', readonly=True)
+                status, unseen = mailbox.search(None, 'UNSEEN')
+                assert status == 'OK' and len(unseen[0].split()) == 2, 'header read marked messages seen'
+            assert run('read', '--url', imap_url, '--user', 'test', '--limit', '1', env=password)['result']['messages'] == messages[:1]
+            assert run('read', '--user', 'test', '--limit', '1', env={**password, 'LMCLIENT_MAIL_URL': imap_url})['result']['messages'] == messages[:1]
+            run('read', *common, '--credentials-file', str(credentials),
+                env={'LMCLIENT_MAIL_PASSWORD': 'dummy-private-password'}, code=3)
+            # STARTTLS certificate assertions remain Docker-only: lmmock has no TLS.
+    print(f'PASS {checks - before} lmmock mail checks: shared-spool SMTP/IMAP, UTF-8, newest-first headers, UNSEEN, limits, URL/env, credentials and auth rejection')
+
+
+lmmock_mail_tier()
+
 if shutil.which('docker') is None:
     print(f'PASS {checks} mail checks; SKIPPED live GreenMail: docker is absent')
     sys.exit(0)
@@ -246,7 +308,8 @@ try:
             mailbox.select('INBOX', readonly=True)
             status, unseen = mailbox.search(None, 'UNSEEN')
             assert status == 'OK' and len(unseen[0].split()) == 2, 'header read marked messages seen'
-        # GreenMail's self-signed certificate must not be silently trusted or downgraded.
+        # Docker-only: lmmock has no TLS. GreenMail's self-signed certificate
+        # must not be silently trusted or downgraded.
         run('read', *common, '--starttls', '--timeout', '1000', env=password, code=3)
         assert run('read', '--url', f'imap://127.0.0.1:{imap}', '--user', 'test', '--limit', '1', env=password)['result']['messages'] == messages[:1]
         assert run('read', '--user', 'test', '--limit', '1', env={**password, 'LMCLIENT_MAIL_URL': f'imap://127.0.0.1:{imap}'})['result']['messages'] == messages[:1]
