@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Queue envelope and live RabbitMQ checks. Owns and always removes its container."""
+"""Queue envelope checks, released lmmock AMQP tier, and real RabbitMQ round trips."""
 import json
 import os
 from pathlib import Path
@@ -7,7 +7,9 @@ import shutil
 import subprocess
 import sys
 from jvm_noise import java_command, strip_jvm_noise
-import tempfile
+from temp_cleanup import temporary_directory
+from urllib.parse import urlsplit, urlunsplit
+from lmmock_tiers import mock
 import time
 import uuid
 
@@ -20,7 +22,7 @@ SECRET = 'dummy-secret-never-print'
 
 def run(*args, code=0, env=None):
     global checks
-    p = subprocess.run(COMMAND + ['queue', *args], capture_output=True, text=True, timeout=25, env=env or ENV)
+    p = subprocess.run(COMMAND + ['queue', *args], capture_output=True, text=True, encoding='utf-8', timeout=25, env=env or ENV)
     assert p.returncode == code, (args[0:1], p.returncode, p.stdout, p.stderr)
     assert SECRET not in p.stdout + p.stderr
     data = json.loads(p.stdout)
@@ -58,7 +60,7 @@ def skip_docker(reason):
         value = globals().get(key)
         if value:
             message = message.replace(value, '(redacted)')
-    print('queue: SKIP live checks (' + message + ')')
+    print('queue: SKIP Docker live checks (' + message + ')')
     sys.exit(0)
 
 
@@ -92,7 +94,26 @@ def remove_container(name):
     except (OSError, subprocess.TimeoutExpired):
         print('queue: WARNING Docker cleanup unavailable for ' + name)
 
-require_docker()
+
+def live(url):
+    """Identical assertions for the authenticated mock and RabbitMQ endpoints."""
+    endpoint = urlsplit(url)
+    assert endpoint.scheme == 'amqp' and endpoint.hostname and endpoint.port, 'invalid AMQP endpoint'
+    # Exercise the credentials file without URL userinfo taking precedence.
+    credentials_url = urlunsplit(endpoint._replace(netloc=endpoint.netloc.rsplit('@', 1)[-1]))
+    assert run('ping', env={**ENV, 'LMCLIENT_QUEUE_URL': url})['connected']
+    messages = ['first', 'héllo "world"\nsecond', 'third']
+    for body in messages:
+        assert run('publish', '--url', url, '--queue', 'roundtrip', '--body', body)['published']
+    result = run('consume', '--url', url, '--queue', 'roundtrip', '--limit', '3', '--timeout', '2000')
+    assert result['messages'] == messages, result
+    assert run('consume', '--url', url, '--queue', 'roundtrip', '--timeout', '200')['messages'] == []
+    with temporary_directory(prefix="lmclient-queue-credentials-") as directory:
+        credentials = Path(directory) / 'credentials.properties'
+        credentials.write_text('user=guest\npassword=guest\n')
+        assert run('ping', '--url', credentials_url, '--credentials-file', str(credentials))['connected']
+    run('ping', '--url', url, '--timeout', '1000', code=3, env={**ENV, 'LMCLIENT_PASSWORD': SECRET})
+
 
 for args in [[], ['unknown'], ['ping'], ['ping', '--url'], ['ping', '--url', 'http://localhost'],
              ['publish', '--url', 'amqp://localhost/', '--queue', 'q'],
@@ -101,6 +122,15 @@ for args in [[], ['unknown'], ['ping'], ['ping', '--url'], ['ping', '--url', 'ht
              ['ping', '--password', SECRET]]:
     run(*args, code=2)
 run('ping', '--url', 'amqp://guest:' + SECRET + '@127.0.0.1:1/', '--timeout', '300', code=3)
+before = checks
+with mock.lmmock_proto('amqp', {'users': {'guest': 'guest'}}) as base:
+    endpoint = urlsplit(base)
+    assert endpoint.scheme == 'amqp' and endpoint.hostname and endpoint.port, 'invalid lmmock AMQP endpoint'
+    # Readiness omits userinfo and path; RabbitMQ's default vhost is '/'.
+    live(urlunsplit(endpoint._replace(netloc='guest:guest@' + endpoint.netloc, path='/')))
+print(f'queue lmmock: {checks - before} live checks passed; {checks} including offline/connection-error checks')
+
+require_docker()
 name = 'lmclient-queue-' + uuid.uuid4().hex[:10]
 try:
     docker_setup('run', '-d', '--name', name, '-e', 'RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS=+S 2:2',
@@ -113,19 +143,9 @@ try:
         if p.returncode == 0: break
         time.sleep(1)
     else: raise AssertionError('RabbitMQ did not become ready')
-    assert run('ping', env={**ENV, 'LMCLIENT_QUEUE_URL': url})['connected']
-    messages = ['first', 'héllo "world"\nsecond', 'third']
-    for body in messages:
-        assert run('publish', '--url', url, '--queue', 'roundtrip', '--body', body)['published']
-    result = run('consume', '--url', url, '--queue', 'roundtrip', '--limit', '3', '--timeout', '2000')
-    assert result['messages'] == messages, result
-    assert run('consume', '--url', url, '--queue', 'roundtrip', '--timeout', '200')['messages'] == []
-    with tempfile.TemporaryDirectory() as directory:
-        credentials = Path(directory) / 'credentials.properties'
-        credentials.write_text('user=guest\npassword=guest\n')
-        assert run('ping', '--url', f'amqp://127.0.0.1:{port}/', '--credentials-file', str(credentials))['connected']
-    run('ping', '--url', url, '--timeout', '1000', code=3, env={**ENV, 'LMCLIENT_PASSWORD': SECRET})
-    print(f'queue: {checks} checks passed; live publish 3 / consume 3 preserved order and auto-ack')
+    before = checks
+    live(url)
+    print(f'queue Docker: {checks - before} live checks passed; {checks} total including offline and lmmock')
 except DockerUnavailable as exc:
     skip_docker(exc)
 finally:
