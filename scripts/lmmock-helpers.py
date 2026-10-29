@@ -122,16 +122,20 @@ def _server(arguments, config=None):
             path = Path(directory) / 'config.json'
             path.write_text(json.dumps(config), encoding='utf-8')
             args += ['--config', str(path)]
-        # Files avoid pipe deadlocks; diagnostics are not echoed because fixtures may contain secrets.
-        with (Path(directory) / 'output.log').open('w+b') as output:
-            child = subprocess.Popen(args, stdout=output, stderr=output)
+        # File-backed stderr avoids pipe deadlocks and preserves startup diagnostics.
+        with (Path(directory) / 'stderr.log').open('w+b') as output:
+            child = subprocess.Popen(args, stdout=subprocess.DEVNULL, stderr=output)
+            def diagnostics():
+                output.seek(0, os.SEEK_END)
+                output.seek(max(0, output.tell() - 16384))
+                return output.read().decode('utf-8', errors='replace').strip()
             try:
                 deadline = time.monotonic() + 30
                 while not ready.exists():
                     if child.poll() is not None:
-                        raise RuntimeError(f'lmmock exited before readiness (exit {child.returncode})')
+                        raise RuntimeError(f'lmmock exited before readiness (exit {child.returncode}): {diagnostics()}')
                     if time.monotonic() >= deadline:
-                        raise TimeoutError('lmmock readiness timeout')
+                        raise TimeoutError('lmmock readiness timeout: ' + diagnostics())
                     time.sleep(0.05)
                 url = json.loads(ready.read_text(encoding='utf-8'))['url']
                 if not isinstance(url, str) or not url:
@@ -149,9 +153,47 @@ def _server(arguments, config=None):
                 child.wait(timeout=5)
 
 
+def compile_script(source, destination):
+    # CI invokes the package's JS entry directly: no npm .cmd parsing or shell.
+    javascript = os.environ.get('LMMOCK_LMSCRIPT_JS')
+    if javascript:
+        node = shutil.which('node')
+        if not node:
+            raise RuntimeError('lmmock compiler requires node on PATH')
+        command = [node, str(Path(javascript).resolve())]
+    else:
+        command = [os.environ.get('LMSCRIPT_BIN', 'lmscript')]
+    try:
+        result = subprocess.run([*command, '--no-preflight', str(source), str(destination)],
+                                capture_output=True, text=True, encoding='utf-8',
+                                errors='replace', timeout=30)
+    except subprocess.TimeoutExpired as exc:
+        diagnostic = (exc.stderr or b'')
+        if isinstance(diagnostic, bytes):
+            diagnostic = diagnostic.decode('utf-8', errors='replace')
+        raise RuntimeError('lmmock compiler timed out: ' + diagnostic[-16384:]) from exc
+    except OSError as exc:
+        raise RuntimeError(f'lmmock compiler could not start: {exc}') from exc
+    if result.returncode != 0:
+        raise RuntimeError(f'lmmock compiler exited {result.returncode}: {result.stderr[-16384:].strip()}')
+    if not destination.is_file():
+        raise RuntimeError('lmmock compiler did not produce bytecode: ' + result.stderr[-16384:].strip())
+
+
+@contextlib.contextmanager
 def lmmock_serve(dsl_path, config=None):
     path = Path(dsl_path).resolve()
-    return _server(['serve', '--script' if path.suffix == '.lms' else '--dsl', str(path)], config)
+    if path.suffix != '.lms':
+        with _server(['serve', '--dsl', str(path)], config) as url:
+            yield url
+        return
+    # Preserve unavailable-lmmock skip behavior before attempting compilation.
+    locate_lmmock()
+    with temporary_directory(prefix='lmclient-lmmock-compile-') as directory:
+        bytecode = Path(directory) / 'mock.dslb'
+        compile_script(path, bytecode)
+        with _server(['serve', '--dsl', str(bytecode)], config) as url:
+            yield url
 
 
 def lmmock_proto(name, config=None):

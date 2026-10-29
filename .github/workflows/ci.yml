@@ -47,15 +47,13 @@ jobs:
           node-version: 24
       - name: Pinned example compiler
         run: npm install -g @lmctl-ai/lmctl@0.2.420
-      - name: Download verified lmmock 0.1.4
+      - name: Download verified pinned lmmock
         env:
           LMMOCK_REQUIRED: 1
         run: |
           python3 scripts/lmmock-helpers.py
           npm install --prefix "$RUNNER_TEMP/lmmock-compiler" @lmctl-ai/lmctl@0.2.444
-          suffix=''
-          if [[ "$RUNNER_OS" == Windows ]]; then suffix=.cmd; fi
-          echo "LMSCRIPT_BIN=$RUNNER_TEMP/lmmock-compiler/node_modules/.bin/lmscript$suffix" >> "$GITHUB_ENV"
+          echo "LMMOCK_LMSCRIPT_JS=$RUNNER_TEMP/lmmock-compiler/node_modules/@lmctl-ai/lmctl/bin/lmscript" >> "$GITHUB_ENV"
       - name: JVM tests
         timeout-minutes: 25
         run: |

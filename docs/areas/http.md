@@ -25,7 +25,11 @@ On Windows, quote-heavy JSON passed through `--data` can lose embedded quotes du
   and assertion failures fail the suite. CI sets `LMMOCK_REQUIRED=1`, so missing
   dependencies fail there too. Children use bounded readiness and termination.
   CI installs an isolated mock compiler `@lmctl-ai/lmctl@0.2.444` via
-  `LMSCRIPT_BIN`, retaining the existing example compiler.
+  `LMMOCK_LMSCRIPT_JS`, retaining the existing example compiler. The harness
+  invokes this JS entry with Node directly, compiles to temporary bytecode, then
+  runs `lmmock serve --dsl` on every platform. Local runs default to
+  `LMSCRIPT_BIN` or `lmscript` on PATH. Compiler and server startup errors include
+  stderr (last 16 KiB); compilation failures never become skips.
 - `scripts/mocks/http.lms` is a small lmclient-owned fixture (schema exported
   from lmmock 0.1.4). It checks health JSON, POST echo, request headers, 404/429/503
   envelopes, and an unfollowed redirect. Existing Python-server checks retain

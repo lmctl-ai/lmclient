@@ -4,6 +4,7 @@ import contextlib
 import importlib.util
 import io
 import os
+import sys
 from pathlib import Path
 import unittest
 from unittest.mock import patch
@@ -21,7 +22,7 @@ class HarnessTests(unittest.TestCase):
         self.addCleanup(self.stack.close)
         self.directory = Path(self.stack.enter_context(temporary_directory(prefix='lmclient-harness-')))
         env = dict(os.environ)
-        for key in ('LMMOCK_BIN', 'LMMOCK_VERSION', 'LMMOCK_REQUIRED'):
+        for key in ('LMMOCK_BIN', 'LMMOCK_VERSION', 'LMMOCK_REQUIRED', 'LMMOCK_LMSCRIPT_JS', 'LMSCRIPT_BIN'):
             env.pop(key, None)
         env['PATH'] = str(self.directory)
         self.stack.enter_context(patch.dict(os.environ, env, clear=True))
@@ -91,6 +92,49 @@ class HarnessTests(unittest.TestCase):
             self.assertIn('SKIP lmmock: cannot download', output.getvalue())
             with patch.dict(os.environ, {'LMMOCK_REQUIRED': '1'}), self.assertRaisesRegex(RuntimeError, 'lmmock required:'):
                 harness.locate_lmmock()
+
+
+    def fake_compiler(self, body):
+        # Python stands in for Node so these process tests need no installed compiler.
+        compiler = self.directory / 'compiler with spaces.js'
+        compiler.write_text(body, encoding='utf-8')
+        self.stack.enter_context(patch.dict(os.environ, {'LMMOCK_LMSCRIPT_JS': str(compiler)}))
+        self.stack.enter_context(patch.object(harness.shutil, 'which', return_value=sys.executable))
+
+    def test_failing_compiler_reports_stderr_without_starting_server(self):
+        self.fake_compiler("import sys; sys.stderr.write('fixture compiler syntax error'); sys.exit(7)")
+        with patch.object(harness, 'locate_lmmock', return_value='lmmock'), \
+             patch.object(harness, '_server') as server:
+            with self.assertRaisesRegex(RuntimeError, 'compiler exited 7: fixture compiler syntax error'):
+                with harness.lmmock_serve(self.directory / 'source.lms'):
+                    self.fail('failing compiler yielded a server')
+            server.assert_not_called()
+
+    def test_source_compiles_before_serve_and_bytecode_is_cleaned(self):
+        shim = self.directory / 'broken lmscript.cmd'
+        shim.write_text('@echo off\nexit /b 99\n', encoding='utf-8')
+        self.stack.enter_context(patch.dict(os.environ, {'LMSCRIPT_BIN': str(shim)}))
+        self.fake_compiler("import sys; from pathlib import Path; Path(sys.argv[-1]).write_bytes(b'fixture-bytecode')")
+        paths = []
+        @contextlib.contextmanager
+        def server(arguments, config):
+            self.assertEqual(arguments[:2], ['serve', '--dsl'])
+            bytecode = Path(arguments[2])
+            self.assertEqual(bytecode.read_bytes(), b'fixture-bytecode')
+            self.assertEqual(config, {'fixture': True})
+            paths.append(bytecode)
+            yield 'http://127.0.0.1:1234'
+        with patch.object(harness, 'locate_lmmock', return_value='lmmock'), \
+             patch.object(harness, '_server', server):
+            with harness.lmmock_serve(self.directory / 'source with spaces.lms', {'fixture': True}) as url:
+                self.assertEqual(url, 'http://127.0.0.1:1234')
+        self.assertFalse(paths[0].exists())
+
+    def test_failed_server_includes_stderr(self):
+        with patch.object(harness, 'locate_lmmock', return_value=sys.executable):
+            with self.assertRaisesRegex(RuntimeError, r'before readiness \(exit 1\): fixture server error'):
+                with harness._server(['-c', "import sys; sys.stderr.write('fixture server error'); sys.exit(1)"]):
+                    self.fail('failed server became ready')
 
 
 if __name__ == '__main__':

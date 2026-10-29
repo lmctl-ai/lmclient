@@ -57,7 +57,11 @@ message. Callers obtain the token from `CredStore` after refreshing.
   and assertion failures fail the suite. CI sets `LMMOCK_REQUIRED=1`, so missing
   dependencies fail there too. Children use bounded readiness and termination.
   CI installs an isolated mock compiler `@lmctl-ai/lmctl@0.2.444` via
-  `LMSCRIPT_BIN`, retaining the existing example compiler.
+  `LMMOCK_LMSCRIPT_JS`, retaining the existing example compiler. The harness
+  invokes this JS entry with Node directly, compiles to temporary bytecode, then
+  runs `lmmock serve --dsl` on every platform. Local runs default to
+  `LMSCRIPT_BIN` or `lmscript` on PATH. Compiler and server startup errors include
+  stderr (last 16 KiB); compilation failures never become skips.
 - The IdP comes from the checksum-verified `examples.tar.gz` of that same
   release, including its schema. No OAuth handler copy is vendored: lmmock is
   the single source of truth, pinned for reproducibility. Tests mirror lmconn's
