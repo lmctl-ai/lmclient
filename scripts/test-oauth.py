@@ -3,6 +3,7 @@
 import contextlib
 import json
 import os
+import re
 from pathlib import Path
 import queue
 import shutil
@@ -12,6 +13,7 @@ import subprocess
 import sys
 import tempfile
 import threading
+import time
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -239,9 +241,20 @@ with tempfile.TemporaryDirectory(prefix='lmclient-oauth-') as directory:
                                  '--auth-style','body','--timeout','6000'], env=env,
                                  stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True)
         try:
-            line = child.stderr.readline()
-            assert line.startswith('Authorize URL: ')
-            url = line.strip().removeprefix('Authorize URL: ')
+            # The JVM may write warnings (for example JDK 24+ native-access notices while the SQLite
+            # driver loads) to stderr before the authorize URL, so scan lines for the URL instead of
+            # trusting the first line; everything consumed is kept for the redaction/envelope checks.
+            consumed, url, deadline = [], None, time.monotonic() + 15
+            while url is None:
+                assert time.monotonic() < deadline, 'authorize URL not printed within 15 s: ' + ''.join(consumed)
+                line = child.stderr.readline()
+                assert line, 'lmclient exited before printing the authorize URL: ' + ''.join(consumed)
+                consumed.append(line)
+                found = re.search(r'https?://\S+', line)
+                if found and '/authorize?' in found.group(0): url = found.group(0)
+            line = ''.join(consumed)
+            query = urllib.parse.parse_qs(urllib.parse.urlparse(url).query)
+            assert query.get('client_id') == ['mock-client'] and query.get('state') and query.get('redirect_uri'), url
             try: urllib.request.build_opener(NoRedirect).open(url,timeout=5)
             except urllib.error.HTTPError as redirect:
                 assert redirect.code == 302
