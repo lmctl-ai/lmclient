@@ -51,3 +51,15 @@ Wave 8 Linux JVM validation against released lmmock v0.1.10: 13 offline checks,
 from PATH, all 23 offline/mock checks passed before the Docker-only skip. A
 forced missing `LMMOCK_BIN` skipped locally, while strict acquisition rejected
 it. Windows/macOS runtime verification belongs to CI.
+
+### Windows fixture encoding
+
+All client envelope pipes are decoded explicitly as UTF-8. The Windows JDK
+launcher processes argv using the system ANSI code page (CP_ACP), before
+Java's UTF-8 output settings apply; changing Python's decoder or
+`-Dfile.encoding` cannot restore characters lost at that boundary. See
+[OpenJDK's Windows argument parser](https://github.com/openjdk/jdk/blob/jdk-25-ga/src/java.base/windows/native/libjli/cmdtoargs.c).
+The payload command has no file-input option, so Windows round-trip fixtures
+use plain ASCII argv; Unix retains Unicode, embedded quotes, and newlines.
+Both mock and Docker tiers use the same platform fixture. This is a test
+coverage limitation, not a claim that arbitrary Unicode argv works on Windows.

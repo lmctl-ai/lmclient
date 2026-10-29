@@ -26,3 +26,16 @@ URL schemes use their standard default ports (25/465/143/993). With `--host`, SM
 Send emits `{sent:true,to:[...]}`. Read emits newest-first `{messages:[{from,subject,date},...]}` using read-only folder access and header fetching only, without retrieving message bodies or marking mail read. Dates are ISO UTC strings or null. `--limit` accepts 1–1000; body files are limited to 10 MiB and credential files to 1 MiB. Network operations have connect/read/write timeouts. Send/read also enforce an overall operation deadline, so a peer trickling partial replies cannot extend `--timeout` indefinitely (error code `TIMEOUT`). The timeout tests measure from socket acceptance, confirm listener readiness with a probe connection, allow up to four times the configured 10-second timeout for CI scheduling, and retry a timing failure once; errors use sanitized messages and never echo server diagnostics or passwords. Exit codes: 0 success, 2 usage, 3 runtime.
 
 The demo targets local GreenMail ports 3025/3143 and skips cleanly if unavailable. Production delivery, attachments, HTML, folder mutations, OAuth SMTP authentication, and idle subscriptions are outside v1.
+
+### Windows fixture encoding
+
+All client envelope pipes are decoded explicitly as UTF-8. The Windows JDK
+launcher processes argv using the system ANSI code page (CP_ACP), before
+Java's UTF-8 output settings apply; changing Python's decoder or
+`-Dfile.encoding` cannot restore characters lost at that boundary. See
+[OpenJDK's Windows argument parser](https://github.com/openjdk/jdk/blob/jdk-25-ga/src/java.base/windows/native/libjli/cmdtoargs.c).
+The mail suite supplies RFC 2047 ASCII encoded-word subjects on Windows,
+then asserts the original Unicode subject (`Second café 世界`) after IMAP
+read-back on every platform, for both lmmock and GreenMail. Unix additionally
+exercises direct Unicode subject argv. Assertion diagnostics escape non-ASCII
+characters so Windows console encoding cannot obscure a future failure.

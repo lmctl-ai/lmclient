@@ -156,3 +156,15 @@ branch is an experiment, not a production area implementation.
 Earlier evidence: [initial harness run](https://github.com/lmctl-ai/lmclient/actions/runs/40822836520)
 and [missing-reflection run](https://github.com/lmctl-ai/lmclient/actions/runs/40823047697).
 Exactly one Kafka metadata-fix round was applied; no further fixes are pending.
+
+### Windows fixture encoding
+
+All client envelope pipes are decoded explicitly as UTF-8. The Windows JDK
+launcher processes argv using the system ANSI code page (CP_ACP), before
+Java's UTF-8 output settings apply; changing Python's decoder or
+`-Dfile.encoding` cannot restore characters lost at that boundary. See
+[OpenJDK's Windows argument parser](https://github.com/openjdk/jdk/blob/jdk-25-ga/src/java.base/windows/native/libjli/cmdtoargs.c).
+The payload command has no file-input option, so Windows round-trip fixtures
+use plain ASCII argv; Unix retains Unicode, embedded quotes, and newlines.
+Both mock and Docker tiers use the same platform fixture. This is a test
+coverage limitation, not a claim that arbitrary Unicode argv works on Windows.

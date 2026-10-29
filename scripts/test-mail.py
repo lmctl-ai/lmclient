@@ -8,6 +8,7 @@ Mock children and containers are always reaped before fixture cleanup.
 import json
 import importlib.util
 import imaplib
+from email.header import Header
 import os
 from pathlib import Path
 import shutil
@@ -27,6 +28,13 @@ artifact = Path(sys.argv[1] if len(sys.argv) > 1 else ROOT / 'target/lmclient-0.
 COMMAND = java_command(artifact)
 ENV = {k: v for k, v in os.environ.items() if not k.startswith('LMCLIENT_MAIL_')}
 checks = 0
+
+def subject_argument(subject):
+    # The Windows Java launcher converts argv through CP_ACP before main().
+    # MIME encoded words are ASCII on argv but decode to the SAME Unicode
+    # subject over IMAP. Keep the Unicode assertion on every platform.
+    return Header(subject, 'utf-8').encode() if os.name == 'nt' else subject
+
 
 def run(*args, code=0, env=None, process_timeout=30):
     global checks
@@ -176,13 +184,13 @@ def lmmock_mail_tier():
             for i, subject in enumerate(['First message', 'Second café 世界']):
                 sent = run('send', *smtp_args,
                            '--from', 'sender@example.test', '--to', 'test@localhost,other@example.test',
-                           '--subject', subject, '--body-file', str(body),
+                           '--subject', subject_argument(subject), '--body-file', str(body),
                            *(['--user', 'test', '--credentials-file', str(credentials)] if i else []), env=password)
                 assert sent['result'] == {'sent': True, 'to': ['test@localhost', 'other@example.test']}
             read_args = ['read', '--host', imap.hostname, '--port', str(imap.port),
                          '--limit', '10', '--credentials-file', str(credentials)]
             messages = run(*read_args)['result']['messages']
-            assert [message['subject'] for message in messages] == ['Second café 世界', 'First message']
+            assert [message['subject'] for message in messages] == ['Second café 世界', 'First message'], ascii(messages)
             for message in messages:
                 assert set(message) == {'from', 'subject', 'date'}
                 assert message['from'] == 'sender@example.test'
@@ -292,12 +300,12 @@ try:
         for i, subject in enumerate(['First message', 'Second café 世界']):
             sent = run('send', '--host', '127.0.0.1', '--port', smtp,
                        '--from', 'sender@example.test', '--to', 'test@localhost,other@example.test',
-                       '--subject', subject, '--body-file', str(body),
+                       '--subject', subject_argument(subject), '--body-file', str(body),
                        *(['--user', 'test', '--credentials-file', str(credentials)] if i else []), env=password)
             assert sent['result'] == {'sent': True, 'to': ['test@localhost', 'other@example.test']}
         read_args = ['read', '--host', '127.0.0.1', '--port', imap, '--limit', '10', '--credentials-file', str(credentials)]
         messages = run(*read_args)['result']['messages']
-        assert [message['subject'] for message in messages] == ['Second café 世界', 'First message']
+        assert [message['subject'] for message in messages] == ['Second café 世界', 'First message'], ascii(messages)
         for message in messages:
             assert set(message) == {'from', 'subject', 'date'}
             assert message['from'] == 'sender@example.test'

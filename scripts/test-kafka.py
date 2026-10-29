@@ -12,6 +12,9 @@ import uuid
 from urllib.parse import urlsplit
 from lmmock_tiers import mock
 
+# Windows Java launcher argv uses CP_ACP; stdout encoding cannot repair it.
+# No file input exists for payloads: use portable ASCII argv on Windows,
+# retaining Unicode/quoted/newline round trips on Unix in BOTH live tiers.
 ROOT = Path(__file__).resolve().parents[1]
 artifact = Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / 'target/lmclient-0.2.0-all.jar'
 COMMAND = java_command(artifact)
@@ -117,7 +120,7 @@ def live(url):
     """Identical client assertions for the in-memory broker and real KRaft."""
     assert run('ping', env={**ENV, 'LMCLIENT_KAFKA_URL': url})['connected']
     assert run('ping', '--url', url, env={**ENV, 'LMCLIENT_KAFKA_URL': '127.0.0.1:1'})['connected']
-    messages = ['first', 'héllo "Kafka"\nsecond', 'third']
+    messages = ['first', ('hello second' if os.name == 'nt' else 'héllo "Kafka"\nsecond'), 'third']
     for message in messages:
         assert run('produce', '--url', url, '--topic', 'roundtrip', '--message', message)['published']
     result = run('consume', '--url', url, '--topic', 'roundtrip', '--limit', '3', '--timeout', '5000')
@@ -163,10 +166,10 @@ try:
                  'mv /tmp/lmclient-listener.tmp /tmp/lmclient-listener',
                  'sh', f'PLAINTEXT://{url}', timeout=30)
     for attempt in range(60):
-        state = subprocess.check_output(['docker', 'inspect', '-f', '{{.State.Running}}', name], text=True, timeout=10).strip()
+        state = subprocess.check_output(['docker', 'inspect', '-f', '{{.State.Running}}', name], text=True, encoding='utf-8', timeout=10).strip()
         assert state == 'true', 'Kafka container exited before becoming ready'
         p = subprocess.run(COMMAND + ['kafka', 'ping', '--url', url, '--timeout', '3000'],
-                           env=ENV, capture_output=True, text=True, timeout=10)
+                           env=ENV, capture_output=True, text=True, encoding='utf-8', timeout=10)
         if p.returncode == 0:
             break
         time.sleep(1)

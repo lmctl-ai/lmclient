@@ -13,6 +13,9 @@ from lmmock_tiers import mock
 import time
 import uuid
 
+# Windows Java launcher argv uses CP_ACP; stdout encoding cannot repair it.
+# No file input exists for payloads: use portable ASCII argv on Windows,
+# retaining Unicode/quoted/newline round trips on Unix in BOTH live tiers.
 ROOT = Path(__file__).resolve().parents[1]
 artifact = Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / 'target/lmclient-0.2.0-all.jar'
 COMMAND = java_command(artifact)
@@ -102,7 +105,7 @@ def live(url):
     # Exercise the credentials file without URL userinfo taking precedence.
     credentials_url = urlunsplit(endpoint._replace(netloc=endpoint.netloc.rsplit('@', 1)[-1]))
     assert run('ping', env={**ENV, 'LMCLIENT_QUEUE_URL': url})['connected']
-    messages = ['first', 'héllo "world"\nsecond', 'third']
+    messages = ['first', ('hello second' if os.name == 'nt' else 'héllo "world"\nsecond'), 'third']
     for body in messages:
         assert run('publish', '--url', url, '--queue', 'roundtrip', '--body', body)['published']
     result = run('consume', '--url', url, '--queue', 'roundtrip', '--limit', '3', '--timeout', '2000')
@@ -139,7 +142,7 @@ try:
     url = f'amqp://guest:guest@127.0.0.1:{port}/'
     for attempt in range(60):
         p = subprocess.run(COMMAND + ['queue', 'ping', '--url', url, '--timeout', '500'], env=ENV,
-                           capture_output=True, text=True, timeout=10)
+                           capture_output=True, text=True, encoding='utf-8', timeout=10)
         if p.returncode == 0: break
         time.sleep(1)
     else: raise AssertionError('RabbitMQ did not become ready')

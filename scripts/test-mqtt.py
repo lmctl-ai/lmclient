@@ -17,6 +17,9 @@ import tempfile
 import time
 import uuid
 
+# Windows Java launcher argv uses CP_ACP; stdout encoding cannot repair it.
+# No file input exists for payloads: use portable ASCII argv on Windows,
+# retaining Unicode/quoted/newline round trips on Unix in BOTH live tiers.
 ROOT = Path(__file__).resolve().parents[1]
 artifact = Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / 'target/lmclient-0.2.0-all.jar'
 COMMAND = java_command(artifact)
@@ -36,7 +39,7 @@ def envelope(p, code=0):
     return data.get('result')
 
 def run(*args, code=0, env=None):
-    return envelope(subprocess.run(COMMAND + ['mqtt', *args], capture_output=True, text=True,
+    return envelope(subprocess.run(COMMAND + ['mqtt', *args], capture_output=True, text=True, encoding='utf-8',
                                    timeout=25, env=env or ENV), code)
 
 
@@ -194,7 +197,7 @@ def mock_tier():
                                      stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, encoding='utf-8')
             try:
                 assert subscribed.wait(10), 'mock subscription did not receive SUBACK'
-                messages = ['first', 'héllo "world"\nsecond', 'third']
+                messages = ['first', ('hello second' if os.name == 'nt' else 'héllo "world"\nsecond'), 'third']
                 for qos, payload in enumerate(messages):
                     assert run('pub', '--url', url, '--topic', topic, '--message', payload, '--qos', str(qos))['published']
                 stdout, stderr = child.communicate(timeout=20)
@@ -237,7 +240,7 @@ try:
     url = f'tcp://127.0.0.1:{port}'
     for attempt in range(30):
         p = subprocess.run(COMMAND + ['mqtt', 'ping', '--url', url, '--timeout', '500'], env=ENV,
-                           capture_output=True, text=True, timeout=10)
+                           capture_output=True, text=True, encoding='utf-8', timeout=10)
         if p.returncode == 0: break
         time.sleep(1)
     else: raise AssertionError('Mosquitto did not become ready')
@@ -245,15 +248,15 @@ try:
     topic = 'lmclient/' + uuid.uuid4().hex
     subscriber = subprocess.Popen(COMMAND + ['mqtt', 'sub', '--url', url, '--topic', topic, '--limit', '3',
                                               '--qos', '2', '--timeout', '15000'], env=ENV,
-                                  stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+                                  stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, encoding='utf-8')
     # Observe the broker's SUBSCRIBE log instead of racing an arbitrary sleep.
     for attempt in range(100):
-        logs = subprocess.run(['docker', 'logs', name], capture_output=True, text=True)
+        logs = subprocess.run(['docker', 'logs', name], capture_output=True, text=True, encoding='utf-8')
         if topic in logs.stdout + logs.stderr: break
         assert subscriber.poll() is None, 'subscriber exited before subscription'
         time.sleep(.1)
     else: raise AssertionError('subscription did not become ready')
-    messages = ['first', 'héllo "world"\nsecond', 'third']
+    messages = ['first', ('hello second' if os.name == 'nt' else 'héllo "world"\nsecond'), 'third']
     for qos, payload in enumerate(messages):
         assert run('pub', '--url', url, '--topic', topic, '--message', payload, '--qos', str(qos))['published']
     stdout, stderr = subscriber.communicate(timeout=20)
