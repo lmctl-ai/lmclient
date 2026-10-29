@@ -1,0 +1,30 @@
+# Chapter: lmclient - MQTT pub/sub
+# Shows: concurrent subscriber and publisher through JSON envelopes
+# Run: lmscript examples/mqtt_demo.lms [url]
+# Needs: lmclient on PATH and an MQTT broker; skips if the service is unreachable
+# exit: 0
+if (which("lmclient") == null) { println("SKIPPED: lmclient is not on PATH"); exit(0); }
+url = ARGV.get(0, getenv("LMCLIENT_MQTT_URL", "tcp://127.0.0.1:1883"));
+r = system(["lmclient", "mqtt", "ping", "--url", url, "--timeout", "1500"], 10000);
+if (r.timed_out || r.code != 0) { println("SKIPPED: MQTT broker is unreachable or credentials are unavailable"); exit(0); }
+env = json_parse(r.stdout);
+if (!env.ok) { println("SKIPPED: MQTT broker is unavailable"); exit(0); }
+topic = "lmclient/demo/" + str(now());
+fn publish(url, topic) {
+  # Give the independent subscriber time to connect and subscribe.
+  sleep_ms(1500);
+  return system(["lmclient", "mqtt", "pub", "--url", url, "--topic", topic, "--message", "hello from lmscript", "--qos", "1"], 30000);
+}
+results = parallel([
+  system(["lmclient", "mqtt", "sub", "--url", url, "--topic", topic, "--limit", "1", "--timeout", "6000"], 30000),
+  publish(url, topic)
+]);
+for (r in results) {
+  if (r.timed_out) { println("MQTT operation timed out"); exit(1); }
+  env = json_parse(r.stdout);
+  if (!env.ok) { println(env.error.code + ": " + env.error.message); exit(1); }
+}
+received = json_parse(results[0].stdout).result.messages;
+assert(len(received) == 1);
+assert(received[0].payload == "hello from lmscript");
+println("MQTT round-trip: " + json_stringify(received));

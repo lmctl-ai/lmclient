@@ -1,0 +1,23 @@
+# Chapter: lmclient - durable AMQP queues
+# Shows: publish then consume through one JSON envelope per command
+# Run: lmscript examples/queue_demo.lms [url]
+# Needs: lmclient on PATH and RabbitMQ; skips if the service is unreachable
+# exit: 0
+if (which("lmclient") == null) { println("SKIPPED: lmclient is not on PATH"); exit(0); }
+url = ARGV.get(0, getenv("LMCLIENT_QUEUE_URL", "amqp://127.0.0.1:5672/"));
+r = system(["lmclient", "queue", "ping", "--url", url, "--timeout", "1500"], 10000);
+if (r.timed_out || r.code != 0) { println("SKIPPED: RabbitMQ is unreachable or credentials are unavailable"); exit(0); }
+env = json_parse(r.stdout);
+if (!env.ok) { println("SKIPPED: RabbitMQ is unavailable"); exit(0); }
+# Each run owns a unique durable queue; remove demo queues in RabbitMQ after use.
+queue = "lmclient-demo-" + str(now());
+r = system(["lmclient", "queue", "publish", "--url", url, "--queue", queue, "--body", "hello from lmscript"], 30000);
+if (r.timed_out) { println("publish timed out"); exit(1); }
+env = json_parse(r.stdout);
+if (!env.ok) { println(env.error.code + ": " + env.error.message); exit(1); }
+r = system(["lmclient", "queue", "consume", "--url", url, "--queue", queue, "--limit", "1", "--timeout", "2000"], 15000);
+if (r.timed_out) { println("consume timed out"); exit(1); }
+env = json_parse(r.stdout);
+if (!env.ok) { println(env.error.code + ": " + env.error.message); exit(1); }
+assert(env.result.messages == ["hello from lmscript"]);
+println("queue round-trip: " + json_stringify(env.result.messages));

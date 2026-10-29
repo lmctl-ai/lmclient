@@ -1,0 +1,10 @@
+[
+  {
+    "name": "org.eclipse.paho.client.mqttv3.logging.JSR47Logger",
+    "allPublicConstructors": true
+  },
+  {
+    "name": "org.eclipse.paho.client.mqttv3.internal.ResourceBundleCatalog",
+    "allPublicConstructors": true
+  }
+]
