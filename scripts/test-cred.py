@@ -2,6 +2,7 @@
 """Offline credential CLI checks and bidirectional Java/Node SQLite interoperability."""
 from datetime import datetime
 import json
+import re
 import os
 from pathlib import Path
 import shutil
@@ -52,7 +53,7 @@ with tempfile.TemporaryDirectory(prefix='lmclient-cred-') as directory:
     assert run('get', 'service', 'key', '--reveal')[0] == {'service': 'service', 'field': 'key', 'set': True, 'value': SECRET}
     rows = run('list')[0]
     assert len(rows) == 1 and set(rows[0]) == {'service', 'field', 'updated_at'}
-    datetime.fromisoformat(rows[0]['updated_at'].replace('Z', '+00:00'))
+    datetime.fromisoformat(re.sub(r'(\.\d{6})\d+', r'\1', rows[0]['updated_at']).replace('Z', '+00:00'))
 
     for value in [SECRET + '\n', '']:
         result, warning = run('set', 'service', 'key', '--env', 'LMCLIENT_CRED_TEST_VALUE',

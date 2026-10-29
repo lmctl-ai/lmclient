@@ -23,6 +23,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.FutureTask;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 /** SMTP send, header-only IMAP read, and TCP ping. See docs/areas/mail.md. */
 public final class MailArea {
@@ -52,9 +56,29 @@ public final class MailArea {
             properties.setProperty("mail.imap.peek", "true");
             Session session = Session.getInstance(properties);
             session.setDebug(false);
-            return o.command.equals("send") ? send(o, session) : read(o, session);
+            // Socket timeouts bound inactivity only. A peer sending partial replies
+            // can reset them forever, so also bound the entire mail operation.
+            FutureTask<String> operation = new FutureTask<>(
+                () -> o.command.equals("send") ? send(o, session) : read(o, session));
+            Thread.ofVirtual().name("lmclient-mail").start(operation);
+            try {
+                // Only this thread emits envelopes, including after cancellation.
+                return Envelope.ok(operation.get(o.timeout, TimeUnit.MILLISECONDS));
+            } catch (ExecutionException e) {
+                if (e.getCause() instanceof Exception cause) throw cause;
+                throw new IllegalStateException("mail operation failed");
+            } finally {
+                // Interruptible virtual-thread socket I/O closes on cancellation.
+                // Do not wait for server cooperation during cleanup.
+                if (!operation.isDone()) operation.cancel(true);
+            }
         } catch (Usage e) {
             return Envelope.fail("USAGE", e.getMessage());
+        } catch (TimeoutException e) {
+            return Envelope.fail("TIMEOUT", "mail operation timed out");
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            return Envelope.fail("MAIL_ERROR", "mail operation interrupted");
         } catch (AuthenticationFailedException e) {
             return Envelope.fail("AUTH", "mail authentication failed; check user and password configuration");
         } catch (Exception e) {
@@ -63,7 +87,7 @@ public final class MailArea {
         }
     }
 
-    private static int send(Options o, Session session) throws Exception {
+    private static String send(Options o, Session session) throws Exception {
         InternetAddress[] from = addresses(o.values.get("from"));
         if (from.length != 1) throw usage("--from must contain one address");
         InternetAddress[] to = addresses(o.values.get("to"));
@@ -90,10 +114,10 @@ public final class MailArea {
             if (i > 0) json.append(',');
             json.append(Envelope.quote(o.redact(to[i].getAddress())));
         }
-        return Envelope.ok(json.append("]}").toString());
+        return json.append("]}").toString();
     }
 
-    private static int read(Options o, Session session) throws Exception {
+    private static String read(Options o, Session session) throws Exception {
         StringBuilder json = new StringBuilder("{\"messages\":[");
         try (IMAPStore store = new IMAPStore(session, null)) {
             store.connect(o.host, o.port, o.user, o.password);
@@ -121,7 +145,7 @@ public final class MailArea {
                 if (folder.isOpen()) folder.close(false);
             }
         }
-        return Envelope.ok(json.append("]}").toString());
+        return json.append("]}").toString();
     }
 
     private static InternetAddress[] addresses(String text) {

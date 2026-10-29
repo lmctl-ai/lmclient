@@ -8,6 +8,7 @@ import base64
 import datetime
 import http.server
 import json
+import re
 import os
 from pathlib import Path
 import socket
@@ -186,7 +187,7 @@ try:
         assert state['requests'][-1]['headers']['Authorization'] == 'Bearer fresh-access-private'
         assert stored('expired', 'oauth_refresh_token') == 'refresh-private'
         assert stored('expired', 'oauth_access_token') == 'fresh-access-private'
-        assert datetime.datetime.fromisoformat(stored('expired', 'oauth_expires_at').replace('Z', '+00:00')) > datetime.datetime.now(datetime.timezone.utc)
+        assert datetime.datetime.fromisoformat(re.sub(r'(\.\d{6})\d+', r'\1', stored('expired', 'oauth_expires_at')).replace('Z', '+00:00')) > datetime.datetime.now(datetime.timezone.utc)
         run('request', base + '/echo', '--auth', 'expired')
         assert len(state['tokens']) == 1
         oauth('body', style='body')

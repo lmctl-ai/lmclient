@@ -13,6 +13,7 @@ import socket
 import subprocess
 import sys
 import tempfile
+import threading
 import time
 import uuid
 
@@ -53,14 +54,68 @@ with socket.socket() as closed:
     closed.bind(('127.0.0.1', 0))
     unused = closed.getsockname()[1]
 run('ping', '--host', '127.0.0.1', '--port', str(unused), '--timeout', '300', code=3)
-# A TCP server which never greets the SMTP client proves read timeouts are active.
-with socket.socket() as stalled:
-    stalled.bind(('127.0.0.1', 0))
-    stalled.listen(1)
-    started = time.monotonic()
-    run('send', '--host', '127.0.0.1', '--port', str(stalled.getsockname()[1]), '--timeout', '250',
-        '--from', 'sender@example.test', '--to', 'test@example.test', code=3)
-    assert time.monotonic() - started < 5, 'SMTP read timeout not enforced'
+# Start the clock when the peer accepts, not before JVM/native startup. Keep
+# the peer open until the client finishes: server EOF cannot masquerade as a timeout.
+# A partial greeting arriving every 50ms defeats an inactivity-only socket timeout.
+def check_stalled_peer(protocol, trickle):
+    label = protocol + (' trickled greeting' if trickle else ' silent greeting')
+    last_timing = ''
+    for attempt in range(2):  # One retry for scheduling jitter, not protocol/envelope failures.
+        stop = threading.Event()
+        accepted_at = []
+        peer_errors = []
+        with socket.socket() as listener:
+            listener.bind(('127.0.0.1', 0))
+            listener.listen(1)
+            listener.settimeout(0.2)
+            def serve():
+                try:
+                    while not stop.is_set():
+                        try:
+                            connection, _ = listener.accept()
+                            break
+                        except socket.timeout:
+                            continue
+                    else:
+                        return
+                    with connection:
+                        accepted_at.append(time.monotonic())
+                        while not stop.wait(0.05):
+                            if trickle:
+                                try:
+                                    connection.sendall(b'x')  # Never complete the protocol greeting.
+                                except OSError:
+                                    return
+                except OSError:
+                    if not stop.is_set():
+                        peer_errors.append('fixture socket failed')
+            peer = threading.Thread(target=serve, daemon=True)
+            peer.start()
+            args = ['--host', '127.0.0.1', '--port', str(listener.getsockname()[1]), '--timeout', '2000']
+            command = (['send', *args, '--from', 'sender@example.test', '--to', 'test@example.test']
+                       if protocol == 'SMTP' else ['read', *args, '--user', 'test', '--limit', '1'])
+            try:
+                try:
+                    run(*command, code=3, env={'LMCLIENT_MAIL_PASSWORD': 'secret'})
+                    duration = time.monotonic() - accepted_at[0] if accepted_at else None
+                    passed = duration is not None and duration < 15
+                    last_timing = 'no accepted connection' if duration is None else f'{duration:.1f}s after accept'
+                except subprocess.TimeoutExpired:
+                    passed = False
+                    last_timing = 'client exceeded 30s process watchdog'
+            finally:
+                stop.set()
+                peer.join(timeout=2)
+            assert not peer.is_alive() and not peer_errors, label + ': fixture failed'
+            if passed:
+                return
+            if attempt == 0:
+                print('Retrying ' + label + ' timing check: ' + last_timing)
+    raise AssertionError(label + ': timeout not enforced (' + last_timing + ')')
+
+for protocol in ('SMTP', 'IMAP'):
+    for trickle in (False, True):
+        check_stalled_peer(protocol, trickle)
 
 if shutil.which('docker') is None:
     print(f'PASS {checks} mail checks; SKIPPED live GreenMail: docker is absent')
