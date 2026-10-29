@@ -8,6 +8,7 @@ concurrency:
   cancel-in-progress: ${{ !startsWith(github.ref, 'refs/tags/') }}
 jobs:
   native:
+    if: github.ref != 'refs/heads/spike/kafka'
     name: ${{ matrix.name }}
     runs-on: ${{ matrix.os }}
     timeout-minutes: 60
@@ -175,3 +176,44 @@ jobs:
           test "$(find . -maxdepth 1 -type f -name 'lmclient-*' | wc -l)" -eq 5
           sha256sum lmclient-* > SHA256SUMS
           timeout 180 gh release create "$GITHUB_REF_NAME" lmclient-* SHA256SUMS --repo "$GITHUB_REPOSITORY" --title "$GITHUB_REF_NAME" --notes 'One native executable per platform; Java is not required. Linux requires glibc 2.35 or newer. Includes PostgreSQL, SQLite, H2, DuckDB and SQL Server JDBC drivers.'
+
+  kafka-spike:
+    if: github.ref == 'refs/heads/spike/kafka'
+    name: kafka-${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 35
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - {os: ubuntu-22.04, name: linux-x64}
+          - {os: ubuntu-22.04-arm, name: linux-arm64}
+          - {os: macos-15, name: macos-arm64}
+          - {os: macos-15-intel, name: macos-x64}
+          - {os: windows-2022, name: windows-x64}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: graalvm/setup-graalvm@27b360dbb857524eaf0b4c4cef364d38e5b4f173
+        with:
+          java-version: '25'
+          distribution: graalvm-community
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          cache: maven
+      - name: JVM package and client construction
+        run: |
+          mvn -q -B package -DskipTests
+          java -cp target/lmclient-0.2.0-all.jar ai.lmctl.lmclient.spike.KafkaSpike --construct
+      - name: Build Kafka-reachable native executable
+        run: |
+          native-image --no-fallback -J-Xmx4g -H:NumberOfThreads=2 -cp target/lmclient-0.2.0-all.jar ai.lmctl.lmclient.spike.KafkaSpike target/kafka-spike
+      - name: Native producer and consumer construction
+        run: |
+          exe=target/kafka-spike
+          if [[ "$RUNNER_OS" == Windows ]]; then exe=target/kafka-spike.exe; fi
+          "$exe" --construct
+      - name: Live native Kafka round-trip
+        if: runner.os == 'Linux'
+        run: python3 scripts/test-kafka-spike.py target/kafka-spike
