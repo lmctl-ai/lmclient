@@ -22,3 +22,10 @@ There is no persistent-session, retained-publication, or MQTT 5 API.
 - CI service: `eclipse-mosquitto:2`, TCP 1883, config `listener 1883` and `allow_anonymous true`; the test starts and removes its own container with a random loopback host port.
 - Native: Paho uses socket network modules and in-memory persistence. Retain its ServiceLoader providers via the existing shaded services transformer. Area native-image metadata registers its reflective logger and message resource bundles. Native verification belongs to CI; local verification is JVM only.
 - Example: `lmscript examples/mqtt_demo.lms` (service must be running; skips if unreachable).
+
+## verification
+
+JVM live suite: 19 checks passed against the container image above.
+Mosquitto: an independent subscriber received QoS 0, 1, and 2 publications in order, including quotes, Unicode, and a newline. An empty subscription returned an empty list after its deadline.
+The isolated JVM `mvn -q -B verify` build passed. Native-image and TLS
+interoperability have not been tested locally.

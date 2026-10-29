@@ -23,3 +23,10 @@ be 1..10000. Only AMQP 0-9-1 is supported, not AMQP 1.0.
 - CI service: `rabbitmq:3-alpine`, TCP 5672, guest/guest; the test starts and removes its own container with a random loopback host port.
 - Native: plain socket RabbitMQ client, no Netty or dynamic proxies. No application reflection configuration needed. Native verification belongs to CI; local verification is JVM only.
 - Example: `lmscript examples/queue_demo.lms` (service must be running; skips if unreachable).
+
+## verification
+
+JVM live suite: 18 checks passed against the container image above.
+RabbitMQ: published three messages, consumed the same three in order, then verified the queue was empty. Credentials-file authentication and secret-safe failures passed.
+The isolated JVM `mvn -q -B verify` build passed. Native-image and TLS
+interoperability have not been tested locally.

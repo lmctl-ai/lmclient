@@ -19,5 +19,6 @@ r = system(["lmclient", "queue", "consume", "--url", url, "--queue", queue, "--l
 if (r.timed_out) { println("consume timed out"); exit(1); }
 env = json_parse(r.stdout);
 if (!env.ok) { println(env.error.code + ": " + env.error.message); exit(1); }
-assert(env.result.messages == ["hello from lmscript"]);
+assert(len(env.result.messages) == 1);
+assert(env.result.messages[0] == "hello from lmscript");
 println("queue round-trip: " + json_stringify(env.result.messages));
