@@ -1,0 +1,33 @@
+# Chapter: lmclient - Redis key/value, lists, and publish
+# Shows: plain argv calls, JSON envelopes, TTL, and an isolated disposable key
+# Run: lmscript examples/redis_demo.lms
+# Needs: lmclient on PATH, Redis via LMCLIENT_REDIS_URL; credentials only in env/file
+# exit: 0
+if (which("lmclient") == null) {
+  println("SKIPPED: lmclient is not on PATH");
+  exit(0);
+}
+url = env("LMCLIENT_REDIS_URL", "redis://127.0.0.1:6379/0");
+probe = system(["lmclient", "redis", "ping", "--url", url, "--timeout", "1000"], 5000);
+if (probe.timed_out || probe.code != 0) {
+  println("SKIPPED: Redis is unavailable or credentials are not configured");
+  exit(0);
+}
+fn call(args) {
+  r = system(concat(["lmclient", "redis"], args, ["--url", url, "--timeout", "3000"]), 10000);
+  if (r.timed_out) { println("Redis command timed out"); exit(1); }
+  if (trim(r.stdout) == "") { println("lmclient returned no envelope (exit " + str(r.code) + ")"); exit(1); }
+  reply = json_parse(r.stdout);
+  if (!reply.ok) { println("Redis command failed: " + reply.error.code); exit(1); }
+  return reply.result;
+}
+key = "lmclient:demo:" + str(now()) + ":" + str(random());
+call(["set", key, "hello from lmscript", "--ttl", "30"]);
+println("value: " + call(["get", key]).value);
+# Delete before reusing the same key as a list; all successful runs clean up.
+call(["del", key]);
+println("list length: " + str(call(["lpush", key, "first", "second"]).length));
+println("list: " + json_stringify(call(["lrange", key, "0", "-1"]).values));
+println("popped: " + call(["rpop", key]).value);
+println("publish receivers: " + str(call(["publish", "lmclient:demo", "hello subscribers"]).receivers));
+call(["del", key]);
