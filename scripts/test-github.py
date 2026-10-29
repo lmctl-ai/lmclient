@@ -8,6 +8,7 @@ on PATH. The fixture records whether an Authorization header was present, never 
 import http.server
 import json
 import os
+import shutil
 from pathlib import Path
 import sqlite3
 import stat
@@ -64,7 +65,11 @@ class Handler(http.server.BaseHTTPRequestHandler):
             return self.respond(200, {'not': 'a list'})
         return self.respond(404, {'message': 'Not Found'})
 
-server = http.server.ThreadingHTTPServer(('127.0.0.1', 0), Handler)
+class QuietServer(http.server.ThreadingHTTPServer):
+    def handle_error(self, request, client_address):
+        pass  # a client closing its connection early is not a test failure
+
+server = QuietServer(('127.0.0.1', 0), Handler)
 threading.Thread(target=server.serve_forever, daemon=True).start()
 API = f'http://127.0.0.1:{server.server_address[1]}'
 
@@ -76,15 +81,19 @@ conn.execute('CREATE TABLE IF NOT EXISTS creds (service TEXT NOT NULL, field TEX
 conn.execute("INSERT INTO creds VALUES ('github','api_key',?,'2026-10-29T00:00:00Z')", (SECRETS[0],))
 conn.commit(); conn.close()
 # PATH without the real gh (so the fallback is deterministic), plus a dir with a fake gh.
+# java itself is launched by absolute path (jvm_noise.java_command), so these dirs need no java.
+# The fake gh is a POSIX shell script; Java's ProcessBuilder on Windows resolves only gh.exe,
+# so the gh-source checks are skipped there (the store, env and anonymous sources still run).
+WINDOWS = os.name == 'nt'
 nogh = Path(tmp.name) / 'nogh'; nogh.mkdir()
 fakegh = Path(tmp.name) / 'fakegh'; fakegh.mkdir()
-for tool in ('java', 'sh'):
-    real = subprocess.run(['which', tool], capture_output=True, text=True).stdout.strip()
-    if real:
-        os.symlink(real, nogh / tool); os.symlink(real, fakegh / tool)
-gh = fakegh / 'gh'
-gh.write_text('#!/bin/sh\n[ "$1" = auth ] && [ "$2" = token ] && printf "%s\\n" "' + SECRETS[2] + '"\n')
-gh.chmod(gh.stat().st_mode | stat.S_IEXEC)
+if not WINDOWS:
+    sh = shutil.which('sh')
+    if sh:
+        os.symlink(sh, nogh / 'sh'); os.symlink(sh, fakegh / 'sh')
+    gh = fakegh / 'gh'
+    gh.write_text('#!/bin/sh\n[ "$1" = auth ] && [ "$2" = token ] && printf "%s\\n" "' + SECRETS[2] + '"\n')
+    gh.chmod(gh.stat().st_mode | stat.S_IEXEC)
 
 def env(db=empty_db, path=nogh, **extra):
     base = {k: v for k, v in os.environ.items() if k not in ('GITHUB_TOKEN', 'GH_TOKEN', 'LMCLIENT_DB', 'LMCONN_DB', 'LMCLIENT_GITHUB_API')}
@@ -142,10 +151,13 @@ assert envelope['result'] == {'login': 'octo', 'name': 'Octo Cat', 'id': 583231,
 assert state['requests'][-1]['bearer'] is True
 envelope, _ = run('user', env=env(GH_TOKEN=SECRETS[1]))
 assert envelope['result']['auth'] == 'env:GH_TOKEN', envelope
-envelope, _ = run('user', env=env(path=fakegh))
-assert envelope['result']['auth'] == 'gh' and state['requests'][-1]['bearer'] is True, envelope
-envelope, _ = run('repos', 'acme', env=env(path=fakegh))
-assert envelope['result']['auth'] == 'gh', envelope
+if WINDOWS:
+    print('SKIPPED gh-source checks on Windows (POSIX shell fixture; ProcessBuilder resolves gh.exe only)')
+else:
+    envelope, _ = run('user', env=env(path=fakegh))
+    assert envelope['result']['auth'] == 'gh' and state['requests'][-1]['bearer'] is True, envelope
+    envelope, _ = run('repos', 'acme', env=env(path=fakegh))
+    assert envelope['result']['auth'] == 'gh', envelope
 
 # errors
 error('user', code=3, expect='MISSING_KEY', env=env())                          # anonymous user: no API call
