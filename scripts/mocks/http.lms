@@ -1,0 +1,24 @@
+p = _lmcode_ schema="schema.json";
+@health
+fn health(x: Exchange) -> void implements Handler { x.json("{\"ok\":true}"); }
+@echo
+fn echo(x: Exchange) -> void implements Handler { x.status(201); x.send(x.body()); }
+@headers
+fn headers(x: Exchange) -> void implements Handler { x.set_header("Content-Type", "text/plain"); x.send(x.header("X-Test")); }
+@missing
+fn missing(x: Exchange) -> void implements Handler { x.status(404); }
+@limited
+fn limited(x: Exchange) -> void implements Handler { x.status(429); }
+@unavailable
+fn unavailable(x: Exchange) -> void implements Handler { x.status(503); }
+@redirect
+fn redirect(x: Exchange) -> void implements Handler { x.status(302); x.set_header("Location", "/health"); }
+route("GET", "/health", "health");
+route("POST", "/echo", "echo");
+route("GET", "/headers", "headers");
+route("GET", "/status/404", "missing");
+route("GET", "/status/429", "limited");
+route("GET", "/status/503", "unavailable");
+route("GET", "/redirect", "redirect");
+end _lmcode_
+savedsl(p, ARGV[0]);

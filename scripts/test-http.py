@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Offline HTTP/OAuth checks against a local Python ThreadingHTTPServer.
+"""HTTP/OAuth checks against local Python and lmmock servers.
 Run: python3 scripts/test-http.py target/lmclient-0.2.0-all.jar
 Also accepts a native executable. Seeds the shared SQLite schema directly;
 no dependency on the concurrently developed cred CLI, Docker, or external APIs.
@@ -229,6 +229,8 @@ try:
             closed.bind(('127.0.0.1', 0))
             port = closed.getsockname()[1]
         assert run('request', f'http://127.0.0.1:{port}', '--timeout', '1000', code=3)['code'] == 'NETWORK'
+        from lmmock_tiers import http_tier
+        http_tier(run)
         print(f'PASS {checks} HTTP checks: envelopes, echo, auth precedence, OAuth refresh, redaction, bounds, timeout, redirects and no retry')
 finally:
     server.shutdown()

@@ -16,6 +16,21 @@ On Windows, quote-heavy JSON passed through `--data` can lose embedded quotes du
 
 ## wiring
 
+- Additional lmmock tier runs in the same script on JVM and all five native CI
+  platforms, using loopback sockets without Docker. `scripts/lmmock-helpers.py`
+  resolves `LMMOCK_BIN`, then PATH, then downloads release **0.1.4** (override
+  `LMMOCK_VERSION`) to `build/lmmock-cache/`, verifying `SHA256SUMS`.
+  An unavailable executable/download prints `SKIP` and exits 0; an explicit
+  `LMMOCK_BIN=/nonexistent` forces that path. Checksum, compilation, readiness,
+  and assertion failures fail the suite. CI sets `LMMOCK_REQUIRED=1`, so missing
+  dependencies fail there too. Children use bounded readiness and termination.
+  CI installs an isolated mock compiler `@lmctl-ai/lmctl@0.2.444` via
+  `LMSCRIPT_BIN`, retaining the existing example compiler.
+- `scripts/mocks/http.lms` is a small lmclient-owned fixture (schema exported
+  from lmmock 0.1.4). It checks health JSON, POST echo, request headers, 404/429/503
+  envelopes, and an unfollowed redirect. Existing Python-server checks retain
+  their broader timeout, size-bound, credential, and refresh coverage.
+
 - No new Maven dependencies or POM changes. Uses JDK `java.net.http.HttpClient`, existing `CredStore`, and the already bundled lmcode SDK's reflection-free JSON parser.
 - Build: `mvn -q -B package -DskipTests`.
 - Test: `python3 scripts/test-http.py target/lmclient-0.2.0-all.jar` (also accepts a native executable).

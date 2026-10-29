@@ -48,6 +48,24 @@ message. Callers obtain the token from `CredStore` after refreshing.
 
 ## wiring
 
+- Additional lmmock tier runs in the same script on JVM and all five native CI
+  platforms, using loopback sockets without Docker. `scripts/lmmock-helpers.py`
+  resolves `LMMOCK_BIN`, then PATH, then downloads release **0.1.4** (override
+  `LMMOCK_VERSION`) to `build/lmmock-cache/`, verifying `SHA256SUMS`.
+  An unavailable executable/download prints `SKIP` and exits 0; an explicit
+  `LMMOCK_BIN=/nonexistent` forces that path. Checksum, compilation, readiness,
+  and assertion failures fail the suite. CI sets `LMMOCK_REQUIRED=1`, so missing
+  dependencies fail there too. Children use bounded readiness and termination.
+  CI installs an isolated mock compiler `@lmctl-ai/lmctl@0.2.444` via
+  `LMSCRIPT_BIN`, retaining the existing example compiler.
+- The IdP comes from the checksum-verified `examples.tar.gz` of that same
+  release, including its schema. No OAuth handler copy is vendored: lmmock is
+  the single source of truth, pinned for reproducibility. Tests mirror lmconn's
+  PKCE S256, header/body client authentication, JSON/form tokens, protected
+  userinfo, rotating refresh tokens, revoked grants, bad state, malformed JSON,
+  server errors, string/missing expiry, and unknown token fields. The existing
+  Node oracle remains for additional manual and adversarial cases.
+
 - No new Maven dependencies or POM changes. JDK networking, cryptography,
   and the existing `CredStore`/SQLite implementation are used.
 - Test: `python3 scripts/test-oauth.py target/lmclient-0.2.0-all.jar`;

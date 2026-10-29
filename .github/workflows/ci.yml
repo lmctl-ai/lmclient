@@ -42,6 +42,20 @@ jobs:
       - name: macOS timeout utility
         if: runner.os == 'macOS'
         run: brew install coreutils
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 24
+      - name: Pinned example compiler
+        run: npm install -g @lmctl-ai/lmctl@0.2.420
+      - name: Download verified lmmock 0.1.4
+        env:
+          LMMOCK_REQUIRED: 1
+        run: |
+          python3 scripts/lmmock-helpers.py
+          npm install --prefix "$RUNNER_TEMP/lmmock-compiler" @lmctl-ai/lmctl@0.2.444
+          suffix=''
+          if [[ "$RUNNER_OS" == Windows ]]; then suffix=.cmd; fi
+          echo "LMSCRIPT_BIN=$RUNNER_TEMP/lmmock-compiler/node_modules/.bin/lmscript$suffix" >> "$GITHUB_ENV"
       - name: JVM tests
         timeout-minutes: 25
         run: |
@@ -64,11 +78,6 @@ jobs:
         with:
           path: target/static-jni
           key: ${{ steps.jni-cache.outputs.cache-primary-key }}
-      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
-        with:
-          node-version: 24
-      - name: Pinned example compiler
-        run: npm install -g @lmctl-ai/lmctl@0.2.420
       - name: Build native executable
         timeout-minutes: 40
         run: bash scripts/build-native.sh
@@ -91,6 +100,8 @@ jobs:
           else
             python3 scripts/test-dsl.py "$exe"
           fi
+          python3 scripts/test-oauth.py "$exe"
+          python3 scripts/test-http.py "$exe"
           python3 scripts/test-examples.py
           mkdir -p dist
           cp "$exe" "dist/lmclient-${{ matrix.name }}$suffix"

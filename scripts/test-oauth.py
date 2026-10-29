@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Offline JVM/native OAuth tests using the vendored strict Node mock IdP (scripts/mock-idp.js) as oracle."""
+"""JVM/native OAuth tests using the vendored Node oracle and released lmmock IdP."""
 import contextlib
 import json
 import os
@@ -281,5 +281,8 @@ with temporary_directory(prefix='lmclient-oauth-') as directory:
             if child.poll() is None:
                 child.kill()
             child.communicate()  # Reap and close all pipes, including early assertion failures.
+    from lmmock_tiers import oauth_tier
+    oauth_tier(directory, authorize, run, get, put, protected)
+
     for output in outputs: redacted(output)
     print(f'oauth: {checks} checks passed; shared Node IdP verified PKCE, manual/body/form, refresh, protected userinfo, and adversarial errors')
