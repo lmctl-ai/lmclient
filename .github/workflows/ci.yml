@@ -208,7 +208,15 @@ jobs:
           java -cp target/lmclient-0.2.0-all.jar ai.lmctl.lmclient.spike.KafkaSpike --construct
       - name: Build Kafka-reachable native executable
         run: |
-          native-image --no-fallback -J-Xmx4g -H:NumberOfThreads=2 -cp target/lmclient-0.2.0-all.jar ai.lmctl.lmclient.spike.KafkaSpike target/kafka-spike
+          # Isolate Kafka from unrelated JDBC native-image feature metadata in the family jar.
+          mvn -q -B dependency:copy-dependencies -DincludeGroupIds=org.apache.kafka,org.slf4j,com.github.luben,org.xerial.snappy,org.lz4 -DoutputDirectory=target/kafka-deps
+          jar cf target/kafka-spike-classes.jar -C target/classes ai/lmctl/lmclient/spike -C target/classes ai/lmctl/lmclient/areas/Envelope.class
+          if [[ -d src/main/resources/META-INF/native-image/ai.lmctl/lmclient-kafka ]]; then
+            jar uf target/kafka-spike-classes.jar -C src/main/resources META-INF/native-image/ai.lmctl/lmclient-kafka
+          fi
+          sep=:
+          if [[ "$RUNNER_OS" == Windows ]]; then sep=';'; fi
+          native-image --no-fallback -J-Xmx4g -H:NumberOfThreads=2 -cp "target/kafka-spike-classes.jar${sep}target/kafka-deps/*" ai.lmctl.lmclient.spike.KafkaSpike target/kafka-spike
       - name: Native producer and consumer construction
         run: |
           exe=target/kafka-spike

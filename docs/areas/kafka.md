@@ -32,4 +32,17 @@ broker failover are outside this small gate.
 
 ## Verdict
 
-Pending live JVM and native CI evidence. No native build is run locally.
+JVM live round-trip passed against `apache/kafka:3.9.1` (UTF-8 key/payload
+and offset verified; container removed). Native result is pending.
+
+The first CI dispatch (40822836520) failed before Kafka analysis with an
+unrelated family-jar feature error:
+
+```
+Error: User-enabled Feature org.sqlite.nativeimage.SqliteJdbcFeature class not found.
+```
+
+The spike harness now builds a Kafka-only classpath (the two spike classes,
+Kafka, SLF4J, and Kafka compression dependencies), excluding unrelated JDBC
+metadata. This corrects the experiment; it is not a Kafka reflection fix.
+No native build is run locally.
