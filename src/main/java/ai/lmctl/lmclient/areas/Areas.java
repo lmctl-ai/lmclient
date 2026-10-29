@@ -21,4 +21,18 @@ public final class Areas {
         "mqtt", MqttArea::run,
         "mongo", MongoArea::run
     );
+
+    /** Wave 6 areas (lmconn ports) — registered separately so wave-5b merges stay trivial. */
+    public static final Map<String, AreaMain> WAVE6 = Map.of(
+        "cred", CredArea::run,
+        "http", HttpArea::run,
+        "oauth", OauthArea::run,
+        "llm", LlmArea::run,
+        "github", GithubArea::run
+    );
+
+    public static AreaMain lookup(String name) {
+        AreaMain area = REGISTRY.get(name);
+        return area != null ? area : WAVE6.get(name);
+    }
 }

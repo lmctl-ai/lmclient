@@ -76,7 +76,7 @@ public final class Main {
                 try (var host = new DslHost()) { return host.run(Path.of(bytecode),dryRun); }
             default: break;
         }
-        var area = ai.lmctl.lmclient.areas.Areas.REGISTRY.get(args[0]);
+        var area = ai.lmctl.lmclient.areas.Areas.lookup(args[0]);
         if (area != null) return area.run(java.util.Arrays.copyOfRange(args, 1, args.length));
         Map<String, String> options = new LinkedHashMap<>();
         for (int i = 0; i < args.length; i++) {
