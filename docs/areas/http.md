@@ -10,6 +10,10 @@ Authentication uses the family `CredStore`: stored `api_key`, then uppercase ser
 
 Selected API/OAuth secrets are redacted recursively from response strings and JSON keys. Explicit authorization and cookie header values are also redacted. Error messages never include server diagnostics, credential values, or arbitrary request arguments. Embedded URL userinfo is rejected; use `--auth` or an authorization header instead.
 
+## Known limitations
+
+On Windows, quote-heavy JSON passed through `--data` can lose embedded quotes during argv transport and be treated as plain text. Use `--data-file PATH` with a UTF-8 JSON file to preserve the payload and automatic `application/json` detection.
+
 ## wiring
 
 - No new Maven dependencies or POM changes. Uses JDK `java.net.http.HttpClient`, existing `CredStore`, and the already bundled lmcode SDK's reflection-free JSON parser.

@@ -131,10 +131,19 @@ try:
         assert {'status', 'ok', 'contentType', 'latencyMs', 'url', 'bodyJson'} == set(result)
         assert result['status'] == 200 and result['ok'] is True and result['latencyMs'] >= 0
         assert result['bodyJson']['headers']['X-Echo'] == 'first, second'
-        result = run('request', base + '/echo', '--data', '{"a":1}')
-        assert result['bodyJson']['method'] == 'POST'
-        assert result['bodyJson']['headers']['Content-Type'] == 'application/json'
-        assert json.loads(result['bodyJson']['body']) == {'a': 1}
+        json_file = Path(directory) / 'body.json'
+        json_file.write_text('{"a":1}', encoding='utf-8')
+        # Windows argv transport may strip embedded quotes. Exercise object JSON
+        # through a file there, and still verify --data with quote-free JSON.
+        json_cases = [(['--data-file', str(json_file)], {'a': 1})]
+        json_cases.append((['--data', '[1,2]'], [1, 2]) if os.name == 'nt'
+                          else (['--data', '{"a":1}'], {'a': 1}))
+        for body_args, expected_body in json_cases:
+            result = run('request', base + '/echo', *body_args)
+            assert result['bodyJson']['method'] == 'POST'
+            echoed_headers = result['bodyJson']['headers']
+            assert echoed_headers.get('Content-Type') == 'application/json', echoed_headers
+            assert json.loads(result['bodyJson']['body']) == expected_body
         data_file = Path(directory) / 'body.txt'
         data_file.write_text('héllo 世界', encoding='utf-8')
         result = run('request', base + '/echo', '--method', 'put', '--data-file', str(data_file))
