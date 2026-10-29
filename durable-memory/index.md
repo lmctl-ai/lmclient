@@ -5,3 +5,4 @@
 - [03 Native JDBC resource size](03-native-size.md)
 - [Rename lmdb to lmclient, 0.2.0](rename-2026-10-29.md)
 - [Protocol areas: redis, mail, queue, mqtt, mongo](lmclient-areas-2026-10-29.md)
+- [LangChain4j spike deferred; Kafka spike pattern](langchain4j-spike-2026-10-29.md)
