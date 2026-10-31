@@ -44,8 +44,11 @@ def oauth_tier(directory, authorize, run, get, put, protected):
             urls = {'authUrl': base + '/authorize', 'tokenUrl': base + '/token', 'userinfoUrl': base + '/api/userinfo'}
             service = 'lmmock-' + (mode or style)
             failure = mode in ('bad-state', 'bad-json', 'server-error')
-            result = authorize(service, urls, port, '--scope', 'read write', '--auth-style', style,
-                               expected=3 if failure else 0, error='OAUTH_ERROR' if failure else None)
+            try:
+                result = authorize(service, urls, port, '--scope', 'read write', '--auth-style', style,
+                                   expected=3 if failure else 0, error='OAUTH_ERROR' if failure else None)
+            except AssertionError as error:
+                raise AssertionError(f'lmmock OAuth scenario {mode or style}: {error}') from error
             events = [json.loads(line) for line in log.read_text(encoding='utf-8').splitlines()]
             assert [e['path'] for e in events] == (['/authorize'] if mode == 'bad-state' else ['/authorize', '/token'])
             assert events[0]['params']['code_challenge_method'] == 'S256'
