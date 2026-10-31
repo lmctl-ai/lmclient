@@ -5,6 +5,7 @@ if command -v timeout >/dev/null 2>&1; then deadline=timeout
 elif command -v gtimeout >/dev/null 2>&1; then deadline=gtimeout
 else echo 'GNU timeout/coreutils is required' >&2; exit 2; fi
 "$deadline" 300 mvn -B -q verify
+python3 tests/check-host-flags.py sha256:bc50acc669dde4a0818adfc40592c5917dcb9284564d186cf1a1dcc49390be3c java -jar "target/lmclient-$(cat VERSION)-all.jar"
 "$deadline" 30 python3 scripts/check-version.py
 "$deadline" 30 python3 scripts/test-native-resources.py
 "$deadline" 30 python3 scripts/test-lmmock-harness.py

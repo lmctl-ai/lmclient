@@ -7,7 +7,7 @@ let q = c.query("SELECT name, population/area_km2 AS density FROM region ORDER B
 q.csv("data/duckdb_population.csv");
 end _dsl_
 savedsl(dbhost, "build/duckdb_population.dslb");
-r = system ${dsl_cli(dbhost)} --dsl build/duckdb_population.dslb;
+r = system ${dsl_cli(dbhost)} --lmcode build/duckdb_population.dslb;
 assert(r.code == 0);
 let rows = csv_parse(read_file("data/duckdb_population.csv"), false);
 assert(rows.len() == 5);
@@ -17,5 +17,5 @@ let p = plot;
 p.png("images/duckdb_population.png", 900, 560); p.cmd("set title 'Regional population density'; set ylabel 'People / km²'; set style data histograms; set style fill solid 0.8; set datafile separator ','; plot 'data/duckdb_population.csv' every ::1 using 2:xtic(1) title 'density'"); p.close();
 end _dsl_
 savedsl(plot, "build/duckdb_population_plot.dslb");
-r = system ${dsl_cli(plot)} --dsl build/duckdb_population_plot.dslb;
+r = system ${dsl_cli(plot)} --lmcode build/duckdb_population_plot.dslb;
 assert(r.code == 0);

@@ -24,7 +24,7 @@ def run(*args, code=0, env=None):
     return process
 
 assert run("--version").stdout.strip() == "lmclient " + (ROOT / "VERSION").read_text().strip()
-schema = json.loads(run("--dsl-schema").stdout)
+schema = json.loads(run("--lmcode-schema").stdout)
 assert schema.get("name") == "lmclient" and schema.get("dsl.schema") == 2, schema
 assert schema.get("types") and schema.get("functions"), "host schema is incomplete"
 assert "PostgreSQL" in run("--notices").stdout

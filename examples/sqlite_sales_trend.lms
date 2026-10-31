@@ -7,7 +7,7 @@ let q = c.query("SELECT row_number() OVER () AS n, month, revenue FROM sales ORD
 q.csv("data/sqlite_sales_trend.csv");
 end _dsl_
 savedsl(dbhost, "build/sqlite_sales_trend.dslb");
-r = system ${dsl_cli(dbhost)} --dsl build/sqlite_sales_trend.dslb;
+r = system ${dsl_cli(dbhost)} --lmcode build/sqlite_sales_trend.dslb;
 assert(r.code == 0);
 let rows = csv_parse(read_file("data/sqlite_sales_trend.csv"), false);
 assert(rows.len() == 7);
@@ -19,5 +19,5 @@ p.cmd("set title 'SQLite sales trend'; set xlabel 'Month'; set ylabel 'Revenue';
 p.close();
 end _dsl_
 savedsl(plot, "build/sqlite_sales_trend_plot.dslb");
-r = system ${dsl_cli(plot)} --dsl build/sqlite_sales_trend_plot.dslb;
+r = system ${dsl_cli(plot)} --lmcode build/sqlite_sales_trend_plot.dslb;
 assert(r.code == 0);

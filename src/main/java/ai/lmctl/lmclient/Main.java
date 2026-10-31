@@ -26,7 +26,7 @@ public final class Main {
         }
         catch (OutOfMemoryError e) {
             System.err.println("lmclient: LMCLIENT_MAX_MEMORY_MB memory budget exceeded");
-            if (java.util.Arrays.asList(args).contains("--dsl"))
+            if (java.util.Arrays.asList(args).contains("--lmcode"))
                 System.out.println("{\"ok\":false,\"phase\":\"run\",\"code\":\"RUN_ERROR\",\"message\":\"LMCLIENT_MAX_MEMORY_MB memory budget exceeded\"}");
             code = 3;
         }
@@ -51,8 +51,8 @@ public final class Main {
         if (args.length == 0 || args[0].equals("--help")) { usage(); return args.length == 0 ? 2 : 0; }
         switch (args[0]) {
             case "--version": System.out.println("lmclient " + VERSION); return 0;
-            case "--dsl-schema": System.out.print(HostApi.schema()); return 0;
-            case "--dsl-signatures": System.out.print(HostApi.signatures()); return 0;
+            case "--lmcode-schema": System.out.print(HostApi.schema()); return 0;
+            case "--lmcode-signatures": System.out.print(HostApi.signatures()); return 0;
             case "--drivers": Drivers.names().forEach(System.out::println); return 0;
             case "--notices":
                 try (var stream = Main.class.getResourceAsStream("/THIRD_PARTY_NOTICES")) {
@@ -63,15 +63,15 @@ public final class Main {
                 var results = Drivers.selfTest();
                 results.forEach((name, result) -> System.out.println(name + ": " + result));
                 return results.values().stream().allMatch("ok"::equals) ? 0 : 3;
-            case "--dsl":
+            case "--lmcode":
                 boolean dryRun = false;
                 String bytecode = null;
                 for (int i = 1; i < args.length; i++) {
                     if (args[i].equals("--dry-run")) dryRun = true;
-                    else if (args[i].startsWith("--") || bytecode != null) throw new IllegalArgumentException("usage: --dsl BYTECODE [--dry-run]");
+                    else if (args[i].startsWith("--") || bytecode != null) throw new IllegalArgumentException("usage: --lmcode BYTECODE [--dry-run]");
                     else bytecode = args[i];
                 }
-                if (bytecode == null) throw new IllegalArgumentException("--dsl requires a bytecode file");
+                if (bytecode == null) throw new IllegalArgumentException("--lmcode requires a bytecode file");
                 Drivers.register();
                 try (var host = new DslHost()) { return host.run(Path.of(bytecode),dryRun); }
             default: break;
@@ -180,7 +180,7 @@ public final class Main {
             lmclient --url JDBC_URL --metadata schemas|tables|views|columns|keys|foreign_keys|indexes [--table NAME]
             lmclient --url JDBC_URL --explain SQL
             lmclient --url JDBC_URL --diff-url OTHER_JDBC_URL
-            lmclient --dsl BYTECODE [--dry-run] | --dsl-schema | --dsl-signatures
+            lmclient --lmcode BYTECODE [--dry-run] | --lmcode-schema | --lmcode-signatures
             lmclient --drivers | --driver-test | --version | --notices
             lmclient redis|mail|queue|mqtt|mongo ...   (protocol areas; see docs/areas/)
             Credentials: LMCLIENT_USER, LMCLIENT_PASSWORD, or --credentials-file UTF8_PROPERTIES.

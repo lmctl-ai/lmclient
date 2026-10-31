@@ -7,7 +7,7 @@ let q = c.query("SELECT day, kwh, SUM(kwh) OVER (ORDER BY day) AS cumulative FRO
 q.csv("data/duckdb_energy.csv");
 end _dsl_
 savedsl(dbhost, "build/duckdb_energy.dslb");
-r = system ${dsl_cli(dbhost)} --dsl build/duckdb_energy.dslb;
+r = system ${dsl_cli(dbhost)} --lmcode build/duckdb_energy.dslb;
 assert(r.code == 0);
 let rows = csv_parse(read_file("data/duckdb_energy.csv"), false);
 assert(rows.len() == 8);
@@ -17,5 +17,5 @@ let p = plot;
 p.png("images/duckdb_energy.png", 900, 560); p.cmd("set title 'Weekly energy budget'; set xlabel 'Day'; set ylabel 'kWh'; set grid; set datafile separator ','; plot 'data/duckdb_energy.csv' every ::1 using 1:2 with boxes title 'daily', '' every ::1 using 1:3 with lines lw 3 title 'cumulative'"); p.close();
 end _dsl_
 savedsl(plot, "build/duckdb_energy_plot.dslb");
-r = system ${dsl_cli(plot)} --dsl build/duckdb_energy_plot.dslb;
+r = system ${dsl_cli(plot)} --lmcode build/duckdb_energy_plot.dslb;
 assert(r.code == 0);

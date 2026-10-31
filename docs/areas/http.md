@@ -27,7 +27,7 @@ On Windows, quote-heavy JSON passed through `--data` can lose embedded quotes du
   CI installs an isolated mock compiler `@lmctl-ai/lmctl@0.2.444` via
   `LMMOCK_LMSCRIPT_JS`, retaining the existing example compiler. The harness
   invokes this JS entry with Node directly, compiles to temporary bytecode, then
-  runs `lmmock serve --dsl` on every platform. It stages the source beside
+  runs `lmmock serve --lmcode` on every platform. It stages the source beside
   `schema.json` exported from the exact serving binary, preserving raw bytes
   without newline conversion; no checked-in or release-archive schema is used.
   Local runs default to

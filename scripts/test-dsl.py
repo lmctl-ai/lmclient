@@ -73,13 +73,13 @@ c.begin(); c.exec("INSERT INTO child VALUES (3,1,'rolled')"); c.rollback();
 let after = c.query("SELECT id,label FROM child ORDER BY id"); after.csv("after.csv");
 '''
     bytecode = compile_fixture(directory, body, "contract")
-    dry = invoke([str(LAUNCHER), "--dsl", str(bytecode), "--dry-run"], directory, 60)
+    dry = invoke([str(LAUNCHER), "--lmcode", str(bytecode), "--dry-run"], directory, 60)
     dry_report = report(dry)
     if not dry_report.get("ok") or not dry_report.get("result", {}).get("dry_run"):
         raise AssertionError("dry-run report mismatch")
     if list(directory.glob("*.csv")) or list(directory.glob("*.json")):
         raise AssertionError("dry-run created result files")
-    run = invoke([str(LAUNCHER), "--dsl", str(bytecode)], directory, 90)
+    run = invoke([str(LAUNCHER), "--lmcode", str(bytecode)], directory, 90)
     if not report(run).get("ok"):
         raise AssertionError("contract fixture failed")
     rows = list(csv.reader((directory / "result.csv").open(encoding="utf-8")))
@@ -99,40 +99,40 @@ let after = c.query("SELECT id,label FROM child ORDER BY id"); after.csv("after.
         ("nonnumeric", 'let c = connect("jdbc:h2:mem:numeric"); let q = c.query("SELECT \'x\'"); q.number(0,0);', "numeric"),
     ):
         bad = compile_fixture(directory, body, name)
-        result = invoke([str(LAUNCHER), "--dsl", str(bad)], directory, 60, expected=3)
+        result = invoke([str(LAUNCHER), "--lmcode", str(bad)], directory, 60, expected=3)
         value = report(result)
         if value.get("ok") or value.get("phase") != "run": raise AssertionError(f"{fragment} error report mismatch")
 
     corrupt = bytearray(bytecode.read_bytes()); corrupt[0] ^= 1
     corrupt_path = directory / "corrupt.dslb"; corrupt_path.write_bytes(corrupt)
-    result = invoke([str(LAUNCHER), "--dsl", str(corrupt_path)], directory, 60, expected=3)
+    result = invoke([str(LAUNCHER), "--lmcode", str(corrupt_path)], directory, 60, expected=3)
     if report(result).get("phase") != "load": raise AssertionError("corrupt bytecode was not a load error")
     mismatch = bytearray(bytecode.read_bytes()); mismatch[6] ^= 1
     mismatch_path = directory / "mismatch.dslb"; mismatch_path.write_bytes(mismatch)
-    result = invoke([str(LAUNCHER), "--dsl", str(mismatch_path)], directory, 60, expected=3)
+    result = invoke([str(LAUNCHER), "--lmcode", str(mismatch_path)], directory, 60, expected=3)
     if report(result).get("code") != "LOAD_SCHEMA_MISMATCH": raise AssertionError("schema mismatch was not detected")
 
     runaway = compile_fixture(directory, 'let c = connect("jdbc:h2:mem:runaway"); while (true) { let q = c.query("SELECT REPEAT(\'x\',200000)"); }', "runaway")
     env = {**os.environ, "LMCLIENT_MAX_MEMORY_MB": "64"}
-    result = invoke([str(LAUNCHER), "--dsl", str(runaway)], directory, 90, expected=3, env=env)
+    result = invoke([str(LAUNCHER), "--lmcode", str(runaway)], directory, 90, expected=3, env=env)
     value = report(result)
     if value.get("phase") != "run" or "memory" not in value.get("message", "").lower() or "LMCLIENT_MAX_MEMORY_MB" not in result.stderr:
         raise AssertionError("memory budget report mismatch")
 
     bounded = compile_fixture(directory, 'let c = connect("jdbc:h2:mem:bounded"); let i = 0; while (i < 300) { let q = c.query("SELECT REPEAT(\'x\',10000)"); i = i + 1; }', "bounded")
-    invoke([str(LAUNCHER), "--dsl", str(bounded)], directory, 180)
+    invoke([str(LAUNCHER), "--lmcode", str(bounded)], directory, 180)
     cycles = compile_fixture(directory, 'let i = 0; while (i < 100) { let c = connect("jdbc:h2:mem:cycles"); c.close(); i = i + 1; }', "cycles")
-    invoke([str(LAUNCHER), "--dsl", str(cycles)], directory, 90)
+    invoke([str(LAUNCHER), "--lmcode", str(cycles)], directory, 90)
     native_close = compile_fixture(directory, 'let a = connect("jdbc:duckdb:"); let b = connect("jdbc:duckdb:"); a.close(); let c = connect("jdbc:duckdb:"); c.close(); b.close();', "native_close")
-    invoke([str(LAUNCHER), "--dsl", str(native_close)], directory, 90)
+    invoke([str(LAUNCHER), "--lmcode", str(native_close)], directory, 90)
     native_limit = compile_fixture(directory, 'let a = connect("jdbc:duckdb:"); let b = connect("jdbc:duckdb:"); let c = connect("jdbc:duckdb:");', "native_limit")
-    result = invoke([str(LAUNCHER), "--dsl", str(native_limit)], directory, 90, expected=3)
+    result = invoke([str(LAUNCHER), "--lmcode", str(native_limit)], directory, 90, expected=3)
     if "native connection limit" not in report(result).get("message", ""):
         raise AssertionError("native connection limit report mismatch")
     if os.environ.get("LMCLIENT_TEST_DEFAULT_BUDGET") == "1":
         default_env = dict(os.environ)
         default_env.pop("LMCLIENT_MAX_MEMORY_MB", None)
-        result = invoke([str(LAUNCHER), "--dsl", str(runaway)], directory, 180, expected=3, env=default_env)
+        result = invoke([str(LAUNCHER), "--lmcode", str(runaway)], directory, 180, expected=3, env=default_env)
         value = report(result)
         if "memory" not in value.get("message", "").lower() or "LMCLIENT_MAX_MEMORY_MB" not in result.stderr:
             raise AssertionError("default memory budget was not enforced")

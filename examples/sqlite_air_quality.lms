@@ -7,7 +7,7 @@ let q = c.query("SELECT day, pm25, AVG(pm25) OVER (ORDER BY day ROWS BETWEEN 2 P
 q.csv("data/sqlite_air_quality.csv");
 end _dsl_
 savedsl(dbhost, "build/sqlite_air_quality.dslb");
-r = system ${dsl_cli(dbhost)} --dsl build/sqlite_air_quality.dslb;
+r = system ${dsl_cli(dbhost)} --lmcode build/sqlite_air_quality.dslb;
 assert(r.code == 0);
 let rows = csv_parse(read_file("data/sqlite_air_quality.csv"), false);
 assert(rows.len() == 11);
@@ -17,5 +17,5 @@ let p = plot;
 p.png("images/sqlite_air_quality.png", 900, 560); p.cmd("set title 'Air quality and 3-day rolling mean'; set xlabel 'Day'; set ylabel 'PM2.5'; set grid; set datafile separator ','; plot 'data/sqlite_air_quality.csv' every ::1 using 1:2 with points pt 7 title 'reading', '' every ::1 using 1:3 with lines lw 3 title 'rolling mean'"); p.close();
 end _dsl_
 savedsl(plot, "build/sqlite_air_quality_plot.dslb");
-r = system ${dsl_cli(plot)} --dsl build/sqlite_air_quality_plot.dslb;
+r = system ${dsl_cli(plot)} --lmcode build/sqlite_air_quality_plot.dslb;
 assert(r.code == 0);

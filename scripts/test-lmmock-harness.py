@@ -123,7 +123,7 @@ class HarnessTests(unittest.TestCase):
         @contextlib.contextmanager
         def server(arguments, config, *, binary):
             self.assertEqual(binary, 'lmmock')
-            self.assertEqual(arguments[:2], ['serve', '--dsl'])
+            self.assertEqual(arguments[:2], ['serve', '--lmcode'])
             bytecode = Path(arguments[2])
             self.assertEqual(bytecode.read_bytes(), b'fixture-bytecode')
             self.assertEqual(config, {'fixture': True})

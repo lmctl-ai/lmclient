@@ -7,7 +7,7 @@ let tables = c.tables(); let customer_columns = c.columns("customers"); let orde
 tables.csv("data/er_tables.csv"); customer_columns.csv("data/er_customer_columns.csv"); order_columns.csv("data/er_order_columns.csv"); keys.csv("data/er_keys.csv");
 end _dsl_
 savedsl(dbhost, "build/er_diagram.dslb");
-r = system ${dsl_cli(dbhost)} --dsl build/er_diagram.dslb;
+r = system ${dsl_cli(dbhost)} --lmcode build/er_diagram.dslb;
 assert(r.code == 0);
 let customer_check = csv_parse(read_file("data/er_customer_columns.csv"), false);
 let order_check = csv_parse(read_file("data/er_order_columns.csv"), false);
@@ -34,5 +34,5 @@ scene.text(70.0, 470.0, 16.0, "JDBC metadata exports: er_tables.csv, er_*_column
 scene.render_png("images/er_diagram.png", 900, 560, 1);
 end _dsl_
 savedsl(draw, "build/er_diagram_draw.dslb");
-r = system ${dsl_cli(draw)} --dsl build/er_diagram_draw.dslb;
+r = system ${dsl_cli(draw)} --lmcode build/er_diagram_draw.dslb;
 assert(r.code == 0);

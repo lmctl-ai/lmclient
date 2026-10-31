@@ -7,7 +7,7 @@ let q = c.query("SELECT day, close, 100.0*(close/LAG(close) OVER (ORDER BY day)-
 q.csv("data/duckdb_returns.csv");
 end _dsl_
 savedsl(dbhost, "build/duckdb_returns.dslb");
-r = system ${dsl_cli(dbhost)} --dsl build/duckdb_returns.dslb;
+r = system ${dsl_cli(dbhost)} --lmcode build/duckdb_returns.dslb;
 assert(r.code == 0);
 let rows = csv_parse(read_file("data/duckdb_returns.csv"), false);
 assert(rows.len() == 9);
@@ -17,5 +17,5 @@ let p = plot;
 p.png("images/duckdb_returns.png", 900, 560); p.cmd("set title 'Daily returns'; set xlabel 'Day'; set ylabel 'Percent'; set grid; set datafile separator ','; plot 'data/duckdb_returns.csv' every ::2 using 1:3 with impulses lw 3 title 'return'"); p.close();
 end _dsl_
 savedsl(plot, "build/duckdb_returns_plot.dslb");
-r = system ${dsl_cli(plot)} --dsl build/duckdb_returns_plot.dslb;
+r = system ${dsl_cli(plot)} --lmcode build/duckdb_returns_plot.dslb;
 assert(r.code == 0);

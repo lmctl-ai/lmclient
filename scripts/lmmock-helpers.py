@@ -196,7 +196,7 @@ def compile_script(source, destination):
 def lmmock_serve(dsl_path, config=None):
     path = Path(dsl_path).resolve()
     if path.suffix != '.lms':
-        with _server(['serve', '--dsl', str(path)], config) as url:
+        with _server(['serve', '--lmcode', str(path)], config) as url:
             yield url
         return
     # Preserve unavailable-lmmock skip behavior before attempting compilation.
@@ -207,7 +207,7 @@ def lmmock_serve(dsl_path, config=None):
         export_schema(binary, Path(directory) / 'schema.json')
         bytecode = Path(directory) / 'mock.dslb'
         compile_script(staged_source, bytecode)
-        with _server(['serve', '--dsl', str(bytecode)], config, binary=binary) as url:
+        with _server(['serve', '--lmcode', str(bytecode)], config, binary=binary) as url:
             yield url
 
 

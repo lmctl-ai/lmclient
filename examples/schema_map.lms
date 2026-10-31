@@ -7,7 +7,7 @@ let tables = c.tables(); let columns = c.columns("CUSTOMERS"); let order_columns
 tables.csv("data/schema_tables.csv"); columns.csv("data/schema_customers.csv"); order_columns.csv("data/schema_orders.csv"); keys.csv("data/schema_keys.csv");
 end _dsl_
 savedsl(dbhost, "build/schema_map.dslb");
-r = system ${dsl_cli(dbhost)} --dsl build/schema_map.dslb;
+r = system ${dsl_cli(dbhost)} --lmcode build/schema_map.dslb;
 assert(r.code == 0);
 let table_rows = csv_parse(read_file("data/schema_tables.csv"), false);
 let customer_check = csv_parse(read_file("data/schema_customers.csv"), false);
@@ -47,5 +47,5 @@ scene.text(70.0, 470.0, 16.0, "tables.csv + columns.csv + keys.csv are produced 
 scene.render_png("images/lmclient_schema_map.png", 900, 560, 1);
 end _dsl_
 savedsl(draw, "build/schema_map_draw.dslb");
-r = system ${dsl_cli(draw)} --dsl build/schema_map_draw.dslb;
+r = system ${dsl_cli(draw)} --lmcode build/schema_map_draw.dslb;
 assert(r.code == 0);
