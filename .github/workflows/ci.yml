@@ -77,7 +77,8 @@ jobs:
           LMMOCK_REQUIRED: 1
         run: |
           python3 scripts/lmmock-helpers.py
-          npm install --prefix "$RUNNER_TEMP/lmmock-compiler" @lmctl-ai/lmctl@0.2.458
+          # lmmock's checked-in fixture sources still use the compiler's --no-preflight interface.
+          npm install --prefix "$RUNNER_TEMP/lmmock-compiler" @lmctl-ai/lmctl@0.2.448
           echo "LMMOCK_LMSCRIPT_JS=$RUNNER_TEMP/lmmock-compiler/node_modules/@lmctl-ai/lmctl/bin/lmscript" >> "$GITHUB_ENV"
       - name: JVM tests
         timeout-minutes: 25
