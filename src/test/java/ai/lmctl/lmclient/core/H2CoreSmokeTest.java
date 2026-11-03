@@ -20,6 +20,8 @@ public final class H2CoreSmokeTest {
             boolean cellLimit = false;
             try { db.query("SELECT REPEAT('x', 100)"); } catch (DatabaseException expected) { cellLimit = true; }
             check(cellLimit, "cell limit");
+            String tz = String.valueOf(db.query("SELECT TIMESTAMP WITH TIME ZONE '2026-05-21 07:34:50.94+00'", List.of(), 2).rows().getFirst().getFirst());
+            check(tz.endsWith("Z") || tz.matches(".*[+-]\\d{2}:?\\d{2}$"), "timestamptz must keep its zone offset, not silently convert to host-local time: " + tz);
         }
         try (Database db = Database.connect("jdbc:h2:mem:lmclient_core;DB_CLOSE_DELAY=-1", new Properties())) {
             Database.SchemaSnapshot first = db.snapshot();

@@ -173,7 +173,11 @@ public final class Database implements AutoCloseable {
         try (result) {
             ResultSetMetaData metadata = result.getMetaData();
             List<String> columns = new ArrayList<>(metadata.getColumnCount());
-            for (int i = 1; i <= metadata.getColumnCount(); i++) columns.add(metadata.getColumnLabel(i));
+            int[] columnTypes = new int[metadata.getColumnCount()];
+            for (int i = 1; i <= metadata.getColumnCount(); i++) {
+                columns.add(metadata.getColumnLabel(i));
+                columnTypes[i - 1] = withTimezoneType(metadata.getColumnType(i), metadata.getColumnTypeName(i));
+            }
             List<List<Object>> rows = new ArrayList<>();
             ReadBudget budget = new ReadBudget(memoryBudgetBytes());
             budget.add(64L + columns.stream().mapToLong(Database::estimateBytes).sum());
@@ -181,7 +185,7 @@ public final class Database implements AutoCloseable {
                 List<Object> row = new ArrayList<>(columns.size());
                 if (rows.size() >= rowLimit) throw new DatabaseException("result exceeds max row limit of " + rowLimit);
                 budget.add(64L + 16L * columns.size());
-                for (int i = 1; i <= columns.size(); i++) row.add(readValue(result, i, budget));
+                for (int i = 1; i <= columns.size(); i++) row.add(readValue(result, i, columnTypes[i - 1], budget));
                 rows.add(row);
             }
             return new QueryResult(columns, rows, -1);
@@ -202,8 +206,24 @@ public final class Database implements AutoCloseable {
         return value;
     }
 
-    private Object readValue(ResultSet result, int column, ReadBudget budget) throws SQLException {
-        Object value = result.getObject(column);
+    /**
+     * pgjdbc reports {@code timestamptz}/{@code timetz} columns as the plain (non-timezone) JDBC
+     * SQL type codes while still naming them correctly in {@code getColumnTypeName}; fall back to
+     * that name so timezone offsets aren't silently dropped for PostgreSQL connections.
+     */
+    private static int withTimezoneType(int sqlType, String typeName) {
+        if (sqlType == java.sql.Types.TIMESTAMP_WITH_TIMEZONE || sqlType == java.sql.Types.TIME_WITH_TIMEZONE) return sqlType;
+        if ("timestamptz".equalsIgnoreCase(typeName)) return java.sql.Types.TIMESTAMP_WITH_TIMEZONE;
+        if ("timetz".equalsIgnoreCase(typeName)) return java.sql.Types.TIME_WITH_TIMEZONE;
+        return sqlType;
+    }
+
+    private Object readValue(ResultSet result, int column, int columnType, ReadBudget budget) throws SQLException {
+        Object value = switch (columnType) {
+            case java.sql.Types.TIMESTAMP_WITH_TIMEZONE -> result.getObject(column, java.time.OffsetDateTime.class);
+            case java.sql.Types.TIME_WITH_TIMEZONE -> result.getObject(column, java.time.OffsetTime.class);
+            default -> result.getObject(column);
+        };
         if (value instanceof Clob clob) {
             long length = clob.length();
             if (length > maxCellBytes) throw new DatabaseException("result cell exceeds configured limit");
