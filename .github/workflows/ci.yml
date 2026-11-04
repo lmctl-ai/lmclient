@@ -77,7 +77,7 @@ jobs:
           LMMOCK_REQUIRED: 1
         run: |
           python3 scripts/lmmock-helpers.py
-          # lmmock's checked-in fixture sources still use the compiler's --no-preflight interface.
+          # This fixture harness targets lmmock's released serve/bytecode contract; keep its compiler compatible.
           npm install --prefix "$RUNNER_TEMP/lmmock-compiler" @lmctl-ai/lmctl@0.2.448
           echo "LMMOCK_LMSCRIPT_JS=$RUNNER_TEMP/lmmock-compiler/node_modules/@lmctl-ai/lmctl/bin/lmscript" >> "$GITHUB_ENV"
       - name: JVM tests

@@ -17,7 +17,7 @@ import urllib.error
 import urllib.request
 from temp_cleanup import temporary_directory
 
-PINNED_VERSION = '0.1.103'
+PINNED_VERSION = '0.1.36'
 
 ROOT = Path(__file__).resolve().parents[1]
 
