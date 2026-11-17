@@ -124,15 +124,22 @@ public final class DslHost implements AutoCloseable {
             if (Files.size(bytecode) > context.memoryLimitBytes / 4) throw VmException.badBytecode("bytecode exceeds LMCLIENT_MAX_MEMORY_MB budget");
             program = Program.load(Files.readAllBytes(bytecode),HostApi.schemaBytes(),registry);
         }
-        catch (VmException error) { return Reports.error("load",error); }
-        catch (java.io.IOException error) { return Reports.error("load",VmException.badBytecode("cannot read bytecode file")); }
-        if (dryRun) return Reports.ok("{\"dry_run\":true}");
-        try { program.run(context,registry); return Reports.ok("null"); }
+        catch (VmException error) { return reportError("load",error); }
+        catch (java.io.IOException error) { return reportError("load",VmException.badBytecode("cannot read bytecode file")); }
+        if (dryRun) return reportOk("{\"dry_run\":true}");
+        try { program.run(context,registry); return reportOk("null"); }
         catch (VmException error) {
             if (error.getMessage().toLowerCase(java.util.Locale.ROOT).contains("memory"))
                 System.err.println("lmclient: LMCLIENT_MAX_MEMORY_MB memory budget exceeded");
-            return Reports.error("run",error);
+            return reportError("run",error);
         }
+    }
+
+    private static void printlnLf(String line) { byte[] b = (line + "\n").getBytes(StandardCharsets.UTF_8); System.out.write(b, 0, b.length); System.out.flush(); }
+    private static int reportOk(String resultJson) { printlnLf("{\"ok\": true, \"result\": " + resultJson + "}"); return 0; }
+    private static int reportError(String phase, VmException e) {
+        printlnLf("{\"ok\": false, \"phase\": " + Reports.escape(phase) + ", \"code\": " + Reports.escape(e.code) + ", \"message\": " + Reports.escape(e.getMessage()) + (e.line == null ? "" : ", \"line\": " + e.line + (e.column == null ? "" : ", \"column\": " + e.column)) + "}");
+        return e.code.equals("APP_FAIL") ? 4 : 3;
     }
 
     @Override public void close() {

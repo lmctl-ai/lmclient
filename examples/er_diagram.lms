@@ -1,13 +1,22 @@
 # A small relational model is queried through JDBC and rendered as an ER diagram.
 mkdir("images"); mkdir("data"); mkdir("build");
-dbhost = _dsl_ cli="lmclient" install="github:lmctl-ai/lmclient@latest";
+dbhost = _lmcode_ cli="lmclient" install="github:lmctl-ai/lmclient@latest";
 let c = connect("jdbc:sqlite::memory:");
 c.exec("CREATE TABLE customers(id INTEGER PRIMARY KEY, name TEXT); CREATE TABLE orders(id INTEGER PRIMARY KEY, customer_id INTEGER, total REAL, FOREIGN KEY(customer_id) REFERENCES customers(id)); INSERT INTO customers VALUES (1,'Ada'),(2,'Lin'); INSERT INTO orders VALUES (10,1,42.5),(11,1,18.0),(12,2,77.0);");
 let tables = c.tables(); let customer_columns = c.columns("customers"); let order_columns = c.columns("orders"); let keys = c.keys("orders");
 tables.csv("data/er_tables.csv"); customer_columns.csv("data/er_customer_columns.csv"); order_columns.csv("data/er_order_columns.csv"); keys.csv("data/er_keys.csv");
-end _dsl_
+end _lmcode_
+fn dsl_cli(tool) {
+  let w = which(tool);
+  if (w != null) { return w; }
+  let ext = "";
+  if (env("OS", "") == "Windows_NT" || env("RUNNER_OS", "") == "Windows") { ext = ".exe"; }
+  let cache = env("LMSCRIPT_TOOL_CACHE", path_join(env("XDG_CACHE_HOME", path_join(env("HOME", ""), ".cache")), "lmscript", "tools"));
+  return path_join(cache, "github", "lmctl-ai", tool, "latest", tool + ext);
+}
+fn savedsl(p, out) { assert(run_lmcode(p, {command: [dsl_cli("lmclient"), "--save-dslb", out, "$DSLFILE"]}).ok); }
 savedsl(dbhost, "build/er_diagram.dslb");
-r = system ${dsl_cli(dbhost)} --lmcode build/er_diagram.dslb;
+r = system ${dsl_cli("lmclient")} --lmcode build/er_diagram.dslb;
 assert(r.code == 0);
 let customer_check = csv_parse(read_file("data/er_customer_columns.csv"), false);
 let order_check = csv_parse(read_file("data/er_order_columns.csv"), false);
@@ -15,7 +24,7 @@ let key_check = csv_parse(read_file("data/er_keys.csv"), false);
 assert(customer_check.len() == 3);
 assert(order_check.len() == 4);
 assert(key_check.len() >= 2);
-let draw = _dsl_ cli="lmdraw" install="github:lmctl-ai/lmdraw@latest";
+let draw = _lmcode_ cli="lmdraw" install="github:lmctl-ai/lmdraw@latest";
 scene.canvas(900, 560, "#0f1720");
 scene.text(36.0, 48.0, 28.0, "lmclient entity relationship diagram", "#f4f7fb");
 scene.text(36.0, 78.0, 15.0, "Primary and foreign keys discovered through JDBC metadata", "#9fb3c8");
@@ -32,7 +41,7 @@ scene.arrow(370.0, 250.0, 530.0, 250.0, "#f2c94c", 3.0);
 scene.text(402.0, 238.0, 16.0, "1 : N", "#f2c94c");
 scene.text(70.0, 470.0, 16.0, "JDBC metadata exports: er_tables.csv, er_*_columns.csv, er_keys.csv", "#9fb3c8");
 scene.render_png("images/er_diagram.png", 900, 560, 1);
-end _dsl_
+end _lmcode_
 savedsl(draw, "build/er_diagram_draw.dslb");
-r = system ${dsl_cli(draw)} --lmcode build/er_diagram_draw.dslb;
+r = system ${dsl_cli("lmdraw")} --lmcode build/er_diagram_draw.dslb;
 assert(r.code == 0);

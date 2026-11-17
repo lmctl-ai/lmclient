@@ -1,21 +1,30 @@
 # Daily particulate matter, with a 24-hour rolling average.
 mkdir("images"); mkdir("data"); mkdir("build");
-dbhost = _dsl_ cli="lmclient" install="github:lmctl-ai/lmclient@latest";
+dbhost = _lmcode_ cli="lmclient" install="github:lmctl-ai/lmclient@latest";
 let c = connect("jdbc:sqlite::memory:");
 c.exec("CREATE TABLE air(day INTEGER, pm25 REAL); INSERT INTO air VALUES (1,18.0),(2,21.5),(3,26.0),(4,24.0),(5,31.0),(6,28.5),(7,20.0),(8,17.0),(9,22.0),(10,19.0);");
 let q = c.query("SELECT day, pm25, AVG(pm25) OVER (ORDER BY day ROWS BETWEEN 2 PRECEDING AND CURRENT ROW) AS rolling FROM air");
 q.csv("data/sqlite_air_quality.csv");
-end _dsl_
+end _lmcode_
+fn dsl_cli(tool) {
+  let w = which(tool);
+  if (w != null) { return w; }
+  let ext = "";
+  if (env("OS", "") == "Windows_NT" || env("RUNNER_OS", "") == "Windows") { ext = ".exe"; }
+  let cache = env("LMSCRIPT_TOOL_CACHE", path_join(env("XDG_CACHE_HOME", path_join(env("HOME", ""), ".cache")), "lmscript", "tools"));
+  return path_join(cache, "github", "lmctl-ai", tool, "latest", tool + ext);
+}
+fn savedsl(p, out) { assert(run_lmcode(p, {command: [dsl_cli("lmclient"), "--save-dslb", out, "$DSLFILE"]}).ok); }
 savedsl(dbhost, "build/sqlite_air_quality.dslb");
-r = system ${dsl_cli(dbhost)} --lmcode build/sqlite_air_quality.dslb;
+r = system ${dsl_cli("lmclient")} --lmcode build/sqlite_air_quality.dslb;
 assert(r.code == 0);
 let rows = csv_parse(read_file("data/sqlite_air_quality.csv"), false);
 assert(rows.len() == 11);
 assert(abs(num(rows[3][2]) - 21.8333333333) < 0.0001);
-plot = _dsl_ cli="lmplot" install="github:lmctl-ai/lmplot@latest";
+plot = _lmcode_ cli="lmplot" install="github:lmctl-ai/lmplot@latest";
 let p = plot;
 p.png("images/sqlite_air_quality.png", 900, 560); p.cmd("set title 'Air quality and 3-day rolling mean'; set xlabel 'Day'; set ylabel 'PM2.5'; set grid; set datafile separator ','; plot 'data/sqlite_air_quality.csv' every ::1 using 1:2 with points pt 7 title 'reading', '' every ::1 using 1:3 with lines lw 3 title 'rolling mean'"); p.close();
-end _dsl_
+end _lmcode_
 savedsl(plot, "build/sqlite_air_quality_plot.dslb");
-r = system ${dsl_cli(plot)} --lmcode build/sqlite_air_quality_plot.dslb;
+r = system ${dsl_cli("lmplot")} --lmcode build/sqlite_air_quality_plot.dslb;
 assert(r.code == 0);

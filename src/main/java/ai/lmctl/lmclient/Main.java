@@ -53,6 +53,28 @@ public final class Main {
             case "--version": System.out.println("lmclient " + VERSION); return 0;
             case "--lmcode-schema": System.out.print(HostApi.schema()); return 0;
             case "--lmcode-signatures": System.out.print(HostApi.signatures()); return 0;
+            case "--save-dslb":
+                if (args.length != 3) throw new IllegalArgumentException("usage: --save-dslb OUTPUT SOURCE");
+                io.lmctl.lmcode.InvocationResults invResults;
+                try { invResults = io.lmctl.lmcode.InvocationResults.fromCommand(java.util.List.of(args[2])); }
+                catch (io.lmctl.lmcode.VmException e) { return io.lmctl.lmcode.Reports.failureFrame("cli", e); }
+                try {
+                    var reg = new io.lmctl.lmcode.Registry();
+                    invResults.select(0, reg, new io.lmctl.lmcode.ResultContract());
+                    if (!invResults.dry()) {
+                        Path target = Path.of(args[1]).toAbsolutePath();
+                        if (target.getParent() != null) Files.createDirectories(target.getParent());
+                        Files.copy(Path.of(args[2]), target, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+                    }
+                    invResults.complete(0);
+                    return invResults.writeFrame(System.out);
+                } catch (io.lmctl.lmcode.VmException e) {
+                    invResults.fail(0, "run", e);
+                    return invResults.writeFrame(System.out);
+                } catch (Exception e) {
+                    invResults.fail(0, "run", io.lmctl.lmcode.VmException.host("cannot save bytecode"));
+                    return invResults.writeFrame(System.out);
+                }
             case "--drivers": Drivers.names().forEach(System.out::println); return 0;
             case "--notices":
                 try (var stream = Main.class.getResourceAsStream("/THIRD_PARTY_NOTICES")) {

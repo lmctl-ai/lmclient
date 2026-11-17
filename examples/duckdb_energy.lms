@@ -1,21 +1,30 @@
 # DuckDB window functions reveal a cumulative energy budget.
 mkdir("images"); mkdir("data"); mkdir("build");
-dbhost = _dsl_ cli="lmclient" install="github:lmctl-ai/lmclient@latest";
+dbhost = _lmcode_ cli="lmclient" install="github:lmctl-ai/lmclient@latest";
 let c = connect("jdbc:duckdb:");
 c.exec("CREATE TABLE energy(day INT, kwh DOUBLE); INSERT INTO energy VALUES (1,14.2),(2,15.1),(3,13.7),(4,16.4),(5,18.0),(6,17.2),(7,15.8);");
 let q = c.query("SELECT day, kwh, SUM(kwh) OVER (ORDER BY day) AS cumulative FROM energy");
 q.csv("data/duckdb_energy.csv");
-end _dsl_
+end _lmcode_
+fn dsl_cli(tool) {
+  let w = which(tool);
+  if (w != null) { return w; }
+  let ext = "";
+  if (env("OS", "") == "Windows_NT" || env("RUNNER_OS", "") == "Windows") { ext = ".exe"; }
+  let cache = env("LMSCRIPT_TOOL_CACHE", path_join(env("XDG_CACHE_HOME", path_join(env("HOME", ""), ".cache")), "lmscript", "tools"));
+  return path_join(cache, "github", "lmctl-ai", tool, "latest", tool + ext);
+}
+fn savedsl(p, out) { assert(run_lmcode(p, {command: [dsl_cli("lmclient"), "--save-dslb", out, "$DSLFILE"]}).ok); }
 savedsl(dbhost, "build/duckdb_energy.dslb");
-r = system ${dsl_cli(dbhost)} --lmcode build/duckdb_energy.dslb;
+r = system ${dsl_cli("lmclient")} --lmcode build/duckdb_energy.dslb;
 assert(r.code == 0);
 let rows = csv_parse(read_file("data/duckdb_energy.csv"), false);
 assert(rows.len() == 8);
 assert(abs(num(rows[7][2]) - 110.4) < 0.001);
-plot = _dsl_ cli="lmplot" install="github:lmctl-ai/lmplot@latest";
+plot = _lmcode_ cli="lmplot" install="github:lmctl-ai/lmplot@latest";
 let p = plot;
 p.png("images/duckdb_energy.png", 900, 560); p.cmd("set title 'Weekly energy budget'; set xlabel 'Day'; set ylabel 'kWh'; set grid; set datafile separator ','; plot 'data/duckdb_energy.csv' every ::1 using 1:2 with boxes title 'daily', '' every ::1 using 1:3 with lines lw 3 title 'cumulative'"); p.close();
-end _dsl_
+end _lmcode_
 savedsl(plot, "build/duckdb_energy_plot.dslb");
-r = system ${dsl_cli(plot)} --lmcode build/duckdb_energy_plot.dslb;
+r = system ${dsl_cli("lmplot")} --lmcode build/duckdb_energy_plot.dslb;
 assert(r.code == 0);

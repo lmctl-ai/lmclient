@@ -7,3 +7,5 @@
 - [Protocol areas: redis, mail, queue, mqtt, mongo](lmclient-areas-2026-10-29.md)
 - [LangChain4j spike deferred; Kafka spike pattern](langchain4j-spike-2026-10-29.md)
 - [AWT Toolkit guard: Desktop substitution](awt-toolkit-guard-2026-10-29.md)
+- [Host flag cutover](host-flags.md)
+- [Standard REST and CLI interfaces (`lmcode_std_v3`)](std-rest-and-cli-interfaces.md)

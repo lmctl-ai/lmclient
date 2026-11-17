@@ -1,23 +1,32 @@
 # Monthly sales trend from an in-memory SQLite database.
 mkdir("images"); mkdir("data"); mkdir("build");
-dbhost = _dsl_ cli="lmclient" install="github:lmctl-ai/lmclient@latest";
+dbhost = _lmcode_ cli="lmclient" install="github:lmctl-ai/lmclient@latest";
 let c = connect("jdbc:sqlite::memory:");
 c.exec("CREATE TABLE sales(month TEXT, revenue REAL); INSERT INTO sales VALUES ('Jan',12000),('Feb',14500),('Mar',13800),('Apr',17100),('May',19600),('Jun',21400);");
 let q = c.query("SELECT row_number() OVER () AS n, month, revenue FROM sales ORDER BY n");
 q.csv("data/sqlite_sales_trend.csv");
-end _dsl_
+end _lmcode_
+fn dsl_cli(tool) {
+  let w = which(tool);
+  if (w != null) { return w; }
+  let ext = "";
+  if (env("OS", "") == "Windows_NT" || env("RUNNER_OS", "") == "Windows") { ext = ".exe"; }
+  let cache = env("LMSCRIPT_TOOL_CACHE", path_join(env("XDG_CACHE_HOME", path_join(env("HOME", ""), ".cache")), "lmscript", "tools"));
+  return path_join(cache, "github", "lmctl-ai", tool, "latest", tool + ext);
+}
+fn savedsl(p, out) { assert(run_lmcode(p, {command: [dsl_cli("lmclient"), "--save-dslb", out, "$DSLFILE"]}).ok); }
 savedsl(dbhost, "build/sqlite_sales_trend.dslb");
-r = system ${dsl_cli(dbhost)} --lmcode build/sqlite_sales_trend.dslb;
+r = system ${dsl_cli("lmclient")} --lmcode build/sqlite_sales_trend.dslb;
 assert(r.code == 0);
 let rows = csv_parse(read_file("data/sqlite_sales_trend.csv"), false);
 assert(rows.len() == 7);
 assert(abs(num(rows[1][2]) - 12000.0) < 0.001);
-plot = _dsl_ cli="lmplot" install="github:lmctl-ai/lmplot@latest";
+plot = _lmcode_ cli="lmplot" install="github:lmctl-ai/lmplot@latest";
 let p = plot;
 p.png("images/sqlite_sales_trend.png", 900, 560);
 p.cmd("set title 'SQLite sales trend'; set xlabel 'Month'; set ylabel 'Revenue'; set grid; set datafile separator ','; plot 'data/sqlite_sales_trend.csv' every ::1 using 1:3:xtic(2) with linespoints lw 3 pt 7 title 'revenue'");
 p.close();
-end _dsl_
+end _lmcode_
 savedsl(plot, "build/sqlite_sales_trend_plot.dslb");
-r = system ${dsl_cli(plot)} --lmcode build/sqlite_sales_trend_plot.dslb;
+r = system ${dsl_cli("lmplot")} --lmcode build/sqlite_sales_trend_plot.dslb;
 assert(r.code == 0);

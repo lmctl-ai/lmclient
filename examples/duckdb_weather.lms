@@ -1,21 +1,30 @@
 # DuckDB aggregates station temperatures into a climate profile.
 mkdir("images"); mkdir("data"); mkdir("build");
-dbhost = _dsl_ cli="lmclient" install="github:lmctl-ai/lmclient@latest";
+dbhost = _lmcode_ cli="lmclient" install="github:lmctl-ai/lmclient@latest";
 let c = connect("jdbc:duckdb:");
 c.exec("CREATE TABLE temps(station VARCHAR, month INT, celsius DOUBLE); INSERT INTO temps VALUES ('North',1,-3),('North',4,8),('North',7,19),('North',10,7),('South',1,14),('South',4,20),('South',7,27),('South',10,22);");
 let q = c.query("SELECT month, AVG(celsius) AS average_c, MIN(celsius) AS coldest, MAX(celsius) AS warmest FROM temps GROUP BY month ORDER BY month");
 q.csv("data/duckdb_weather.csv");
-end _dsl_
+end _lmcode_
+fn dsl_cli(tool) {
+  let w = which(tool);
+  if (w != null) { return w; }
+  let ext = "";
+  if (env("OS", "") == "Windows_NT" || env("RUNNER_OS", "") == "Windows") { ext = ".exe"; }
+  let cache = env("LMSCRIPT_TOOL_CACHE", path_join(env("XDG_CACHE_HOME", path_join(env("HOME", ""), ".cache")), "lmscript", "tools"));
+  return path_join(cache, "github", "lmctl-ai", tool, "latest", tool + ext);
+}
+fn savedsl(p, out) { assert(run_lmcode(p, {command: [dsl_cli("lmclient"), "--save-dslb", out, "$DSLFILE"]}).ok); }
 savedsl(dbhost, "build/duckdb_weather.dslb");
-r = system ${dsl_cli(dbhost)} --lmcode build/duckdb_weather.dslb;
+r = system ${dsl_cli("lmclient")} --lmcode build/duckdb_weather.dslb;
 assert(r.code == 0);
 let rows = csv_parse(read_file("data/duckdb_weather.csv"), false);
 assert(rows.len() == 5);
 assert(abs(num(rows[1][1]) - 5.5) < 0.001);
-plot = _dsl_ cli="lmplot" install="github:lmctl-ai/lmplot@latest";
+plot = _lmcode_ cli="lmplot" install="github:lmctl-ai/lmplot@latest";
 let p = plot;
 p.png("images/duckdb_weather.png", 900, 560); p.cmd("set title 'Seasonal temperature profile'; set xlabel 'Month'; set ylabel 'Degrees C'; set grid; set datafile separator ','; plot 'data/duckdb_weather.csv' every ::1 using 1:2 with linespoints lw 3 title 'average', '' every ::1 using 1:3 with lines dt 2 title 'coldest', '' every ::1 using 1:4 with lines dt 2 title 'warmest'"); p.close();
-end _dsl_
+end _lmcode_
 savedsl(plot, "build/duckdb_weather_plot.dslb");
-r = system ${dsl_cli(plot)} --lmcode build/duckdb_weather_plot.dslb;
+r = system ${dsl_cli("lmplot")} --lmcode build/duckdb_weather_plot.dslb;
 assert(r.code == 0);

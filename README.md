@@ -73,7 +73,9 @@ providers by lmconn.
 
 ## JDBC host API
 
-Inside an lmscript program, bind the host with `_dsl_ cli="lmclient" install="github:lmctl-ai/lmclient@latest"`. `connect(url)` returns a connection; `exec(sql)` runs DDL or DML; `query(sql)` returns a result. Results expose `csv(path)`, `json(path)`, `rows()`, `number(row, column)` and `text(row, column)`. `tables()`, `columns(table)`, `keys(table)` and `indexes(table)` expose JDBC metadata for schema reports. Use environment variables or a protected credentials file for server credentials.
+Inside an lmscript program, bind the host with `_lmcode_ cli="lmclient" install="github:lmctl-ai/lmclient@latest"` (or `_dsl_`). `connect(url)` returns a connection; `exec(sql)` runs DDL or DML; `query(sql)` returns a result. Results expose `csv(path)`, `json(path)`, `rows()`, `number(row, column)` and `text(row, column)`. `tables()`, `columns(table)`, `keys(table)` and `indexes(table)` expose JDBC metadata for schema reports. Use environment variables or a protected credentials file for server credentials.
+
+The embedded `lmcode-java` runtime implements the 226-signature `lmcode_std_v3` standard library and the 10 standard REST and stateless CLI interfaces (`RestGet`..`RestOptions`, `RestHandler`, `CliCommand`, `CliOption`), `:param` / `{param}` route placeholders, `rest_config`, `rest_route`, `rest_serve`, `rest_stop` and `rest_cli(argv)`. Annotated `@"/rows/:id"` (`RestGet`) and `@"count"` (`CliCommand`) handlers can query JDBC connections directly via `rest_cli` or HTTP/1.1 stdio serving.
 
 ## Drivers
 
@@ -110,7 +112,7 @@ lmclient --url jdbc:postgresql://db.example/app \
 
 ## Build
 
-The JVM build requires JDK 21 or newer, Maven, and Python 3. `mvn -q verify` resolves the pinned lmcode-java SDK from `sdk.lock` and runs the JDBC core suites; `test.sh` adds CLI and gallery checks. CI also runs the DSL fixtures and every example with compiler `0.2.369`. Native images require GraalVM for JDK 25 with `native-image`, plus the platform C toolchain; the native profile builds the pinned JDBC JNI archives.
+The JVM build requires JDK 21 or newer, Maven, and Python 3. `mvn -q verify` resolves the pinned lmcode-java SDK from `sdk.lock` and runs the JDBC core suites; `test.sh` adds CLI and gallery checks. CI also runs the DSL fixtures and every example with compiler `0.2.482`. Native images require GraalVM for JDK 25 with `native-image`, plus the platform C toolchain; the native profile builds the pinned JDBC JNI archives.
 
 ```sh
 mvn -q verify

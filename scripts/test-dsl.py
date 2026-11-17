@@ -37,11 +37,11 @@ def invoke(args, cwd, timeout, expected=0, env=None):
 def compile_fixture(directory, body, name):
     source = directory / (name + ".lms")
     bytecode = directory / (name + ".dslb")
+    cmd = json.dumps([str(LAUNCHER), "--save-dslb", str(bytecode), "$DSLFILE"])
     source.write_text(
-        'host = _dsl_ cli="lmclient" install="github:lmctl-ai/lmclient@latest";\n'
-        + body + f'\nend _dsl_\nsavedsl(host, "{bytecode.name}");\n', encoding="utf-8")
-    # The outer compiler writes only the requested bytecode. It must not invoke
-    # the generated host program; there is no dsl_cli/system call in fixtures.
+        'host = _lmcode_ cli="lmclient" install="github:lmctl-ai/lmclient@latest";\n'
+        + body + f'\nend _lmcode_\nassert(run_lmcode(host, {{command: {cmd}}}).ok);\n', encoding="utf-8")
+    # The outer compiler writes only the requested bytecode via the capture command.
     invoke([str(COMPILER), str(source)], directory, 120)
     if not bytecode.is_file() or bytecode.stat().st_size == 0:
         raise AssertionError("compiler did not produce DSL bytecode")
@@ -92,6 +92,44 @@ let after = c.query("SELECT id,label FROM child ORDER BY id"); after.csv("after.
     if len(after) != 3: raise AssertionError("transaction rollback did not remove inserted row")
     if not any("EXTRA" in row[-1].upper() for row in csv.reader((directory / "diff.csv").open(encoding="utf-8"))):
         raise AssertionError("schema diff did not report added column")
+
+    rest_cli_body = '''
+@"--table"
+fn opt_table(x: RestExchange) -> void implements CliOption {
+  x.set("table", x.query("table"));
+}
+
+@"count"
+fn cmd_count(x: RestExchange) -> void implements CliCommand {
+  let c = connect("jdbc:h2:mem:rest_cli_db;DB_CLOSE_DELAY=-1");
+  let q = c.query("SELECT COUNT(*) FROM " + x.get("table"));
+  x.send("count=" + q.text(0, 0));
+  c.close();
+}
+
+@"/rows/:id"
+fn get_row(x: RestExchange) -> void implements RestGet {
+  let c = connect("jdbc:h2:mem:rest_cli_db;DB_CLOSE_DELAY=-1");
+  let q = c.query("SELECT label FROM items WHERE id = " + x.param("id"));
+  x.send("row=" + q.text(0, 0));
+  c.close();
+}
+
+let init = connect("jdbc:h2:mem:rest_cli_db;DB_CLOSE_DELAY=-1");
+init.exec("CREATE TABLE items(id INT PRIMARY KEY, label VARCHAR(20)); INSERT INTO items VALUES (1, 'alpha'), (2, 'beta');");
+init.close();
+
+rest_config("prefix", "/api");
+let cli_out = rest_cli(str_split("--table items count", " "));
+let get_out = rest_cli(str_split("/api/rows/2", " "));
+file_write("rest_cli.txt", cli_out + "|" + get_out);
+'''
+    rest_cli_bytecode = compile_fixture(directory, rest_cli_body, "rest_cli")
+    run_rest_cli = invoke([str(LAUNCHER), "--lmcode", str(rest_cli_bytecode)], directory, 90)
+    if not report(run_rest_cli).get("ok"):
+        raise AssertionError("rest_cli fixture failed")
+    if (directory / "rest_cli.txt").read_text(encoding="utf-8") != "count=2|row=beta":
+        raise AssertionError("rest_cli output mismatch")
 
     for name, body, fragment in (
         ("closed", 'let c = connect("jdbc:h2:mem:closed"); c.close(); c.query("SELECT 1");', "closed"),
