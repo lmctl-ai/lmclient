@@ -1,5 +1,7 @@
 # lmclient
 
+Documentation: [Quick reference](https://www.lmctl.com/tools/lmclient/) · [LLM skill](https://www.lmctl.com/tools/lmclient/skill.html) · [Guide](https://www.lmctl.com/tools/lmclient/guide.html) · [Reference](https://www.lmctl.com/tools/lmclient/reference.html)
+
 **A scriptable protocol client in one native executable: JDBC databases plus Redis, mail, message queues, MQTT and MongoDB, for queries, exports, schema inspection and visual results.**
 
 | Query chart | ER diagram | Schema map |
